@@ -4,17 +4,21 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] GameObject obj;
+    [SerializeField] float spawnTime = 5;
+    WaitForSeconds delay;
 
     private void Start()
     {
+        delay = new WaitForSeconds(spawnTime);
         StartCoroutine(spawnCor());
+        
     }
 
     IEnumerator spawnCor()
     {
         while (true)
         {
-            yield return new WaitForSeconds(5f);
+            yield return delay;
             for (int i = 0; i < 50; i++)
             {
                 float value = Random.Range(0f, 10f);

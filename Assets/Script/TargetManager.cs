@@ -5,9 +5,11 @@ public class TargetManager : MonoBehaviour
 {
     public static TargetManager Instance { get; private set; }
 
+    [field:SerializeField] public LayerMask EnemyLayer { get; private set; }
+
     //플레이어가 총알을 쏠때 어떤 타겟 방향으로 총알을 쏴야하는지 결정한다.
     [SerializeField] float radius;
-    [SerializeField] LayerMask enemyLayer;
+    //[SerializeField] LayerMask enemyLayer;
     Collider[] result = new Collider[30];
     Transform enemyTarget;
     float nearestDistance;
@@ -48,7 +50,7 @@ public class TargetManager : MonoBehaviour
     private Transform FindEnemyTarget()
     {
         //원형으로 체크를 해볼까? Enemy 타겟을 찾는거임
-        var enemyCount = Physics.OverlapSphereNonAlloc(transform.position, radius, result, enemyLayer);
+        var enemyCount = Physics.OverlapSphereNonAlloc(transform.position, radius, result, EnemyLayer);
         if (enemyCount == 0)
         {
             enemyTarget = null;
