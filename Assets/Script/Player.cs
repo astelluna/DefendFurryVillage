@@ -10,7 +10,10 @@ public class Player : MonoBehaviour
     [SerializeField] float criticalRate = 0; //크리 확률
     [SerializeField] float criticalDamageRate = 2; //크리 데미지 배율 (2배)
     [SerializeField] float armorPenetration = 0; //방어 관통률
-    [SerializeField] float weaponRange; //무기 사거리
+    [SerializeField] float weaponRange = 5f; //무기 사거리
+    [SerializeField] float specialWeaponRange = 5f; //특수무기 사거리
+    [SerializeField] float specialAttackRate = 5f; //공격 속도
+
 
     //이게 일반 공격, 특수 공격이 따로 있긴한데 일단 일반 공격만 생각하자
     //#2. Weapon 클래스 분리 예정
@@ -21,12 +24,21 @@ public class Player : MonoBehaviour
     WaitForSeconds delay;
     Coroutine shootCor;
 
+    //특수 공격
+    [SerializeField] LaserWeapon laserWeapon;
+    [SerializeField] ShootGunWeapon shootGunWeapon;
+
+    [SerializeField] GrowingLaser LaserPrefab;
+    float specialWeaponAttackRate;
+    WaitForSeconds specialDealy;
+    Coroutine specialShootCor;
+
     IEnumerator Shoot()
     {
         while(true)
         {
             //TODO. 추후 오브젝트풀로 바꿔야함
-
+            Transform enemyTarget = TargetManager.Instance.GetEnemyTarget(weaponRange);
             if(enemyTarget != null)
             {
                 Bullet bullet = Instantiate(bulletPrefab, transform);
@@ -37,55 +49,13 @@ public class Player : MonoBehaviour
         }
         
     }
-    //#3. Target 시스템 분리 예정
-    //플레이어가 총알을 쏠때 어떤 타겟 방향으로 총알을 쏴야하는지 결정한다.
-    [SerializeField] Transform basicPosition;
-    [SerializeField] float radius;
-    [SerializeField] LayerMask enemyLayer;
-    Collider[] result = new Collider[30];
-    Transform enemyTarget;
-    //타겟 찾는거는 제일 가까운거 찾아두고, 무기 사거리에 따라서 알아서 공격하도록 하자
 
-    private Transform FindEnemyTarget()
-    {
-        //원형으로 체크를 해볼까? Enemy 타겟을 찾는거임
-        //Collider[] colliders = Physics.OverlapBoxNonAlloc(,)
-
-        //var k = Physics.OverlapBoxNonAlloc(basicPosition.position, radius, result, enemyLayer);
-        var enemyCount = Physics.OverlapSphereNonAlloc(basicPosition.position, radius, result, enemyLayer);
-        if (enemyCount == 0)
-        {
-            enemyTarget = null;
-            return null;
-        }
-        float nearestDistance = float.MaxValue;
-        Transform enemyTransform = null;
-        for(int i=0; i< enemyCount; i++)
-        {
-            float distance = Vector3.Distance(basicPosition.position, result[i].transform.position);
-            if(distance < nearestDistance)
-            {
-                nearestDistance = distance;
-                enemyTransform = result[i].transform;
-            }
-        }
-        enemyTarget = enemyTransform;
-        return enemyTransform;
-    }
-
-    private void Update()
-    {
-        var k =  FindEnemyTarget();
-        Debug.Log(k);
-    }
-
-
-
-
+    
     private void Awake()
     {
         weaponAttackRate = attackRate;
         delay = new WaitForSeconds(weaponAttackRate);
+
     }
     private void Start()
     {
@@ -93,6 +63,19 @@ public class Player : MonoBehaviour
         if(shootCor == null)
         {
             shootCor = StartCoroutine(Shoot());
+        }
+        if(specialShootCor == null)
+        {
+            //specialShootCor = StartCoroutine(SpecialShoot());
+        }
+        //TODO. 특수무기 등록 나중에는 1개씩만 등록하게 해야함. Weapon??
+        if (laserWeapon != null)
+        {
+            laserWeapon.SetWeaponInfo(specialAttackRate, specialWeaponRange);
+        }
+        if (shootGunWeapon != null)
+        {
+            shootGunWeapon.SetWeaponInfo(specialAttackRate, specialWeaponRange);
         }
     }
 

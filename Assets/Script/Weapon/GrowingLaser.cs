@@ -21,6 +21,8 @@ public class GrowingLaser : MonoBehaviour
     private float targetLength;
     private HashSet<Collider> alreadyHit = new HashSet<Collider>(); // 중복 방지용
 
+    float lifeTime = 3f;
+
     void Start()
     {
         lineRenderer.useWorldSpace = false; // 명시적으로
@@ -33,6 +35,9 @@ public class GrowingLaser : MonoBehaviour
 
         lineRenderer.positionCount = 2;
         lineRenderer.SetPosition(0, Vector3.zero); // 로컬 원점
+
+        //스스로 파괴 
+        Invoke(nameof(DestroySelf), lifeTime);
     }
 
     void Update()
@@ -84,5 +89,15 @@ public class GrowingLaser : MonoBehaviour
                 //  health.TakeDamage(damage * Time.deltaTime);
             }
         }
+    }
+
+    void DestroySelf()
+    {
+        Destroy(this.gameObject);
+    }
+
+    public void SetDirection(Vector3 dir)
+    {
+        this.transform.LookAt(dir);
     }
 }
