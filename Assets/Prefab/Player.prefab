@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3310750348430569361}
   - component: {fileID: 3928260962300889239}
+  - component: {fileID: 3183945173503898611}
+  - component: {fileID: 2196316980823989979}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -45,18 +47,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f852ed0d6f528d47acab89cb122429b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  attack: 10
   attackRate: 1
-  criticalRate: 0
-  criticalDamageRate: 2
-  armorPenetration: 0
   weaponRange: 0
-  bulletPrefab: {fileID: 6306563915319577575, guid: f003a98c35903f3409438966b5dffd55, type: 3}
-  basicPosition: {fileID: 3310750348430569361}
-  radius: 5
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 128
+  specialWeaponRange: 5
+  specialAttackRate: 5
+  basicWeapon: {fileID: 3183945173503898611}
+  specialWeapon: {fileID: 2196316980823989979}
+--- !u!114 &3183945173503898611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127714618053801912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bff7504a6fb0aea408ac1d5f49d3549d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BasicGunWeapon
+  weaponDataSO: {fileID: 11400000, guid: b03f93eba77166248a9af0e85d41b585, type: 2}
+--- !u!114 &2196316980823989979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 127714618053801912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c83efabceaf395843b5143955260e8ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LaserWeapon
+  weaponDataSO: {fileID: 11400000, guid: df576e89de0ec2e41b65797c231e200e, type: 2}
 --- !u!1 &6087429217036585095
 GameObject:
   m_ObjectHideFlags: 0

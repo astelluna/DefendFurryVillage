@@ -602,6 +602,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 127714618053801912, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3310750348430569361, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.46
@@ -647,27 +651,47 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3928260962300889239, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: basicWeapon
+      value: 
+      objectReference: {fileID: 996111197}
+    - target: {fileID: 3928260962300889239, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
       propertyPath: laserWeapon
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3928260962300889239, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: specialWeapon
+      value: 
+      objectReference: {fileID: 996111198}
+    - target: {fileID: 3928260962300889239, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
       propertyPath: shootGunWeapon
       value: 
-      objectReference: {fileID: 996111192}
-    m_RemovedComponents: []
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2196316980823989979, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 127714618053801912, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 996111192}
+      addedObject: {fileID: 996111198}
   m_SourcePrefab: {fileID: 100100000, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
 --- !u!1 &996111191 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 127714618053801912, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
   m_PrefabInstance: {fileID: 996111190}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &996111192
+--- !u!114 &996111197 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3183945173503898611, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+  m_PrefabInstance: {fileID: 996111190}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996111191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bff7504a6fb0aea408ac1d5f49d3549d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BasicGunWeapon
+--- !u!114 &996111198
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -679,7 +703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e650425d67d4c94a887fdbd1e283498, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShootGunWeapon
-  weaponPrefab: {fileID: 3543824175731101463, guid: f003a98c35903f3409438966b5dffd55, type: 3}
+  weaponDataSO: {fileID: 11400000, guid: 40b630265fb20d24891d1c81973e6a3b, type: 2}
 --- !u!1 &1022009902
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,6 +764,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 127714618053801912, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3310750348430569361, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -780,40 +808,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3928260962300889239, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
-      propertyPath: LaserPrefab
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3928260962300889239, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
-      propertyPath: laserWeapon
-      value: 
-      objectReference: {fileID: 3064641489260152569}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 127714618053801912, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3064641489260152569}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
---- !u!1 &3064641489260152568 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 127714618053801912, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
-  m_PrefabInstance: {fileID: 3064641489260152567}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3064641489260152569
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3064641489260152568}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c83efabceaf395843b5143955260e8ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LaserWeapon
-  weaponPrefab: {fileID: 2928852933022596369, guid: 16992d3a229a39641865545c79e36a8b, type: 3}
 --- !u!1001 &4324113583328126827
 PrefabInstance:
   m_ObjectHideFlags: 0
