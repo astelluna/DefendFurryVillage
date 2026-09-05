@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BasicGunWeapon : Weapon
@@ -23,9 +24,11 @@ public class BasicGunWeapon : Weapon
     private void ShootBullet(Transform enemyTarget)
     {
         GameObject gameObject = Instantiate(weaponDataSO.bulletPrefab, transform.position, transform.rotation);
-        if (gameObject.TryGetComponent(out Bullet bullet))
+        if (gameObject.TryGetComponent(out Projectile projectile))
         {
-            bullet.SetDirection(enemyTarget.position);
+            projectile.SetProjectileData(runtimeData, new List<AugmentSpecialDataSO>(augmentSpecialDataSOList));
+            projectile.SetDirectionToEnemyPosition(enemyTarget.position);
+            projectile.Shoot();
         }
         else
         {

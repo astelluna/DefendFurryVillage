@@ -27,9 +27,12 @@ public class MissileWeapon : Weapon
     {
         //그냥 미사일 쏘자
         GameObject gameObject = Instantiate(weaponDataSO.bulletPrefab, transform.position, transform.rotation);
-        if (gameObject.TryGetComponent(out Missile missile))
+        //Missile.cs 씀
+        if (gameObject.TryGetComponent(out Projectile projectile))
         {
-            missile.Shoot(enemyTarget.position, missileRadius);
+            projectile.SetTargetPos(enemyTarget.position);
+            projectile.SetExplodeRadius(missileRadius);
+            projectile.Shoot();
         }
         else
         {

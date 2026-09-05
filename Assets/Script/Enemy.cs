@@ -120,9 +120,24 @@ public class Enemy : MonoBehaviour
         exitGraceCor = null;
     }
 
-    void OnHit()
+    public void TakeDamage(int dmg)
     {
-        //TODO -> 충돌 처리
+        //TODO -> 데미지 처리
+        Debug.Log($"{dmg} 만큼 데미지 받음");
     }
+
+    public void OnHitDelay(int dmg, float delayTime)
+    {
+        //일정시간 이후에 데미지를 받아야 할때 사용한다.
+        StartCoroutine(WaitForDelay(dmg,delayTime));
+    }
+
+    IEnumerator WaitForDelay(int dmg, float delayTime)
+    {
+        //TODO. 기다리는동안 롤 처형시간 이펙트처럼 몸에 이펙트 나와야하면 표시하면 될듯
+        yield return new WaitForSeconds(delayTime);
+        TakeDamage(dmg);
+    }
+
 }
 

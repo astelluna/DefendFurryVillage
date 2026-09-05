@@ -1,9 +1,10 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Missile : MonoBehaviour
+public class Missile : Projectile
 {
     float radius;
     [SerializeField] float duration = 0.3f;
@@ -12,18 +13,8 @@ public class Missile : MonoBehaviour
     Vector3 startPosition;
     Vector3 targetPosition;
 
-    //public void Shoot(Vector3 target, float explodeRadius)
-    public void Shoot(Vector3 target, float explodeRadius)
-    {
-        startPosition = transform.position;
-        targetPosition = target;
-        radius = explodeRadius;
 
-        StartCoroutine(Move());
-    }
-
-
-    IEnumerator Move()
+    IEnumerator MoveExecute()
     {
 
         //해당 방향을 바라보도록 하자.
@@ -65,10 +56,24 @@ public class Missile : MonoBehaviour
         DestroySelf();
     }
 
-    void DestroySelf()
+    public override void Shoot()
+    {
+        startPosition = transform.position;
+        Move();
+    }
+
+    protected override void Move()
+    {
+        StartCoroutine(MoveExecute());
+    }
+
+    protected override void Init()
+    {
+        
+    }
+
+    protected override void DestroySelf()
     {
         Destroy(this.gameObject);
     }
-
-
 }

@@ -1,16 +1,17 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GrowingLaser : MonoBehaviour
+public class GrowingLaser : Projectile
 {
     [Header("길이/성장")]
     public float maxLength = 20f;
     public float growSpeed = 30f;
     public LayerMask hitLayers;      // 레이저가 막히는 대상 (벽 등)
-    public LayerMask targetLayers;   // 데미지를 줄 대상 (적 등)
+    //public LayerMask targetLayers;   // 데미지를 줄 대상 (적 등)
 
     [Header("판정")]
-    public float laserRadius = 0.3f;
+    public float laserRadius = 0.7f;
     public int damage = 10;
     public bool oneTimeDamagePerTarget = true; // 대상당 한 번만 데미지 줄지 여부
 
@@ -21,42 +22,8 @@ public class GrowingLaser : MonoBehaviour
     private float targetLength;
     private HashSet<Collider> alreadyHit = new HashSet<Collider>(); // 중복 방지용
 
-    float lifeTime = 3f;
-
-    void Start()
-    {
-        lineRenderer.useWorldSpace = false; // 명시적으로
-
-        RaycastHit hit;
-        if (Physics.SphereCast(transform.position, laserRadius, transform.forward, out hit, maxLength, hitLayers))
-            targetLength = hit.distance;
-        else
-            targetLength = maxLength;
-
-        lineRenderer.positionCount = 2;
-        lineRenderer.SetPosition(0, Vector3.zero); // 로컬 원점
-
-        //스스로 파괴 
-        Invoke(nameof(DestroySelf), lifeTime);
-    }
-
-    void Update()
-    {
-        // 1. 길이 성장
-        float previousLength = currentLength;
-        if (currentLength < targetLength)
-        {
-            currentLength += growSpeed * Time.deltaTime;
-            currentLength = Mathf.Min(currentLength, targetLength);
-        }
-
-        // 2. 비주얼 갱신
-        // 로컬 좌표로 수정
-        lineRenderer.SetPosition(0, Vector3.zero);
-        lineRenderer.SetPosition(1, Vector3.forward * currentLength); // 로컬 forward
-        // 3. 판정 (자라난 만큼만 검사)
-        CheckHits();
-    }
+    float maxLifeTime = 3f;
+    float curLifeTime = 0f;
 
     void CheckHits()
     {
@@ -65,7 +32,7 @@ public class GrowingLaser : MonoBehaviour
             laserRadius,
             transform.forward,
             currentLength,
-            targetLayers
+            TargetManager.Instance.EnemyLayer
         );
 
         foreach (var hit in hits)
@@ -91,13 +58,55 @@ public class GrowingLaser : MonoBehaviour
         }
     }
 
-    void DestroySelf()
+    public override void Shoot()
     {
-        Destroy(this.gameObject);
+        lineRenderer.useWorldSpace = false; // 명시적으로
+
+        targetLength = maxLength;
+
+        lineRenderer.positionCount = 2;
+        lineRenderer.SetPosition(0, Vector3.zero); // 로컬 원점
+
+        Move();   
     }
 
-    public void SetDirection(Vector3 dir)
+    protected override void Move()
     {
-        this.transform.LookAt(dir);
+        StartCoroutine(LaserMove());
+    }
+    IEnumerator LaserMove()
+    {
+        while(curLifeTime < maxLifeTime)
+        {
+            curLifeTime += Time.deltaTime;
+            // 1. 길이 성장
+            float previousLength = currentLength;
+            if (currentLength < targetLength)
+            {
+                currentLength += growSpeed * Time.deltaTime;
+                currentLength = Mathf.Min(currentLength, targetLength);
+            }
+
+            // 2. 비주얼 갱신
+            // 로컬 좌표로 수정
+            lineRenderer.SetPosition(0, Vector3.zero);
+            lineRenderer.SetPosition(1, Vector3.forward * currentLength); // 로컬 forward
+                                                                          // 3. 판정 (자라난 만큼만 검사)
+            CheckHits();
+            yield return null;
+        }
+        //전부 끝나면 바로 레이저 삭제
+        DestroySelf();
+    }
+
+    protected override void Init()
+    {
+        
+    }
+
+    protected override void DestroySelf()
+    {
+        curLifeTime = 0;
+        Destroy(this.gameObject);
     }
 }

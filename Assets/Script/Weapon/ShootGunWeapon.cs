@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ShootGunWeapon : Weapon
@@ -25,6 +26,17 @@ public class ShootGunWeapon : Weapon
             
         }
     }
+    //테스트용 현재 선택된 증강 리스트
+    [SerializeField] List<AugmentDataSO> testAugmentDataSOList; //테스트용
+    
+    
+    private void Awake()
+    {
+        augmentDataList = testAugmentDataSOList; //테스트용
+        UpdateWeaponData(); //테스트용
+    }
+
+    
 
 
     private void ShootBullet(Transform enemyTarget)
@@ -43,9 +55,11 @@ public class ShootGunWeapon : Weapon
             Quaternion rotation = targetRotation * Quaternion.Euler(0f, angle, 0f);
             var gameObject = Instantiate(weaponDataSO.bulletPrefab, transform.position, rotation);
 
-            if (gameObject.TryGetComponent(out Bullet bullet))
+            //if (gameObject.TryGetComponent(out Bullet bullet))
+            //발사체로 Bullet.cs쓴다
+            if (gameObject.TryGetComponent(out Projectile projectile))
             {
-                bullet.SetBulletHitCount(maxBulletHitCount);
+                projectile.SetProjectileData(runtimeData, new List<AugmentSpecialDataSO>(augmentSpecialDataSOList));
             }
 
         }
