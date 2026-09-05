@@ -15,12 +15,28 @@ public class ShootGunWeapon : Weapon
         while (true)
         {
             //TODO. 추후 오브젝트풀로 바꿔야함
-            Transform enemyTarget = TargetManager.Instance.GetEnemyTarget(weaponDataSO.baseRange);
+            int attackCount = runtimeData.plusAttackCount;
+            List<Transform> enemyTarget = TargetManager.Instance.GetEnemyTarget(weaponDataSO.baseRange,attackCount);
             //무기 쿨타임이 지났고, 타겟을 확인헀다면 발사
-            if (Time.time >= nextAttackTime && enemyTarget != null)
+            if (Time.time >= nextAttackTime && enemyTarget != null && enemyTarget.Count > 0)
             {
                 //스페셜 공격중 샷건 쓴다고 생각해보자.
-                ShootBullet(enemyTarget);
+                Transform selectedTrf = enemyTarget[0];
+                for (int i = 0; i < attackCount; i++)
+                {
+                    //샷건은 무조건 0번째 적을 노려보자.
+                    if (selectedTrf == null)
+                    {
+                        selectedTrf = FindExistTransform(enemyTarget);
+                        if (selectedTrf == null)
+                        {
+                            yield return continuousFireDelay;
+                            continue;
+                        }
+                    }
+                    ShootBullet(selectedTrf);
+                    yield return continuousFireDelay;
+                }
             }
             yield return null;
             

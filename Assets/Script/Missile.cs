@@ -11,14 +11,13 @@ public class Missile : Projectile
     [SerializeField] float arcHeight = 3f;
 
     Vector3 startPosition;
-    Vector3 targetPosition;
 
 
     IEnumerator MoveExecute()
     {
 
         //해당 방향을 바라보도록 하자.
-        transform.LookAt(targetPosition);
+        transform.LookAt(targetPos);
 
         float elapsed = 0f;
 
@@ -29,7 +28,7 @@ public class Missile : Projectile
             float t = elapsed / duration;
 
             Vector3 position =
-                Vector3.Lerp(startPosition, targetPosition, t);
+                Vector3.Lerp(startPosition, targetPos, t);
 
             transform.position = position;
 

@@ -15,6 +15,11 @@ public abstract class Weapon : MonoBehaviour
     protected WeaponRuntimeData runtimeData = new WeaponRuntimeData();
     protected List<AugmentSpecialDataSO> augmentSpecialDataSOList = new List<AugmentSpecialDataSO>();
 
+    //발사 횟수가 2회이상일때 딜레이를 위해서 추가
+    protected float shootDelay = 0.5f;
+    protected WaitForSeconds continuousFireDelay;
+
+
     //증강이 선택되면 현재 무기의 런타임 정보를 갱신한다.
     protected void UpdateWeaponData()
     {
@@ -92,6 +97,7 @@ public abstract class Weapon : MonoBehaviour
     //public void SetWeaponInfo(PlayerStat stat, float attackRate, float range)
     public void SetWeaponInfo(PlayerStat stat)
     {
+        continuousFireDelay = new WaitForSeconds(shootDelay);
         playerStat = stat;
 
         if (shootCor == null)
@@ -108,5 +114,15 @@ public abstract class Weapon : MonoBehaviour
 
     //무기 공격 동작 코루틴은 자식이 알아서 하도록 하자.
     protected abstract IEnumerator ShootWeapon();
-
+    protected virtual Transform FindExistTransform(List<Transform> enemyTransform)
+    {
+        foreach (var item in enemyTransform)
+        {
+            if (item != null)
+            {
+                return item;
+            }
+        }
+        return null;
+    }
 }

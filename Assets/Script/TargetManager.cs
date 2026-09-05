@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TargetManager : MonoBehaviour
@@ -12,8 +13,9 @@ public class TargetManager : MonoBehaviour
     [SerializeField] float radius;
     //[SerializeField] LayerMask enemyLayer;
     Collider[] result = new Collider[30];
-    Transform enemyTarget;
-    float nearestDistance;
+    //Transform enemyTarget;
+    List<(float, Transform)> sortedEnemyList = new List<(float, Transform)>(); //적의 거리, transform정보가 오름차순 저장된 리스트
+    //float nearestDistance;
     //타겟 찾는거는 제일 가까운거 찾아두고, 무기 사거리에 따라서 알아서 공격하도록 하자
     float delayTime = 0.1f;
     WaitForSeconds delay;
@@ -48,32 +50,38 @@ public class TargetManager : MonoBehaviour
         }
     }
 
-    private Transform FindEnemyTarget()
+    private void FindEnemyTarget()
     {
         //원형으로 체크를 해볼까? Enemy 타겟을 찾는거임
         var enemyCount = Physics.OverlapSphereNonAlloc(transform.position, radius, result, EnemyLayer);
+        sortedEnemyList.Clear();
         if (enemyCount == 0)
         {
-            enemyTarget = null;
-            return null;
+            //enemyTarget = null;
+            return;
         }
-        Transform enemyTransform = null;
-        nearestDistance = float.MaxValue;
+        //Transform enemyTransform = null;
+        //nearestDistance = float.MaxValue;
+        //List<(float, Transform)> transformList = new List<(float, Transform)>();
+        
         for (int i = 0; i < enemyCount; i++)
         {
-            //내 앞쪽에 있는지 확인? 어짜피 벽으로 가려있는데 안해도되지않을까
-
-
+            //여러 위치를 측정해서. 저장해둬보자. 최대 5개? 이렇게 해볼까
             //거리 측정
             float distance = Vector3.Distance(transform.position, result[i].transform.position);
-            if (distance < nearestDistance)
-            {
-                nearestDistance = distance;
-                enemyTransform = result[i].transform;
-            }
+            //if (distance < nearestDistance)
+            //{
+            //    nearestDistance = distance;
+            //    enemyTransform = result[i].transform;
+            //}
+
+            sortedEnemyList.Add((distance, result[i].transform));
+
         }
-        enemyTarget = enemyTransform;
-        return enemyTransform;
+        //enemyTarget = enemyTransform;
+
+        sortedEnemyList.Sort((a, b) => a.Item1.CompareTo(b.Item1));
+        //return enemyTransform;
     }
 
     //코루틴으로 0.1초마다 실행하자
@@ -82,20 +90,31 @@ public class TargetManager : MonoBehaviour
         while(true)
         {
             FindEnemyTarget();
-            Debug.Log(enemyTarget);
+            //Debug.Log(enemyTarget);
             yield return delay;
         }
     }
-    public Transform GetEnemyTarget(float range)
+    public List<Transform> GetEnemyTarget(float range, int maxCount)
     {
-        //무기들이 사거리를 넣으면, 현재 사거리에 포함되는지 확인해서 반환
-        if(nearestDistance <= range)
+        //maxCount개만큼 최소순위부터 계속 반환을 해본다.
+        List<Transform> enemyTargetList = new List<Transform>();
+        if (sortedEnemyList == null)
         {
-            return enemyTarget;
+            Debug.LogError("에러떠서 기본꺼 넣어서 보냅니다");
+            return enemyTargetList;
         }
-        else
+        for (int i=0; i< maxCount; i++)
         {
-            return null;
+            if (sortedEnemyList.Count <= i) break;
+            var k = sortedEnemyList;
+            if (k[i].Item2 == null) continue;
+            if (k[i].Item1 > range) break;
+            
+            
+            enemyTargetList.Add(sortedEnemyList[i].Item2);
         }
+
+        return enemyTargetList;
     }
+
 }

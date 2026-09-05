@@ -23,6 +23,12 @@ public class Enemy : MonoBehaviour
     Coroutine attackCor;
 
     private Coroutine exitGraceCor;
+
+
+    Coroutine magnetCoroutine;
+    bool isMagnet = false;
+    Vector3 magnetPos;
+    float magnetSpeed = 50;
     //public void SetEnemyInfo(int dmg, float spd, List<IBulletEffect> effects)
     //{
     //    damage = dmg;
@@ -42,7 +48,7 @@ public class Enemy : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if(isMove)
+        if(isMove && !isMagnet)
         {
             rb.MovePosition(transform.position + transform.forward * -speed * Time.fixedDeltaTime);
         }
@@ -137,6 +143,50 @@ public class Enemy : MonoBehaviour
         //TODO. 기다리는동안 롤 처형시간 이펙트처럼 몸에 이펙트 나와야하면 표시하면 될듯
         yield return new WaitForSeconds(delayTime);
         TakeDamage(dmg);
+    }
+
+    public void StartEnemyMagnet(Vector3 centerPos, float pullDistance)
+    {
+        Vector3 direction = (centerPos - rb.position).normalized;
+        float distance = Vector3.Distance(rb.position, centerPos);
+
+        float moveDistance = Mathf.Min(pullDistance, distance);
+
+        magnetPos = rb.position + direction * moveDistance;
+        if (magnetCoroutine != null) 
+        { 
+            StopCoroutine(magnetCoroutine);
+            magnetCoroutine = null;
+        }
+        isMagnet = true;
+        magnetCoroutine = StartCoroutine(MagnetMove());
+    }
+
+    IEnumerator MagnetMove()
+    {
+        while(true)
+        {
+            float dist = Vector3.Distance(rb.position, magnetPos);
+            if(dist < 0.05f)
+            {
+                isMagnet = false;
+                magnetCoroutine = null;
+                yield break;
+            }
+            Vector3 nextPos = Vector3.MoveTowards(rb.position, magnetPos, Time.fixedDeltaTime * magnetSpeed);
+            rb.MovePosition(nextPos);
+            yield return new WaitForFixedUpdate();
+        }
+        
+    }
+
+    public void KnockBack(float distance)
+    {
+
+        Vector3 pos = rb.position;
+        pos.z += distance;
+
+        rb.MovePosition(pos);
     }
 
 }

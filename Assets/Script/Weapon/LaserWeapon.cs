@@ -4,24 +4,52 @@ using UnityEngine;
 
 public class LaserWeapon : Weapon
 {
+    //테스트용 현재 선택된 증강 리스트
+    [SerializeField] List<AugmentDataSO> testAugmentDataSOList; //테스트용
+
+
+    private void Awake()
+    {
+        augmentDataList = testAugmentDataSOList; //테스트용
+        UpdateWeaponData(); //테스트용
+    }
     protected override IEnumerator ShootWeapon()
     {
         while (true)
         {
             //TODO. 추후 오브젝트풀로 바꿔야함
-            Transform enemyTarget = TargetManager.Instance.GetEnemyTarget(weaponDataSO.baseRange);
+            int attackCount = runtimeData.plusAttackCount;
+            List<Transform> enemyTarget = TargetManager.Instance.GetEnemyTarget(weaponDataSO.baseRange, attackCount);
             //무기 쿨타임이 지났고, 타겟을 확인헀다면 발사
-            if (Time.time >= nextAttackTime && enemyTarget != null)
+            if (Time.time >= nextAttackTime && enemyTarget != null && enemyTarget.Count > 0)
             {
                 //스페셜 공격중 레이저를 쓴다고 생각해보자. -> GrowingLaser.cs 씀
-                Projectile projectile = Instantiate(weaponDataSO.bulletPrefab, transform).GetComponent<Projectile>();
-                projectile.SetDirectionToEnemyPosition(enemyTarget.position);
-                projectile.SetProjectileData(runtimeData, new List<AugmentSpecialDataSO>(augmentSpecialDataSOList));
-                projectile.Shoot();
+                for(int i=0; i< attackCount; i++)
+                {
+                    //레이저는 발사할때 무조건 다른 적을 쏜다고 가정하자. 
+                    int idx = i % enemyTarget.Count;
+                    Transform trf = enemyTarget[idx];
+                    if(trf == null)
+                    {
+                        trf = FindExistTransform(enemyTarget);
+                        if(trf == null)
+                        {
+                            yield return continuousFireDelay;
+                            continue;
+                        }
+                    }
+
+                    Projectile projectile = Instantiate(weaponDataSO.bulletPrefab, transform).GetComponent<Projectile>();
+                    projectile.SetDirectionToEnemyPosition(trf.position);
+                    projectile.SetProjectileData(runtimeData, new List<AugmentSpecialDataSO>(augmentSpecialDataSOList));
+                    projectile.Shoot();
+                    yield return continuousFireDelay;
+                }
+                
+
+
                 SetWeaponCoolTime();
-                //GrowingLaser laser = Instantiate(weaponDataSO.bulletPrefab, transform).GetComponent<GrowingLaser>();
-                //laser.SetDirection(enemyTarget.position);
-                //SetWeaponCoolTime();
+
             }
             yield return null;
         }
