@@ -7,6 +7,8 @@ public abstract class Projectile : MonoBehaviour
     protected WeaponRuntimeData weaponRuntimeData;
     //무기에서 총알 쏘기전에 설정한. 특정 행동들이 필요한 것들을 전부 모아둔 리스트
     protected List<AugmentSpecialDataSO> augmentSpecialDataSOList;
+    //총알에 있는 상태이상 효과들을 저장한 리스트
+    protected List<IStatusEffect> statusEffectList; 
 
 
     protected int curPierceCount = 0;

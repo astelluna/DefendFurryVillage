@@ -15,6 +15,8 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] Rigidbody rb;
 
+    [SerializeField] EnemyStatusEffectController statusEffectController;
+
     bool isMove = true;
     //공격을 추가한다면?
     int attack = 10;
@@ -189,5 +191,18 @@ public class Enemy : MonoBehaviour
         rb.MovePosition(pos);
     }
 
+    public void AddStatusEffect(IStatusEffect effect)
+    {
+        statusEffectController.AddStatusEffect(effect);
+    }
+
+    public void RegisterEffect(GameObject vfx)
+    {
+        //TODO. 추후에 이펙트 추가하자
+    }
+    public void RemoveEffect(GameObject vfx)
+    {
+        //TODO. 추후에 이펙트 제거 하는거 넣자.
+    }
 }
 

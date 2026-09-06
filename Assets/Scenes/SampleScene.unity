@@ -1978,7 +1978,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 127714618053801912, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2196316980823989979, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
       propertyPath: testAugmentDataSOList.Array.size
