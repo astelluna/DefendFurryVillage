@@ -88,7 +88,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            Debug.LogError("성벽 레이어인데 스크립트가 없습니다.");
+            MyLog.LogError("성벽 레이어인데 스크립트가 없습니다.");
         }
         isMove = false;
 
@@ -129,7 +129,7 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int dmg)
     {
         //TODO -> 데미지 처리
-        Debug.Log($"{dmg} 만큼 데미지 받음");
+        MyLog.Log($"{dmg} 만큼 데미지 받음");
     }
 
     public void OnHitDelay(int dmg, float delayTime)

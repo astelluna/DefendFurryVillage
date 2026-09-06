@@ -64,7 +64,7 @@ public class MissileWeapon : Weapon
         }
         else
         {
-            Debug.Log("미사일 찾기 실패");
+            MyLog.Log("미사일 찾기 실패");
         }
         SetWeaponCoolTime();
     }

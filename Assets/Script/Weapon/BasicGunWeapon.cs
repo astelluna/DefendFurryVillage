@@ -60,7 +60,7 @@ public class BasicGunWeapon : Weapon
         }
         else
         {
-            Debug.LogError("총알 스크립트가 없습니다");
+            MyLog.LogError("총알 스크립트가 없습니다");
         }
         SetWeaponCoolTime();
     }

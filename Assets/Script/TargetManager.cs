@@ -90,7 +90,7 @@ public class TargetManager : MonoBehaviour
         while(true)
         {
             FindEnemyTarget();
-            //Debug.Log(enemyTarget);
+            //MyLog.Log(enemyTarget);
             yield return delay;
         }
     }
@@ -100,7 +100,7 @@ public class TargetManager : MonoBehaviour
         List<Transform> enemyTargetList = new List<Transform>();
         if (sortedEnemyList == null)
         {
-            Debug.LogError("에러떠서 기본꺼 넣어서 보냅니다");
+            MyLog.LogError("에러떠서 기본꺼 넣어서 보냅니다");
             return enemyTargetList;
         }
         for (int i=0; i< maxCount; i++)
