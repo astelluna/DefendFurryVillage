@@ -10,11 +10,6 @@ public class MissileWeapon : Weapon
     [SerializeField] List<AugmentDataSO> testAugmentDataSOList; //테스트용
 
 
-    private void Awake()
-    {
-        augmentDataList = testAugmentDataSOList; //테스트용
-        UpdateWeaponData(); //테스트용
-    }
     protected override IEnumerator ShootWeapon()
     {
         while (true)

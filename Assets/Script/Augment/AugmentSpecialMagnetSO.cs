@@ -6,6 +6,10 @@ public class AugmentSpecialMagnetSO : AugmentSpecialDataSO, IOnHit
     [SerializeField] float radius = 1.0f;
 
     Collider[] colliderArray = new Collider[20];
+    public override string GetDescription()
+    {
+        return $"주변의 적들을 끌어당깁니다 ";
+    }
     public void OnHit(WeaponRuntimeData runtimeData, Enemy enemy)
     {
         //맞으면, 해당 범위의 주변 적들을 중앙으로 조금 끌고온다. -> 단, -z축으로

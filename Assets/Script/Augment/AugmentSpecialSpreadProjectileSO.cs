@@ -7,7 +7,15 @@ public class AugmentSpecialSpreadProjectileSO : AugmentSpecialDataSO, IOnHit
     [SerializeField] GameObject projectilePrefab;
 
     List<Vector3> directionList;
-
+    public override string GetDescription()
+    {
+        //주변  8개 방향으로 총알이 생성되어서 날라간다.
+        if (directionList == null || directionList.Count == 0)
+        {
+            Init();
+        }
+        return $"주변 {directionList.Count}의 방향으로 추가 투사체가 발사됩니다 ";
+    }
     public void OnHit(WeaponRuntimeData weaponRuntimeData, Enemy enemy)
     {
         //주변  8개 방향으로 총알이 생성되어서 날라간다.

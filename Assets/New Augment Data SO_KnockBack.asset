@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8b2373c7c9ea8244bf0ca1cd6a80aeb, type: 3}
-  m_Name: New Augment Data SO
+  m_Name: New Augment Data SO_KnockBack
   m_EditorClassIdentifier: Assembly-CSharp::AugmentDataSO
   <addAttackDamage>k__BackingField: 0
-  <reduceAttackRate>k__BackingField: 0.5
+  <reduceAttackRate>k__BackingField: 0
   <addProjectileScale>k__BackingField: 0.5
   <addAttackCount>k__BackingField: 5
   <addPierceCount>k__BackingField: 0
   augmentSpecialDataSOList:
-  - {fileID: 11400000, guid: a3ae040eb6253ef4382b596de0c18973, type: 2}
+  - {fileID: 11400000, guid: 663115480594cea48a7c636f52959fac, type: 2}

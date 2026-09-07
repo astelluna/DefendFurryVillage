@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerStat
@@ -7,6 +9,24 @@ public class PlayerStat
     [field:SerializeField] public float criticalRate { get; private set; } = 0; //크리 확률
     [field:SerializeField] public float criticalDamageRate { get; private set; } = 2; //크리 데미지 배율 (2배)
     [field: SerializeField] public float armorPenetration { get; private set; } = 0; //방어 관통률
+}
+
+public class WeaponAugment
+{
+    public Weapon weapon;
+    public AugmentDataSO dataSO;
+    public event Action<WeaponAugment> OnSelected;
+    public WeaponAugment(Weapon wp, AugmentDataSO data)
+    {
+        weapon = wp;
+        dataSO = data;
+    }
+
+    public void SelectedEventInvoke(WeaponAugment augment)
+    {
+        OnSelected?.Invoke(augment);
+    }
+    
 }
 
 public class Player : MonoBehaviour
@@ -27,11 +47,16 @@ public class Player : MonoBehaviour
     [SerializeField] Weapon basicWeapon;
     [SerializeField] Weapon specialWeapon;
 
+    //캐릭터의 초상화 sprite 
+    [field: SerializeField] public Sprite Portrait { get; private set; }
+
 
     private void Start()
     {
         basicWeapon.SetWeaponInfo(this.playerStat);
         specialWeapon.SetWeaponInfo(this.playerStat);
+
+        AugmentManager.Instance.AddPlayer(this);
     }
 
 
@@ -57,6 +82,33 @@ public class Player : MonoBehaviour
         //float result = damage * (100 / (100 + armor));
         //return result;
         return 0;
+    }
+
+    public WeaponAugment GetAugment()
+    {
+        List<Weapon> haveUpgradeWeaponList = new List<Weapon>();
+        if(basicWeapon.HaveAugmentUpgrade())
+        {
+            haveUpgradeWeaponList.Add(basicWeapon);
+        }
+        if(specialWeapon.HaveAugmentUpgrade())
+        {
+            haveUpgradeWeaponList.Add(specialWeapon);
+        }
+
+        if (haveUpgradeWeaponList.Count == 0) return null;
+
+        int index = UnityEngine.Random.Range(0, haveUpgradeWeaponList.Count);
+        Weapon curWeapon = haveUpgradeWeaponList[index];
+        AugmentDataSO dataSO = curWeapon.GetRandomAugmentData();
+        WeaponAugment weaponAugment = new WeaponAugment(curWeapon, dataSO);
+        return weaponAugment;
+
+    }
+    public bool HaveRemainWeaponAugment()
+    {
+        if(basicWeapon.HaveAugmentUpgrade() || specialWeapon.HaveAugmentUpgrade() ) { return true; }
+        return false;
     }
 
     

@@ -45,15 +45,6 @@ public class ShootGunWeapon : Weapon
     //테스트용 현재 선택된 증강 리스트
     [SerializeField] List<AugmentDataSO> testAugmentDataSOList; //테스트용
     
-    
-    private void Awake()
-    {
-        augmentDataList = testAugmentDataSOList; //테스트용
-        UpdateWeaponData(); //테스트용
-    }
-
-    
-
 
     private void ShootBullet(Transform enemyTarget)
     {

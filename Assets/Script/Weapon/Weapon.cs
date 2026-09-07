@@ -19,9 +19,28 @@ public abstract class Weapon : MonoBehaviour
     protected float shootDelay = 0.5f;
     protected WaitForSeconds continuousFireDelay;
 
+    [field: SerializeField] public Sprite WeaponIcon { get; protected set; }
+    //[SerializeField] protected GameObject weaponPrefab;
+    [SerializeField] protected WeaponDataSO weaponDataSO;
+    //[SerializeField] protected float weaponAttackRate;
+    //[SerializeField] protected float weaponRange;
+    protected Coroutine shootCor;
+    
+    protected float nextAttackTime;
+
+    protected PlayerStat playerStat;
+
+    //현재 적용중인 증강 리스트
+    protected List<AugmentDataSO> augmentDataList = new List<AugmentDataSO>();
+    //기본적으로 적용되는 증강 리스트
+    [SerializeField] protected List<AugmentDataSO> basicAugmentDataSOList = new List<AugmentDataSO>();
+    //레벨업 시 선택할수 있는 증강 리스트 (랜덤으로 하나 선택됨)
+    [SerializeField] protected List<AugmentDataSO> existUpgradeAugmentDataList = new List<AugmentDataSO>();
+    protected List<AugmentDataSO> unUsedUpgradeAugmentDataList = new List<AugmentDataSO>(); //증강 업그레이드 선택하면 여기에 들어옴
+    protected List<AugmentDataSO> usedUpgradeAugmentDataList = new List<AugmentDataSO>(); //증강 업그레이드 선택하면 여기에 들어옴
 
     //증강이 선택되면 현재 무기의 런타임 정보를 갱신한다.
-    protected void UpdateWeaponData()
+    public void UpdateWeaponData()
     {
         float damagePercent = 0;
         float ratePercent = 0;
@@ -29,6 +48,17 @@ public abstract class Weapon : MonoBehaviour
         int attackCount = 0;
         int pierceCount = 0;
 
+
+        //증강을 basicAugmentDataSOList + usedUpgradeAugmentDataList로 변경해야함.
+        augmentDataList.Clear();
+        foreach(var item in basicAugmentDataSOList)
+        {
+            augmentDataList.Add(item);
+        }
+        foreach(var item in usedUpgradeAugmentDataList)
+        {
+            augmentDataList.Add(item);
+        }
         foreach (AugmentDataSO item in augmentDataList)
         {
             damagePercent += item.addAttackDamage;
@@ -55,22 +85,31 @@ public abstract class Weapon : MonoBehaviour
         runtimeData.attackRate = Mathf.Round(runtimeData.attackRate * 100f) / 100f;
         if (runtimeData.bulletScale < 0.1) runtimeData.bulletScale = 0.1f;
     }
-
-
-
-    //[SerializeField] protected GameObject weaponPrefab;
-    [SerializeField] protected WeaponDataSO weaponDataSO;
-    //[SerializeField] protected float weaponAttackRate;
-    //[SerializeField] protected float weaponRange;
-    protected Coroutine shootCor;
-    
-    protected float nextAttackTime;
-
-    protected PlayerStat playerStat;
-
-    //현재 증강 리스트
-    protected List<AugmentDataSO> augmentDataList = new List<AugmentDataSO>();
-
+    public AugmentDataSO GetRandomAugmentData()
+    {
+        if (unUsedUpgradeAugmentDataList.Count == 0) return null;
+        int index = Random.Range(0, unUsedUpgradeAugmentDataList.Count);
+        AugmentDataSO dataSO = unUsedUpgradeAugmentDataList[index];
+        unUsedUpgradeAugmentDataList.Remove(dataSO);
+        usedUpgradeAugmentDataList.Add(dataSO);
+        return dataSO;
+    }
+    public bool HaveAugmentUpgrade()
+    {
+        if (unUsedUpgradeAugmentDataList.Count == 0) return false;
+        return true;
+    }
+    public void ReturnAugment(AugmentDataSO augment)
+    {
+        //증강 미선택되어서 다시 돌려보냄
+        unUsedUpgradeAugmentDataList.Add(augment);
+        usedUpgradeAugmentDataList.Remove(augment);
+    }
+    protected virtual void Awake()
+    {
+        unUsedUpgradeAugmentDataList = new List<AugmentDataSO>(existUpgradeAugmentDataList);
+        UpdateWeaponData();
+    }
 
     //TODO. 추후 몬스터 HP 추가하고, 공격력 추가할때 넣자 
     public void DamageCalc()

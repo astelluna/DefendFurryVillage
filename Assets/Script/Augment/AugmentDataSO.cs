@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 [CreateAssetMenu(menuName = "Weapon/AugmentDataSO")]
 public class AugmentDataSO : ScriptableObject
@@ -10,6 +11,23 @@ public class AugmentDataSO : ScriptableObject
     [field: SerializeField] public int addPierceCount { get; private set; } //추가 관통 횟수
     [SerializeField] List<AugmentSpecialDataSO> augmentSpecialDataSOList;
     public IReadOnlyList<AugmentSpecialDataSO> AugmentSpecialDataSOList => augmentSpecialDataSOList;
+
+    public string GetDataDescription()
+    {
+        StringBuilder sb = new StringBuilder();
+        if (addAttackDamage != 0) sb.Append($"공격력을 {addAttackDamage}% ");
+        if (reduceAttackRate != 0) sb.Append($"쿨타임을 {reduceAttackRate}% ");
+        if (addProjectileScale != 0) sb.Append($"투사체 크기를 {addProjectileScale}% ");
+        if (addAttackCount != 0) sb.Append($"공격 횟수를 {addAttackCount} ");
+        if (addPierceCount != 0) sb.Append($"관통 횟수를 {addPierceCount} ");
+        //특수 스킬들
+        foreach(var item in augmentSpecialDataSOList)
+        {
+            sb.Append(item.GetDescription());
+        }
+        sb.Append("추가합니다");
+        return sb.ToString();
+    }
 }
 
 

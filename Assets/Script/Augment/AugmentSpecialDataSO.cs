@@ -6,5 +6,6 @@ public interface IOnHit
 public abstract class AugmentSpecialDataSO : ScriptableObject
 {
     //public string dataId;
+    public abstract string GetDescription();
 
 }
