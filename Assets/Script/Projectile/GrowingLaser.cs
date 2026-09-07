@@ -42,9 +42,10 @@ public class GrowingLaser : Projectile
                 // 이미 맞은 대상이면 스킵
                 if (alreadyHit.Contains(hit.collider)) continue;
                 alreadyHit.Add(hit.collider);
-                if (hit.collider.TryGetComponent<Enemy>(out var health))
+                if (hit.collider.TryGetComponent<Enemy>(out var enemy))
                 {
-                    Destroy(health.gameObject);
+                    enemy.TakeDamage(10);
+                    //Destroy(enemy.gameObject);
                 }
                 //if (hit.collider.TryGetComponent<Health>(out var health))
                 //    health.TakeDamage(damage);

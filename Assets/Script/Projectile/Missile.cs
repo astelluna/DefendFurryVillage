@@ -49,7 +49,8 @@ public class Missile : Projectile
             //일단은 그냥 없앤다.
             if (item.TryGetComponent(out Enemy enemy))
             {
-                Destroy(enemy.gameObject);
+                enemy.TakeDamage(10);
+                //Destroy(enemy.gameObject);
             }
         }
         DestroySelf();

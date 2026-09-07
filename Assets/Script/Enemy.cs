@@ -31,6 +31,14 @@ public class Enemy : MonoBehaviour
     bool isMagnet = false;
     Vector3 magnetPos;
     float magnetSpeed = 50;
+
+    //TODO. 추후 몬스터 능력치들을 SO로 등록할수있게??
+    //일단 수동 등록
+    [SerializeField] int experence = 2;
+    [SerializeField] int maxHp = 30;
+
+    int curHp;
+
     //public void SetEnemyInfo(int dmg, float spd, List<IBulletEffect> effects)
     //{
     //    damage = dmg;
@@ -47,6 +55,8 @@ public class Enemy : MonoBehaviour
         isMove = true;
         attackCor = null;
         exitGraceCor = null;
+
+        curHp = maxHp;
     }
     private void FixedUpdate()
     {
@@ -131,7 +141,20 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int dmg)
     {
         //TODO -> 데미지 처리
-        MyLog.Log($"{dmg} 만큼 데미지 받음");
+        curHp -= dmg;
+        MyLog.Log($"{dmg} 만큼 데미지 받음, HP: {curHp}");
+        
+        if(curHp <= 0 )
+        {
+            Dead();
+        }
+    }
+
+    private void Dead()
+    {
+        MyLog.Log("사망처리");
+        LevelUpManager.Instance.GetExperience(experence);
+        Destroy(this.gameObject);
     }
 
     public void OnHitDelay(int dmg, float delayTime)

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,7 +27,7 @@ public class AugmentManager : MonoBehaviour
     private void Start()
     {
         //TEST
-        Invoke( nameof(ShowAugmentUI), 3.0f);
+        //Invoke( nameof(ShowAugmentUI), 3.0f);
         //ShowAugmentUI();
     }
 
@@ -42,8 +43,22 @@ public class AugmentManager : MonoBehaviour
     {
         playerList.Add(ply);
     }
-    public void ShowAugmentUI()
+
+    int maxShowCount;
+    int curShowCount;
+
+    public void SetAndShowAugmentUI(int cnt)
     {
+        maxShowCount = cnt;
+        if (curShowCount >= maxShowCount) return;
+        Time.timeScale = 0f;
+        ShowAugmentUI();
+    }
+
+    private void ShowAugmentUI()
+    {
+        
+        curShowCount++;
         //UI를 보여주고 현재 플레이어중 1개를 선택해서 쭉쭉 내려간다음에 증강 1개를 선택해서 가져온다.
         bool needShowPanel = false;
         selectedAugmentList.Clear();
@@ -96,6 +111,16 @@ public class AugmentManager : MonoBehaviour
 
         ClearSelectAugmentList();
         augmentPanel.Close();
+        if (curShowCount >= maxShowCount)
+        {
+            Time.timeScale = 1f;
+            return;
+        }
+        else
+        {
+            //연속 레벨업을 체크해야하므로 추가로 계속 해준다.
+            ShowAugmentUI();
+        }
     }
 
     private void ClearSelectAugmentList()

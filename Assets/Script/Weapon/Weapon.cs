@@ -84,6 +84,7 @@ public abstract class Weapon : MonoBehaviour
         if (runtimeData.attackdamage < 1) runtimeData.attackdamage = 1;
         runtimeData.attackRate = Mathf.Round(runtimeData.attackRate * 100f) / 100f;
         if (runtimeData.bulletScale < 0.1) runtimeData.bulletScale = 0.1f;
+        if (runtimeData.plusAttackCount < 1) runtimeData.plusAttackCount = 1;
     }
     public AugmentDataSO GetRandomAugmentData()
     {
