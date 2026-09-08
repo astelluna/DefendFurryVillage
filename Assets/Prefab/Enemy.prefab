@@ -309,11 +309,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21d4d0d9259033447adec3bfd092a8e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  speed: 4
   rb: {fileID: 4180865111708144461}
   statusEffectController: {fileID: 4252497606840152300}
-  experence: 2
-  maxHp: 30
+  enemyDataSO: {fileID: 11400000, guid: 5f7c1b18f22cb6a4fa76c3796e220792, type: 2}
 --- !u!114 &4252497606840152300
 MonoBehaviour:
   m_ObjectHideFlags: 0

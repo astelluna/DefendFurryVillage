@@ -3,24 +3,42 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+public struct EnemyRuntimeStat
+{
+    public int attack { get; private set; }
+    public int defense { get; private set; }
+    //public int hp { get; private set; }
+    public float attackRate { get; private set; }
+    public float moveSpeed { get; private set; }
+    public float penetration { get; private set; }
+    //public int experience { get; private set; }
 
+
+    public void SetEnemyData(int atk, int def, float atkRate, float moveSpd, float penet)
+    {
+        attack = atk;
+        defense = def;
+        attackRate = atkRate;
+        moveSpeed = moveSpd;
+        penetration = penet;
+    }
+}
 
 [RequireComponent(typeof(Rigidbody))]
 public class Enemy : MonoBehaviour
 {
-    int damage;
-    [SerializeField] float speed;
-    //추가 빙결, 그런 효과들은 따로 처리
-    //List<IBulletEffect> effectList = new List<IBulletEffect>();
-
+    
+    //[SerializeField] float speed;
     [SerializeField] Rigidbody rb;
-
+    //상태이상 처리
     [SerializeField] EnemyStatusEffectController statusEffectController;
 
     bool isMove = true;
     //공격을 추가한다면?
-    int attack = 10;
-    float attackRate = 1f;
+    //int damage;
+    //int attack = 10;
+    //float attackRate = 1f;
+    float curAttackRate;
     WaitForSeconds delay;
     Coroutine attackCor;
 
@@ -32,22 +50,38 @@ public class Enemy : MonoBehaviour
     Vector3 magnetPos;
     float magnetSpeed = 50;
 
-    //TODO. 추후 몬스터 능력치들을 SO로 등록할수있게??
-    //일단 수동 등록
-    [SerializeField] int experence = 2;
-    [SerializeField] int maxHp = 30;
-
+    //몬스터 능력치들을 SO로 등록할수있게
+    [SerializeField] EnemyDataSO enemyDataSO;
+    //int experience;
     int curHp;
+    EnemyRuntimeStat runtimeStat;
 
-    //public void SetEnemyInfo(int dmg, float spd, List<IBulletEffect> effects)
-    //{
-    //    damage = dmg;
-    //    speed = spd;
-    //    effectList = effects;
-    //}
-    private void Awake()
+    private void Init()
     {
-        delay = new WaitForSeconds(attackRate);
+        curHp = enemyDataSO.maxHp;
+        UpdateEnemyStat();
+    }
+
+    public void UpdateEnemyStat()
+    {
+        runtimeStat = new EnemyRuntimeStat();
+        //기본 데이터와. 런타임 데이터를 합해서 업데이트.
+        //베이직으로 기본 셋팅
+        int atk = enemyDataSO.attack;
+        int def = enemyDataSO.defense;
+        float atkRate = enemyDataSO.attackRate;
+        float moveSpeed = enemyDataSO.moveSpeed;
+        float penetration = enemyDataSO.penetration;
+        //버프나 디버프는 아직없음. 추후 있으면 추가. 일단 이렇게만 만들어두자.
+
+        //설정
+        runtimeStat.SetEnemyData(atk, def, atkRate, moveSpeed, penetration);
+        if(curAttackRate != runtimeStat.attackRate)
+        {
+            curAttackRate = runtimeStat.attackRate;
+            delay = new WaitForSeconds(curAttackRate);
+        }
+        
     }
 
     private void OnEnable()
@@ -56,13 +90,16 @@ public class Enemy : MonoBehaviour
         attackCor = null;
         exitGraceCor = null;
 
-        curHp = maxHp;
+        Init();
     }
     private void FixedUpdate()
     {
         if(isMove && !isMagnet)
         {
-            rb.MovePosition(transform.position + transform.forward * -speed * Time.fixedDeltaTime);
+            if(runtimeStat.moveSpeed > 0)
+            {
+                rb.MovePosition(transform.position + transform.forward * -runtimeStat.moveSpeed * Time.fixedDeltaTime);
+            }
         }
         
     }
@@ -121,7 +158,7 @@ public class Enemy : MonoBehaviour
         while(true)
         {
             if (castleWall == null) break;
-            castleWall.TakeDamage(attack);
+            castleWall.TakeDamage(runtimeStat.attack);
             yield return delay;
         }
     }
@@ -153,7 +190,7 @@ public class Enemy : MonoBehaviour
     private void Dead()
     {
         MyLog.Log("사망처리");
-        LevelUpManager.Instance.GetExperience(experence);
+        LevelUpManager.Instance.GetExperience(enemyDataSO.experience);
         Destroy(this.gameObject);
     }
 

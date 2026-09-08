@@ -6,7 +6,7 @@ public class CastleWall : MonoBehaviour
     public void TakeDamage(int dmg)
     {
         hp -= dmg;
-        //Debug.Log($"HP {hp}");
+        Debug.Log($"HP {hp}");
     }
 
 }
