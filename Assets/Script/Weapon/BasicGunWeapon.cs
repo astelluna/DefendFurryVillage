@@ -46,6 +46,7 @@ public class BasicGunWeapon : Weapon
     private void ShootBullet(Transform enemyTarget)
     {
         GameObject gameObject = Instantiate(weaponDataSO.bulletPrefab, transform.position, transform.rotation);
+        gameObject.SetActive(false);
         if (gameObject.TryGetComponent(out Projectile projectile))
         {
             projectile.SetProjectileData(runtimeData, new List<AugmentSpecialDataSO>(augmentSpecialDataSOList));
@@ -56,6 +57,7 @@ public class BasicGunWeapon : Weapon
         {
             MyLog.LogError("총알 스크립트가 없습니다");
         }
+        gameObject.SetActive(true);
         SetWeaponCoolTime();
     }
 }

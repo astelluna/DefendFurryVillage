@@ -51,7 +51,8 @@ public abstract class Weapon : MonoBehaviour
 
         //증강을 basicAugmentDataSOList + usedUpgradeAugmentDataList로 변경해야함.
         augmentDataList.Clear();
-        foreach(var item in basicAugmentDataSOList)
+        augmentSpecialDataSOList.Clear();
+        foreach (var item in basicAugmentDataSOList)
         {
             augmentDataList.Add(item);
         }

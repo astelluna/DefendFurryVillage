@@ -45,20 +45,23 @@ public class AugmentManager : MonoBehaviour
     }
 
     int maxShowCount;
-    int curShowCount;
+    //int curShowCount;
 
     public void SetAndShowAugmentUI(int cnt)
     {
-        maxShowCount = cnt;
-        if (curShowCount >= maxShowCount) return;
+        //maxShowCount = cnt;
+        //if (curShowCount >= maxShowCount) return;
+        maxShowCount += cnt;
+        if (maxShowCount <= 0) return;
         Time.timeScale = 0f;
         ShowAugmentUI();
     }
 
     private void ShowAugmentUI()
     {
-        
-        curShowCount++;
+
+        //curShowCount++;
+        maxShowCount--;
         //UI를 보여주고 현재 플레이어중 1개를 선택해서 쭉쭉 내려간다음에 증강 1개를 선택해서 가져온다.
         bool needShowPanel = false;
         selectedAugmentList.Clear();
@@ -69,6 +72,11 @@ public class AugmentManager : MonoBehaviour
             haveAugmentPlyerList = playerList.FindAll(n => n.HaveRemainWeaponAugment());
             if (haveAugmentPlyerList.Count == 0)
             {
+                if(i==0)
+                {
+                    //단 1번이라도 실행이 안되었었다면? 시간 다시 흘러가야함
+                    Time.timeScale = 1f;
+                }
                 MyLog.LogWarning("더이상 증강이 남아있는 플레이어가 없습니다");
                 break;
             }
@@ -111,7 +119,7 @@ public class AugmentManager : MonoBehaviour
 
         ClearSelectAugmentList();
         augmentPanel.Close();
-        if (curShowCount >= maxShowCount)
+        if(maxShowCount <= 0)
         {
             Time.timeScale = 1f;
             return;

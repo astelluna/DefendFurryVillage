@@ -26,17 +26,17 @@ public class AugmentSpecialSpreadProjectileSO : AugmentSpecialDataSO, IOnHit
         //방향으로 생성해서 설정
         for(int i=0; i< directionList.Count; i++)
         {
-            Bullet bullet = Instantiate(projectilePrefab).GetComponent<Bullet>();
-
             Projectile projectile = Instantiate(projectilePrefab).GetComponent<Projectile>();
+            projectile.gameObject.SetActive(false);
             projectile.SetDirectionToDirection(enemy.transform.position, directionList[i]);
-
+            projectile.SetProjectileData(weaponRuntimeData, null); //null로 해서 다른 특수효과 재귀적으로 호출되지않게 해야할듯
             //그냥 해당 enemy무시처리하지말고 기본 2명이상 관통하는거로 하자
             if (weaponRuntimeData.maxPierce < 1)
             {
                 weaponRuntimeData.maxPierce = 2;
             }
-            projectile.SetProjectileData(weaponRuntimeData, null); //null로 해서 다른 특수효과 재귀적으로 호출되지않게 해야할듯
+            projectile.gameObject.SetActive(true);
+
 
             //Bullet bullet = Instantiate(projectilePrefab).GetComponent<Bullet>();
             //bullet.SetDirectionToDirection(enemy.transform.position, directionList[i]);
