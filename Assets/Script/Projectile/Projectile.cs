@@ -43,7 +43,16 @@ public abstract class Projectile : MonoBehaviour
     protected abstract void DestroySelf();
 
 
-    //지정
+    protected virtual DamageInfo MakeDamageInfo(Enemy enemy)
+    {
+        int enemyArmor = enemy.GetEnemyAromr();
+        DamageInfo damageInfo = new DamageInfo();
+        damageInfo.SetDamageInfo(weaponRuntimeData.attackdamage, weaponRuntimeData.criticalPercent, weaponRuntimeData.criticalDamgeRate, weaponRuntimeData.armorPenetrate, enemyArmor);
+        return damageInfo;
+    }
+
+
+    //총알 날아가는 방향 지정
     public virtual void SetDirectionToEnemyPosition(Vector3 dir)
     {
         //몬스터 방향 위치으로 날아가야하면 이렇게

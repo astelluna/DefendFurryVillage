@@ -56,8 +56,9 @@ public class Bullet : Projectile
                     onHit.OnHit(weaponRuntimeData, enemy);
                 }
             }
-
-            enemy.TakeDamage(weaponRuntimeData.attackdamage);
+            DamageInfo damageInfo =  MakeDamageInfo(enemy);
+            int calcDamage = DamageManager.Instance.CalcDamage(damageInfo);
+            enemy.TakeDamage(calcDamage);
 
             //Destroy(other.gameObject);
             //총알 관통력이 전부 소모되었으면 총알 없앰
@@ -70,6 +71,7 @@ public class Bullet : Projectile
             
         }
     }
+    
 
     public override void Shoot()
     {

@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerStat
 {
     [field: SerializeField] public int attack { get; private set; } = 10;
-    [field:SerializeField] public float criticalRate { get; private set; } = 0; //크리 확률
+    [field:SerializeField] public int criticalPercent { get; private set; } = 0; //크리 확률
     [field:SerializeField] public float criticalDamageRate { get; private set; } = 2; //크리 데미지 배율 (2배)
     [field: SerializeField] public float armorPenetration { get; private set; } = 0; //방어 관통률
 }
@@ -34,7 +34,8 @@ public class Player : MonoBehaviour
     //일단 플레이어에게 필요한거 정의를 다 해보자
     //TODO. (일단 직렬화 시킴. 추후에는 SO로 캐릭터 데이터 받아서 하거나. 그런식으로 처리해보자)
     //캐릭터 기본 스텟
-    PlayerStat playerStat;
+    [SerializeField] PlayerDataSO playerDataSO;
+    //PlayerStat playerStat;
     //무기 스텟? -> SO로 빼야할듯
     [SerializeField] float attackRate = 1f; //공격 속도
     [SerializeField] float weaponRange = 5f; //무기 사거리
@@ -51,10 +52,15 @@ public class Player : MonoBehaviour
     [field: SerializeField] public Sprite Portrait { get; private set; }
 
 
+    private void Awake()
+    {
+        PlayerStat stat = new PlayerStat();
+    }
+
     private void Start()
     {
-        basicWeapon.SetWeaponInfo(this.playerStat);
-        specialWeapon.SetWeaponInfo(this.playerStat);
+        basicWeapon.SetWeaponInfo(this.playerDataSO);
+        specialWeapon.SetWeaponInfo(this.playerDataSO);
 
         AugmentManager.Instance.AddPlayer(this);
     }

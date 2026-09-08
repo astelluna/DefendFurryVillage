@@ -47,12 +47,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f852ed0d6f528d47acab89cb122429b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
+  playerDataSO: {fileID: 0}
   attackRate: 1
   weaponRange: 0
   specialWeaponRange: 5
   specialAttackRate: 5
   basicWeapon: {fileID: 3183945173503898611}
   specialWeapon: {fileID: 2196316980823989979}
+  <Portrait>k__BackingField: {fileID: 0}
 --- !u!114 &3183945173503898611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,7 +67,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bff7504a6fb0aea408ac1d5f49d3549d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BasicGunWeapon
+  <WeaponIcon>k__BackingField: {fileID: 0}
   weaponDataSO: {fileID: 11400000, guid: b03f93eba77166248a9af0e85d41b585, type: 2}
+  basicAugmentDataSOList: []
+  existUpgradeAugmentDataList: []
 --- !u!114 &2196316980823989979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,7 +83,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c83efabceaf395843b5143955260e8ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LaserWeapon
+  <WeaponIcon>k__BackingField: {fileID: 0}
   weaponDataSO: {fileID: 11400000, guid: df576e89de0ec2e41b65797c231e200e, type: 2}
+  basicAugmentDataSOList: []
+  existUpgradeAugmentDataList: []
+  testAugmentDataSOList: []
 --- !u!1 &6087429217036585095
 GameObject:
   m_ObjectHideFlags: 0

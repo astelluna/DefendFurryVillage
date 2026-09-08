@@ -12,7 +12,7 @@ public class GrowingLaser : Projectile
 
     [Header("판정")]
     public float laserRadius = 0.7f;
-    public int damage = 10;
+    //public int damage = 10;
     public bool oneTimeDamagePerTarget = true; // 대상당 한 번만 데미지 줄지 여부
 
     [Header("비주얼")]
@@ -44,7 +44,9 @@ public class GrowingLaser : Projectile
                 alreadyHit.Add(hit.collider);
                 if (hit.collider.TryGetComponent<Enemy>(out var enemy))
                 {
-                    enemy.TakeDamage(10);
+                    DamageInfo damageInfo = MakeDamageInfo(enemy);
+                    int calcDamage = DamageManager.Instance.CalcDamage(damageInfo);
+                    enemy.TakeDamage(calcDamage);
                     //Destroy(enemy.gameObject);
                 }
                 //if (hit.collider.TryGetComponent<Health>(out var health))

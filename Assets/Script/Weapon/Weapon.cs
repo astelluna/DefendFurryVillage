@@ -8,6 +8,9 @@ public struct WeaponRuntimeData
     public float bulletScale;
     public int plusAttackCount;
     public int maxPierce;
+    public int criticalPercent;
+    public float criticalDamgeRate;
+    public float armorPenetrate;
 }
 public abstract class Weapon : MonoBehaviour
 {
@@ -28,7 +31,8 @@ public abstract class Weapon : MonoBehaviour
     
     protected float nextAttackTime;
 
-    protected PlayerStat playerStat;
+    //protected PlayerStat playerStat;
+    protected PlayerDataSO playerData;
 
     //현재 적용중인 증강 리스트
     protected List<AugmentDataSO> augmentDataList = new List<AugmentDataSO>();
@@ -38,7 +42,19 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField] protected List<AugmentDataSO> existUpgradeAugmentDataList = new List<AugmentDataSO>();
     protected List<AugmentDataSO> unUsedUpgradeAugmentDataList = new List<AugmentDataSO>(); //증강 업그레이드 선택하면 여기에 들어옴
     protected List<AugmentDataSO> usedUpgradeAugmentDataList = new List<AugmentDataSO>(); //증강 업그레이드 선택하면 여기에 들어옴
+    protected virtual void Awake()
+    {
+        unUsedUpgradeAugmentDataList = new List<AugmentDataSO>(existUpgradeAugmentDataList);
 
+    }
+    protected virtual void OnDestroy()
+    {
+        if (shootCor != null)
+        {
+            StopCoroutine(shootCor);
+            shootCor = null;
+        }
+    }
     //증강이 선택되면 현재 무기의 런타임 정보를 갱신한다.
     public void UpdateWeaponData()
     {
@@ -75,11 +91,14 @@ public abstract class Weapon : MonoBehaviour
         }
 
         //runtimeData = new WeaponRuntimeData();
-        runtimeData.attackdamage = weaponDataSO.baseDamage + (int)(weaponDataSO.baseDamage * damagePercent);
+        runtimeData.attackdamage = playerData.attack + weaponDataSO.baseDamage + (int)(weaponDataSO.baseDamage * damagePercent);
         runtimeData.attackRate = weaponDataSO.baseAttackRate + (weaponDataSO.baseAttackRate * ratePercent);
         runtimeData.bulletScale = 1f + (1f * bulletSizePercent);
         runtimeData.plusAttackCount = attackCount;
         runtimeData.maxPierce = 1 + pierceCount;
+        runtimeData.criticalPercent = playerData.criticalPercent;
+        runtimeData.criticalDamgeRate = playerData.criticalDamageRate;
+        runtimeData.armorPenetrate = playerData.armorPenetration;
 
         //후처리
         if (runtimeData.attackdamage < 1) runtimeData.attackdamage = 1;
@@ -107,44 +126,17 @@ public abstract class Weapon : MonoBehaviour
         unUsedUpgradeAugmentDataList.Add(augment);
         usedUpgradeAugmentDataList.Remove(augment);
     }
-    protected virtual void Awake()
-    {
-        unUsedUpgradeAugmentDataList = new List<AugmentDataSO>(existUpgradeAugmentDataList);
-        UpdateWeaponData();
-    }
-
-    //TODO. 추후 몬스터 HP 추가하고, 공격력 추가할때 넣자 
-    public void DamageCalc()
-    {
-        //TODO. 추후 총알관통, 크리티컬도 추가해보자.
-        //최종 데미지를 계산해서 보낸다.
-        //총알을 발사할때마다? weapon클래스에서 총알의 데미지, 관통을 계산해야할듯.
-
-        //playerStat.attack;
-    }
-
-
-
-    protected virtual void OnDestroy()
-    {
-        if(shootCor != null)
-        {
-            StopCoroutine(shootCor);
-            shootCor = null;
-        }
-    }
-
-
     //public void SetWeaponInfo(PlayerStat stat, float attackRate, float range)
-    public void SetWeaponInfo(PlayerStat stat)
+    public void SetWeaponInfo(PlayerDataSO plyData)
     {
         continuousFireDelay = new WaitForSeconds(shootDelay);
-        playerStat = stat;
+        playerData = plyData;
 
         if (shootCor == null)
         {
             shootCor = StartCoroutine(ShootWeapon());
         }
+        UpdateWeaponData();
         SetWeaponCoolTime();
     }
 

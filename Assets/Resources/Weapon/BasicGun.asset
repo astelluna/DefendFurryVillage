@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDataSO
   bulletPrefab: {fileID: 3543824175731101463, guid: f003a98c35903f3409438966b5dffd55, type: 3}
   baseRange: 5
-  baseAttackRate: 1
+  baseAttackRate: 1000
   baseDamage: 10

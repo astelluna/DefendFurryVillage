@@ -22,6 +22,11 @@ public struct EnemyRuntimeStat
         moveSpeed = moveSpd;
         penetration = penet;
     }
+
+    public int GetArmorInfo()
+    {
+        return defense;
+    }
 }
 
 [RequireComponent(typeof(Rigidbody))]
@@ -55,6 +60,11 @@ public class Enemy : MonoBehaviour
     //int experience;
     int curHp;
     EnemyRuntimeStat runtimeStat;
+
+    public int GetEnemyAromr()
+    {
+        return runtimeStat.GetArmorInfo();
+    }
 
     private void Init()
     {

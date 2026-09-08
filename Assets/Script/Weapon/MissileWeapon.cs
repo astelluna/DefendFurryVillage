@@ -53,6 +53,7 @@ public class MissileWeapon : Weapon
         //Missile.cs 씀
         if (gameObject.TryGetComponent(out Projectile projectile))
         {
+            projectile.SetProjectileData(runtimeData, new List<AugmentSpecialDataSO>(augmentSpecialDataSOList));
             projectile.SetTargetPos(enemyTarget.position);
             projectile.SetExplodeRadius(missileRadius);
             projectile.Shoot();
