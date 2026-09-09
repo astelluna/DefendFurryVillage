@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Missile : Projectile
 {
-    float radius;
+    //[SerializeField] float basicRadius = 3f; //기본 폭발 범위
     [SerializeField] float duration = 0.3f;
     [SerializeField] float arcHeight = 3f;
 
@@ -42,7 +42,8 @@ public class Missile : Projectile
 
     void Explode()
     {
-        var colliders = Physics.OverlapSphere(transform.position, radius, TargetManager.Instance.EnemyLayer);
+        //기본범위 + 스케일로 폭발범위를 조절하도록 하자
+        var colliders = Physics.OverlapSphere(transform.position, explodeRadius, TargetManager.Instance.EnemyLayer);
         foreach(var item in colliders)
         {
             //TODO. 추후에는 그냥 enemy에 데미지 주면 됨.

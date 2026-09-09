@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class LaserWeapon : Weapon
 {
-    //테스트용 현재 선택된 증강 리스트
-    [SerializeField] List<AugmentDataSO> testAugmentDataSOList; //테스트용
 
     protected override IEnumerator ShootWeapon()
     {

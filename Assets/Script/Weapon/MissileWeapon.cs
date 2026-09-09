@@ -5,10 +5,7 @@ using UnityEngine;
 public class MissileWeapon : Weapon
 {
     //필요한것. Missile라는 발사체를 하나 만들자. 그 미사일은 알아서 발사를 하고 해당 지점에 도달하면 죽도록 하는거임.
-    [SerializeField] float missileRadius = 3f;
-    //테스트용 현재 선택된 증강 리스트
-    [SerializeField] List<AugmentDataSO> testAugmentDataSOList; //테스트용
-
+    [SerializeField] float basicExplodeRadius = 3f;
 
     protected override IEnumerator ShootWeapon()
     {
@@ -53,9 +50,10 @@ public class MissileWeapon : Weapon
         //Missile.cs 씀
         if (gameObject.TryGetComponent(out Projectile projectile))
         {
+            float explodeRadius = basicExplodeRadius + runtimeData.bulletScale;
             projectile.SetProjectileData(runtimeData, new List<AugmentSpecialDataSO>(augmentSpecialDataSOList));
             projectile.SetTargetPos(enemyTarget.position);
-            projectile.SetExplodeRadius(missileRadius);
+            projectile.SetExplodeRadius(explodeRadius);
             projectile.Shoot();
         }
         else

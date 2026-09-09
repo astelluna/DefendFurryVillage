@@ -42,7 +42,7 @@ public class LevelUpManager : MonoBehaviour
             curExperience = curExperience % maxExperience;
             level += div;
             //level 횟수만큼 증강을 표시한다.
-            AugmentManager.Instance.SetAndShowAugmentUI(level);
+            AugmentManager.Instance.SetAndShowAugmentUI(div);
         }
 
         // Update UI;

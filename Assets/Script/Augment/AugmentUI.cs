@@ -21,6 +21,7 @@ public class AugmentUI : MonoBehaviour
     }
     private void AugmentButtonClick()
     {
+        MyLog.Log("버튼 클릭");
         weaponAugment.SelectedEventInvoke(weaponAugment);
     }
 

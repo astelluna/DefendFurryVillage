@@ -13,6 +13,8 @@ public class AugmentManager : MonoBehaviour
 
     List<WeaponAugment> selectedAugmentList = new List<WeaponAugment>();
     List<Player> haveAugmentPlyerList = new List<Player>();
+
+    private bool isShowingPanel = false; //현재 패널 띄워져있는지 플래그
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -35,7 +37,7 @@ public class AugmentManager : MonoBehaviour
     {
         if (Instance == this)
             Instance = null;
-
+        if (isShowingPanel) Time.timeScale = 1f;
         ClearSelectAugmentList();
     }
 
@@ -53,6 +55,7 @@ public class AugmentManager : MonoBehaviour
         //if (curShowCount >= maxShowCount) return;
         maxShowCount += cnt;
         if (maxShowCount <= 0) return;
+        if (isShowingPanel) return;
         Time.timeScale = 0f;
         ShowAugmentUI();
     }
@@ -60,11 +63,11 @@ public class AugmentManager : MonoBehaviour
     private void ShowAugmentUI()
     {
 
-        //curShowCount++;
+        isShowingPanel = true;
         maxShowCount--;
         //UI를 보여주고 현재 플레이어중 1개를 선택해서 쭉쭉 내려간다음에 증강 1개를 선택해서 가져온다.
         bool needShowPanel = false;
-        selectedAugmentList.Clear();
+        ClearSelectAugmentList();
         
         for(int i=0; i< 3; i++)
         {
@@ -76,12 +79,15 @@ public class AugmentManager : MonoBehaviour
                 {
                     //단 1번이라도 실행이 안되었었다면? 시간 다시 흘러가야함
                     Time.timeScale = 1f;
+                    isShowingPanel = false;
+                    maxShowCount = 0;
                 }
                 MyLog.LogWarning("더이상 증강이 남아있는 플레이어가 없습니다");
                 break;
             }
             int playerNo = Random.Range(0, haveAugmentPlyerList.Count);
             Player curPlayer = haveAugmentPlyerList[playerNo];
+
             WeaponAugment data = curPlayer.GetAugment(); //정보를 하나 가져와보자.
             augmentPanel.AddData(data,curPlayer.Portrait,i); //여기서 알아서 i번째 UI에 UI를 넣도록 함.
 
@@ -94,12 +100,10 @@ public class AugmentManager : MonoBehaviour
         {
             augmentPanel.Show();
         }
-        
-
-
     }
     public void OnSelectedAugment(WeaponAugment augment)
     {
+        MyLog.Log("이벤트 발동");
         //선택된거 1개 제외 모두 다시 반환하도록 한다.
         HashSet<Weapon> weaponNeedUptate = new HashSet<Weapon>();
         foreach(var item in selectedAugmentList)
@@ -122,6 +126,7 @@ public class AugmentManager : MonoBehaviour
         if(maxShowCount <= 0)
         {
             Time.timeScale = 1f;
+            isShowingPanel = false;
             return;
         }
         else
