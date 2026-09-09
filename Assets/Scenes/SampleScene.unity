@@ -998,6 +998,148 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelUpUI
   levelText: {fileID: 1141809349}
   experienceText: {fileID: 1236311509}
+--- !u!1001 &812292510
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 127714618053801912, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: m_Name
+      value: Player (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 127714618053801912, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2196316980823989979, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: testAugmentDataSOList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2196316980823989979, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: 'testAugmentDataSOList.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 6a37eddf7e8e02844aa5ddcfa1e2d9df, type: 2}
+    - target: {fileID: 2196316980823989979, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: existUpgradeAugmentDataList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2196316980823989979, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: 'existUpgradeAugmentDataList.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 6a37eddf7e8e02844aa5ddcfa1e2d9df, type: 2}
+    - target: {fileID: 3183945173503898611, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: testAugmentDataSOList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3183945173503898611, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: 'testAugmentDataSOList.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: f72be02a9b1c8114a893d0032e6a0882, type: 2}
+    - target: {fileID: 3183945173503898611, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: existUpgradeAugmentDataList.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3183945173503898611, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: 'existUpgradeAugmentDataList.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 04ca601f25511cb4f9a4f7791a786beb, type: 2}
+    - target: {fileID: 3183945173503898611, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: 'existUpgradeAugmentDataList.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: f72be02a9b1c8114a893d0032e6a0882, type: 2}
+    - target: {fileID: 3183945173503898611, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: 'existUpgradeAugmentDataList.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 6a37eddf7e8e02844aa5ddcfa1e2d9df, type: 2}
+    - target: {fileID: 3183945173503898611, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: 'existUpgradeAugmentDataList.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: e18c68d152f365a4d80a440279995931, type: 2}
+    - target: {fileID: 3183945173503898611, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: 'existUpgradeAugmentDataList.Array.data[4]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 1df4d1f490c9cfd46b6dc4527f80aeba, type: 2}
+    - target: {fileID: 3310750348430569361, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 3310750348430569361, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3310750348430569361, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 3310750348430569361, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3310750348430569361, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3310750348430569361, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3310750348430569361, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3310750348430569361, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3310750348430569361, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3310750348430569361, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928260962300889239, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: playerDataSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 3189704a8b391aa428a1565fae590c9a, type: 2}
+    - target: {fileID: 3928260962300889239, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      propertyPath: specialWeapon
+      value: 
+      objectReference: {fileID: 812292512}
+    m_RemovedComponents:
+    - {fileID: 2196316980823989979, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 127714618053801912, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 812292512}
+  m_SourcePrefab: {fileID: 100100000, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+--- !u!1 &812292511 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 127714618053801912, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
+  m_PrefabInstance: {fileID: 812292510}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &812292512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812292511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ff2b38090399ac4dbd52c0d73ed3413, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShurikenWeapon
+  <WeaponIcon>k__BackingField: {fileID: 0}
+  weaponDataSO: {fileID: 11400000, guid: 8fc8e4e3050d8394e917cbf8247c9334, type: 2}
+  basicAugmentDataSOList: []
+  existUpgradeAugmentDataList: []
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -2031,7 +2173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 127714618053801912, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2196316980823989979, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
       propertyPath: testAugmentDataSOList.Array.size
@@ -2205,7 +2347,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 127714618053801912, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2196316980823989979, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
       propertyPath: testAugmentDataSOList.Array.size
@@ -2456,7 +2598,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 127714618053801912, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3183945173503898611, guid: ba4f237049a16c34f8854d1fefb17b13, type: 3}
       propertyPath: existUpgradeAugmentDataList.Array.size
@@ -2826,6 +2968,7 @@ SceneRoots:
   - {fileID: 1820098893}
   - {fileID: 2118283992}
   - {fileID: 1705955487}
+  - {fileID: 812292510}
   - {fileID: 1022009904}
   - {fileID: 411512698}
   - {fileID: 1908996066}

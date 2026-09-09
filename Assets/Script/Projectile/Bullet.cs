@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -13,26 +14,36 @@ public class Bullet : Projectile
 
     bool isTriggered = false; //두개 이상 객체에 동시에 충돌해서 추가
 
+    bool canMove = false;
+
     //지금 해볼것 -> 관통력을 추가해서 몇개이상 관통이 가능하게 할건지 체크해야함.
     //int maxPierceCount = 1;
-    
+
 
     //int damage;
 
-    
 
-    
+
+
 
     protected override void OnEnable()
     {
         base.OnEnable();
         isTriggered = false;
     }
+    private void OnDisable()
+    {
+        canMove = false;
+    }
 
     private void FixedUpdate()
     {
         //물리적으로 앞으로 이동한다.
-        Move();
+        if(canMove)
+        {
+            Move();
+        }
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -75,6 +86,7 @@ public class Bullet : Projectile
 
     public override void Shoot()
     {
+        canMove = true;
         Invoke(nameof(DestroySelf), lifeTime);
     }
 

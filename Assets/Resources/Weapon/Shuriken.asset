@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06d00af80f0c2694b905668dce31ea1c, type: 3}
+  m_Name: Shuriken
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponDataSO
+  bulletPrefab: {fileID: 2087869031058388614, guid: 8ed067863a58b834dbf6dba9485c251c, type: 3}
+  baseRange: 8
+  baseAttackRate: 5
+  baseDamage: 1

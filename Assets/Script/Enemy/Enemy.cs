@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -60,6 +61,9 @@ public class Enemy : MonoBehaviour
     //int experience;
     int curHp;
     EnemyRuntimeStat runtimeStat;
+
+    //사망 이벤트
+    public event Action<Enemy> OnEnemyDead;
 
     public int GetEnemyAromr()
     {
@@ -201,6 +205,7 @@ public class Enemy : MonoBehaviour
     {
         MyLog.Log("사망처리");
         LevelUpManager.Instance.GetExperience(enemyDataSO.experience);
+        OnEnemyDead?.Invoke(this);
         Destroy(this.gameObject);
     }
 
