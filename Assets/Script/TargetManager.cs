@@ -8,6 +8,7 @@ public class TargetManager : MonoBehaviour
 
     [field:SerializeField] public LayerMask EnemyLayer { get; private set; }
     [field:SerializeField] public LayerMask CastleWallLayer { get; private set; }
+    [field: SerializeField] public LayerMask GroundLayer { get; private set; }
 
     //플레이어가 총알을 쏠때 어떤 타겟 방향으로 총알을 쏴야하는지 결정한다.
     [SerializeField] float radius;

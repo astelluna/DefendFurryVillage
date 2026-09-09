@@ -22,7 +22,7 @@ public abstract class Projectile : MonoBehaviour
     protected Vector3 targetPos;
     protected float explodeRadius;
 
-    
+    public virtual void SetMoveTartgetPos(Vector3 pos) => transform.position = pos; //위에서 떨어지는 공격을 위해 자신의 위치를 타겟 바로위로 지정
     public virtual void SetTargetPos(Vector3 pos) => targetPos = pos; //타겟 위치로 날아가야할때 사용
     public virtual void SetExplodeRadius(float amount) => explodeRadius = amount; //폭발 범위가 필요할때 사용
 

@@ -125,7 +125,7 @@ public class Shuriken : Projectile
 
     protected override void Move()
     {
-        MyLog.Log($"현재속도: " +curBulletSpeed); 
+        //MyLog.Log($"현재속도: " +curBulletSpeed); 
         rb.MovePosition(rb.position + transform.forward * curBulletSpeed * Time.fixedDeltaTime);
     }
     private void Update()
