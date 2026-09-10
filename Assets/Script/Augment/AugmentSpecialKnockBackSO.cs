@@ -1,5 +1,5 @@
 using UnityEngine;
-[CreateAssetMenu(menuName = "Weapon/AugmentSpecialKnockBack")]
+[CreateAssetMenu(menuName = "Weapon/Augment/AugmentSpecialKnockBack")]
 public class AugmentSpecialKnockBackSO : AugmentSpecialDataSO, IOnHit
 {
     [SerializeField] float knockbackValue = 5;

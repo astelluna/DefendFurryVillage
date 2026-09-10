@@ -12,26 +12,26 @@ public struct WeaponRuntimeData
     public float criticalDamgeRate;
     public float armorPenetrate;
 }
-public abstract class Weapon : MonoBehaviour
+public class Weapon : MonoBehaviour
 {
+    
     //런타임 데이터
-    protected WeaponRuntimeData runtimeData = new WeaponRuntimeData();
-    protected List<AugmentSpecialDataSO> augmentSpecialDataSOList = new List<AugmentSpecialDataSO>();
+    public WeaponRuntimeData runtimeData = new WeaponRuntimeData();
+    List<AugmentSpecialDataSO> augmentSpecialDataSOList = new List<AugmentSpecialDataSO>();
+    public IReadOnlyList<AugmentSpecialDataSO> AugmentSpecialDataSOList => augmentSpecialDataSOList;
 
     //발사 횟수가 2회이상일때 딜레이를 위해서 추가
     protected float shootDelay = 0.5f;
-    protected WaitForSeconds continuousFireDelay;
+    public WaitForSeconds continuousFireDelay { get; private set; }
 
+    //무기 정보들
     [field: SerializeField] public Sprite WeaponIcon { get; protected set; }
-    //[SerializeField] protected GameObject weaponPrefab;
-    [SerializeField] protected WeaponDataSO weaponDataSO;
-    //[SerializeField] protected float weaponAttackRate;
-    //[SerializeField] protected float weaponRange;
+    [field:SerializeField] public WeaponDataSO weaponDataSO;
+    [field: SerializeField] public WeaponExecuteSO weaponExecuteSO { get; private set; }
     protected Coroutine shootCor;
     
-    protected float nextAttackTime;
+    public float nextAttackTime { get; private set; }
 
-    //protected PlayerStat playerStat;
     protected PlayerDataSO playerData;
 
     //현재 적용중인 증강 리스트
@@ -134,20 +134,20 @@ public abstract class Weapon : MonoBehaviour
 
         if (shootCor == null)
         {
-            shootCor = StartCoroutine(ShootWeapon());
+            shootCor = StartCoroutine(weaponExecuteSO.ShootWeapon(this));
         }
         UpdateWeaponData();
         SetWeaponCoolTime();
     }
 
-    protected void SetWeaponCoolTime()
+    public void SetWeaponCoolTime()
     {
         nextAttackTime = Time.time + weaponDataSO.baseAttackRate;
     }
 
     //무기 공격 동작 코루틴은 자식이 알아서 하도록 하자.
-    protected abstract IEnumerator ShootWeapon();
-    protected virtual Transform FindExistTransform(List<Transform> enemyTransform)
+    //protected abstract IEnumerator ShootWeapon();
+    public virtual Transform FindExistTransform(List<Transform> enemyTransform)
     {
         foreach (var item in enemyTransform)
         {

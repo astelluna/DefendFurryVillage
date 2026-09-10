@@ -78,6 +78,7 @@ public class Shuriken : Projectile
     }
     private void EnemyDead(Enemy enemy)
     {
+        enemy.OnEnemyDead -= EnemyDead;
         if (takeDamaeEnemyDict.ContainsKey(enemy))
         {
             takeDamaeEnemyDict.Remove(enemy);

@@ -1,5 +1,5 @@
 using UnityEngine;
-[CreateAssetMenu(menuName = "Weapon/AugmentSpecialDelay")]
+[CreateAssetMenu(menuName = "Weapon/Augment/AugmentSpecialDelay")]
 public class AugmentSpecialDelayDamageSO : AugmentSpecialDataSO, IOnHit
 {
     [field:SerializeField] public float delayTime { get; private set; } = 3.0f; //몇초뒤에 데미지를 주는가?

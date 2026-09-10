@@ -1,5 +1,5 @@
 using UnityEngine;
-[CreateAssetMenu(menuName = "Weapon/AugmentStatusEffectBurn")]
+[CreateAssetMenu(menuName = "Weapon/Augment/AugmentStatusEffectBurn")]
 public class AugmentStateEffectBurnSO : AugmentSpecialDataSO, IOnHit
 {
     [field: SerializeField] public int amount { get; private set; }//몇초뒤에 데미지를 주는가?

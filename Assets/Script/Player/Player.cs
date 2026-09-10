@@ -35,16 +35,8 @@ public class Player : MonoBehaviour
     //TODO. (일단 직렬화 시킴. 추후에는 SO로 캐릭터 데이터 받아서 하거나. 그런식으로 처리해보자)
     //캐릭터 기본 스텟
     [SerializeField] PlayerDataSO playerDataSO;
-    //PlayerStat playerStat;
-    //무기 스텟? -> SO로 빼야할듯
-    [SerializeField] float attackRate = 1f; //공격 속도
-    [SerializeField] float weaponRange = 5f; //무기 사거리
-    [SerializeField] float specialWeaponRange = 5f; //특수무기 사거리
-    [SerializeField] float specialAttackRate = 5f; //공격 속도
 
-
-    //이게 일반 공격, 특수 공격
-    //#2. Weapon 클래스
+    //플레이어가 가지고있는 Weapon
     [SerializeField] Weapon basicWeapon;
     [SerializeField] Weapon specialWeapon;
 
@@ -63,31 +55,6 @@ public class Player : MonoBehaviour
         specialWeapon.SetWeaponInfo(this.playerDataSO);
 
         AugmentManager.Instance.AddPlayer(this);
-    }
-
-
-    //TODO. 추후 데미지 계산 -> 플레이어에서 하는게 아니라 무기에서 해야할수도? 
-    public float CalcDamage( int armor)
-    {
-        //현재 공격이 치명타인지 확인.
-        //bool isCritical = false;
-        //float damage = attack;
-        //float percent = Random.Range(0, 100);
-        //if(percent >= criticalRate)
-        //{
-        //    //크리
-        //    isCritical = true;
-        //}
-        //
-        //if(isCritical)
-        //{
-        //    damage *= criticalDamageRate;
-        //}
-        //
-        ////아머를 고려해서 최종 데미지 계산
-        //float result = damage * (100 / (100 + armor));
-        //return result;
-        return 0;
     }
 
     public WeaponAugment GetAugment()

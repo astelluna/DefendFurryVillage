@@ -1,5 +1,5 @@
 using UnityEngine;
-[CreateAssetMenu(menuName = "Weapon/AugmentSpecialMagnet")]
+[CreateAssetMenu(menuName = "Weapon/Augment/AugmentSpecialMagnet")]
 public class AugmentSpecialMagnetSO : AugmentSpecialDataSO, IOnHit
 {
     [SerializeField] float zOffset = 1.0f;

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-[CreateAssetMenu(menuName = "Weapon/AugmentSpecialSpread")]
+[CreateAssetMenu(menuName = "Weapon/Augment/AugmentSpecialSpread")]
 public class AugmentSpecialSpreadProjectileSO : AugmentSpecialDataSO, IOnHit
 {
     //TODO. 발사체인 Projectile 스크립트로 바꿀거임
