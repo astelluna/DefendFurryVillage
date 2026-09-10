@@ -44,9 +44,11 @@ public class GrowingLaser : Projectile
                 alreadyHit.Add(hit.collider);
                 if (hit.collider.TryGetComponent<Enemy>(out var enemy))
                 {
-                    DamageInfo damageInfo = MakeDamageInfo(enemy);
-                    int calcDamage = DamageManager.Instance.CalcDamage(damageInfo);
-                    enemy.TakeDamage(calcDamage);
+
+                    ProcessHit(enemy);
+                    //DamageInfo damageInfo = MakeDamageInfo(enemy);
+                    //int calcDamage = DamageManager.Instance.CalcDamage(damageInfo);
+                    //enemy.TakeDamage(calcDamage);
                     //Destroy(enemy.gameObject);
                 }
                 //if (hit.collider.TryGetComponent<Health>(out var health))

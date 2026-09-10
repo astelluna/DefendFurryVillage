@@ -45,9 +45,13 @@ public class Shuriken : Projectile
                 if(time <= Time.time)
                 {
                     takeDamaeEnemyDict[enemy] = Time.time + damageInterval;
-                    DamageInfo damageInfo = MakeDamageInfo(enemy);
-                    int calcDamage = DamageManager.Instance.CalcDamage(damageInfo);
-                    enemy.TakeDamage(calcDamage);
+
+                    ProcessHit(enemy);
+
+
+                    //DamageInfo damageInfo = MakeDamageInfo(enemy);
+                    //int calcDamage = DamageManager.Instance.CalcDamage(damageInfo);
+                    //enemy.TakeDamage(calcDamage);
                 }
             }
         }

@@ -46,6 +46,9 @@ public class Bullet : Projectile
         
     }
 
+    
+
+
     private void OnTriggerEnter(Collider other)
     {
         if (isTriggered) return;
@@ -59,19 +62,21 @@ public class Bullet : Projectile
             //TODO. 적 총알 충돌 처리 -> 추후에는 데미지 달게 할거임
 
             //일단 n초후에 데미지 받는 거를 테스트 해보자
-            foreach (AugmentSpecialDataSO item in augmentSpecialDataSOList)
-            {
-                IOnHit onHit = item as IOnHit;
-                if (onHit != null)
-                {
-                    onHit.OnHit(weaponRuntimeData, enemy);
-                }
-            }
-            DamageInfo damageInfo =  MakeDamageInfo(enemy);
-            int calcDamage = DamageManager.Instance.CalcDamage(damageInfo);
-            enemy.TakeDamage(calcDamage);
+            //foreach (AugmentSpecialDataSO item in augmentSpecialDataSOList)
+            //{
+            //    IOnHit onHit = item as IOnHit;
+            //    if (onHit != null)
+            //    {
+            //        onHit.OnHit(weaponRuntimeData, enemy);
+            //    }
+            //}
+            //ApplyAugmentHit(enemy);
+            //DamageInfo damageInfo =  MakeDamageInfo(enemy);
+            //int calcDamage = DamageManager.Instance.CalcDamage(damageInfo);
+            //enemy.TakeDamage(calcDamage);
 
-            //Destroy(other.gameObject);
+            //적에 데미지 적용 
+            ProcessHit(enemy);
             //총알 관통력이 전부 소모되었으면 총알 없앰
             curPierceCount++;
             if (curPierceCount >= weaponRuntimeData.maxPierce)

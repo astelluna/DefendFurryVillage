@@ -41,9 +41,10 @@ public class Falling : Projectile
         {
             if (colliders[i].TryGetComponent(out Enemy enemy))
             {
-                DamageInfo damageInfo = MakeDamageInfo(enemy);
-                int calcDamage = DamageManager.Instance.CalcDamage(damageInfo);
-                enemy.TakeDamage(calcDamage);
+                ProcessHit(enemy);
+                //DamageInfo damageInfo = MakeDamageInfo(enemy);
+                //int calcDamage = DamageManager.Instance.CalcDamage(damageInfo);
+                //enemy.TakeDamage(calcDamage);
             }
         }
         DestroySelf();

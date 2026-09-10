@@ -50,9 +50,10 @@ public class Missile : Projectile
             //일단은 그냥 없앤다.
             if (item.TryGetComponent(out Enemy enemy))
             {
-                DamageInfo damageInfo = MakeDamageInfo(enemy);
-                int calcDamage = DamageManager.Instance.CalcDamage(damageInfo);
-                enemy.TakeDamage(calcDamage);
+                ProcessHit(enemy);
+                //DamageInfo damageInfo = MakeDamageInfo(enemy);
+                //int calcDamage = DamageManager.Instance.CalcDamage(damageInfo);
+                //enemy.TakeDamage(calcDamage);
                 //Destroy(enemy.gameObject);
             }
         }

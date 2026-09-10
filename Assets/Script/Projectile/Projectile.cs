@@ -25,23 +25,13 @@ public abstract class Projectile : MonoBehaviour
     public virtual void SetMoveTartgetPos(Vector3 pos) => transform.position = pos; //위에서 떨어지는 공격을 위해 자신의 위치를 타겟 바로위로 지정
     public virtual void SetTargetPos(Vector3 pos) => targetPos = pos; //타겟 위치로 날아가야할때 사용
     public virtual void SetExplodeRadius(float amount) => explodeRadius = amount; //폭발 범위가 필요할때 사용
-
-
-    public abstract void Shoot();
-
-    protected abstract void Move();
-
-    protected abstract void Init();
+    
     public virtual void SetProjectileData(WeaponRuntimeData data, List<AugmentSpecialDataSO> specialDataSOs)
     {
         weaponRuntimeData = data;
         //null이면 빈거 넣음
         augmentSpecialDataSOList = (specialDataSOs == null) ? new List<AugmentSpecialDataSO>() : specialDataSOs;
     }
-
-    //TODO.//추후 여기서 그냥 오브젝트풀에 반환하도록 구현해둘수있을듯?
-    protected abstract void DestroySelf();
-
 
     protected virtual DamageInfo MakeDamageInfo(Enemy enemy)
     {
@@ -51,6 +41,25 @@ public abstract class Projectile : MonoBehaviour
         return damageInfo;
     }
 
+    protected void ProcessHit(Enemy enemy)
+    {
+        ApplyAugmentHit(enemy);
+        DamageInfo damageInfo = MakeDamageInfo(enemy);
+        int calcDamage = DamageManager.Instance.CalcDamage(damageInfo);
+        enemy.TakeDamage(calcDamage);
+    }
+
+    protected void ApplyAugmentHit(Enemy enemy)
+    {
+        foreach (AugmentSpecialDataSO item in augmentSpecialDataSOList)
+        {
+            IOnHit onHit = item as IOnHit;
+            if (onHit != null)
+            {
+                onHit.OnHit(weaponRuntimeData, enemy);
+            }
+        }
+    }
 
     //총알 날아가는 방향 지정
     public virtual void SetDirectionToEnemyPosition(Vector3 dir)
@@ -65,4 +74,12 @@ public abstract class Projectile : MonoBehaviour
         this.transform.LookAt(transform.position + dir);
         Init();
     }
+
+    public abstract void Shoot();
+
+    protected abstract void Move();
+
+    protected abstract void Init();
+    //TODO.//추후 여기서 그냥 오브젝트풀에 반환하도록 구현해둘수있을듯?
+    protected abstract void DestroySelf();
 }
