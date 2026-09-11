@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: New Augment State Effect Burn SO
   m_EditorClassIdentifier: Assembly-CSharp::AugmentStateEffectBurnSO
   <amount>k__BackingField: 33
-  <duration>k__BackingField: 5
+  <duration>k__BackingField: 3
   <VfxPrefab>k__BackingField: {fileID: 0}

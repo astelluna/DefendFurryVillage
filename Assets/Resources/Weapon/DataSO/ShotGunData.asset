@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDataSO
   <bulletPrefab>k__BackingField: {fileID: 3543824175731101463, guid: f003a98c35903f3409438966b5dffd55, type: 3}
   <baseRange>k__BackingField: 8
-  <baseAttackRate>k__BackingField: 4
+  <baseAttackRate>k__BackingField: 10000
   <baseDamage>k__BackingField: 10

@@ -27,14 +27,24 @@ public abstract class StatusEffect : IStatusEffect
         curDurationTime = 0;
     }
 
+    //행동을 추가/삭제할때 해당 상태이상이 특별히 해야할행동이 있다면 여기에서 추가
+    public abstract void OnApplySpecial(Enemy enemy);
+    public abstract void OnTickSpecial(Enemy enemy, float time); 
+    public abstract void OnRemoveSpecial(Enemy enemy);
+    
+
+    //기본 추가,삭제, 틱 동작들
     public void OnApply(Enemy enemy)
     {
         enemy.RegisterEffect(VfxPrefab);
+        OnApplySpecial(enemy);
     }
 
     public void OnRemove(Enemy enemy)
     {
         enemy.RemoveEffect(VfxPrefab);
+        OnRemoveSpecial(enemy);
+
     }
     //지속시간이 끝났는가?
     public bool CheckDurationEnd()
@@ -42,7 +52,11 @@ public abstract class StatusEffect : IStatusEffect
         if (curDurationTime >= duration) return true;
         return false;
     }
-    public abstract void OnTick(Enemy enemy, float time);
+    public void OnTick(Enemy enemy, float time)
+    {
+        curDurationTime += time;
+        OnTickSpecial(enemy, time);
+    }
 
     
 }

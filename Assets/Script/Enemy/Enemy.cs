@@ -40,10 +40,6 @@ public class Enemy : MonoBehaviour
     [SerializeField] EnemyStatusEffectController statusEffectController;
 
     bool isMove = true;
-    //공격을 추가한다면?
-    //int damage;
-    //int attack = 10;
-    //float attackRate = 1f;
     float curAttackRate;
     WaitForSeconds delay;
     Coroutine attackCor;
@@ -64,6 +60,10 @@ public class Enemy : MonoBehaviour
 
     //사망 이벤트
     public event Action<Enemy> OnEnemyDead;
+
+    //스턴 상태 확인
+    private int stunCount = 0;
+    bool isStun = false;
 
     public int GetEnemyAromr()
     {
@@ -100,6 +100,7 @@ public class Enemy : MonoBehaviour
 
     private void OnEnable()
     {
+        isStun = false;
         isMove = true;
         attackCor = null;
         exitGraceCor = null;
@@ -108,7 +109,7 @@ public class Enemy : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if(isMove && !isMagnet)
+        if(isMove && !isMagnet && !isStun)
         {
             if(runtimeStat.moveSpeed > 0)
             {
@@ -270,6 +271,22 @@ public class Enemy : MonoBehaviour
     {
         statusEffectController.AddStatusEffect(effect);
     }
+    public void ApplyStunState(IStatusEffect effect)
+    {
+        stunCount++;
+        isStun = true;
+        MyLog.Log($"스턴 적용 / 현재 스턴: {stunCount}");
+    }
+    public void RemoveStunState(IStatusEffect effect)
+    {
+
+        stunCount = Mathf.Max(0, stunCount - 1);
+        if(stunCount == 0)
+        {
+            isStun = false;
+        }
+        MyLog.Log($"스턴 적용 / 현재 스턴: {stunCount}");
+    }
 
     public void RegisterEffect(GameObject vfx)
     {
@@ -279,5 +296,7 @@ public class Enemy : MonoBehaviour
     {
         //TODO. 추후에 이펙트 제거 하는거 넣자.
     }
+
+    
 }
 

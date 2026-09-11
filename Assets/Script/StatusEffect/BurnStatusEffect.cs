@@ -8,11 +8,20 @@ public class BurnStatusEffect : StatusEffect
     {
         curDurationTime = 0;
     }
-    public override void OnTick(Enemy enemy, float time)
+
+    public override void OnApplySpecial(Enemy enemy)
     {
-        curDurationTime += time;
+        enemy.TakeDamage(amount);
+    }
+
+    public override void OnRemoveSpecial(Enemy enemy)
+    {
+    }
+
+    public override void OnTickSpecial(Enemy enemy, float time)
+    {
         curTickTime += time;
-        if(curTickTime >= tickTime)
+        if (curTickTime >= tickTime)
         {
             curTickTime = 0;
             enemy.TakeDamage(amount);

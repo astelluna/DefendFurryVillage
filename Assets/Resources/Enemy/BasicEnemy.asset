@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDataSO
   <attack>k__BackingField: 1
   <defense>k__BackingField: 100
-  <maxHp>k__BackingField: 12
+  <maxHp>k__BackingField: 5000
   <attackRate>k__BackingField: 1
   <moveSpeed>k__BackingField: 3
   <penetration>k__BackingField: 0
