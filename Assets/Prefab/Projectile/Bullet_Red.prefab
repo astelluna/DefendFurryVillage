@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1847702362461993761}
   - component: {fileID: 6612600401357906398}
   m_Layer: 0
-  m_Name: Bullet
+  m_Name: Bullet_Red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,9 +47,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87d1f54ab510d9d4fa2596d41be03ddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bullet
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 128
   lifeTime: 10
   rb: {fileID: 1847702362461993761}
 --- !u!54 &1847702362461993761
@@ -143,7 +140,6 @@ GameObject:
   - component: {fileID: 2008353018932536078}
   - component: {fileID: 4205694304383936385}
   - component: {fileID: 387130705738045477}
-  - component: {fileID: 3613598803540422941}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -223,24 +219,3 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &3613598803540422941
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3986554273750778180}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}

@@ -9,16 +9,9 @@ public class ShurikenExecuteSO : WeaponExecuteSO
         Vector3 direction = enemyTarget.position - weapon.transform.position;
         direction.y = 0f;
         Quaternion rotation = Quaternion.LookRotation(direction);
-        var gameObject = Instantiate(weapon.weaponDataSO.bulletPrefab, weapon.transform.position, rotation);
-        if (gameObject.TryGetComponent(out Projectile projectile))
-        {
-            projectile.SetProjectileData(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
-            projectile.SetTargetPos(enemyTarget.position);
-            projectile.Shoot();
-        }
-        else
-        {
-            MyLog.LogError("수리검 찾기 실패");
-        }
+        Projectile projectile = Instantiate(weapon.projectilePrefab, weapon.transform.position, rotation);
+        projectile.SetProjectileData(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
+        projectile.SetTargetPos(enemyTarget.position);
+        projectile.Shoot();
     }
 }

@@ -19,15 +19,11 @@ public class ShooGunExecuteSO : WeaponExecuteSO
         {
             float angle = startAngle + angleStep * i;
             Quaternion rotation = targetRotation * Quaternion.Euler(0f, angle, 0f);
-            var gameObject = Instantiate(weapon.weaponDataSO.bulletPrefab, weapon.transform.position, rotation);
-
-            //if (gameObject.TryGetComponent(out Bullet bullet))
             //발사체로 Bullet.cs쓴다
-            if (gameObject.TryGetComponent(out Projectile projectile))
-            {
-                projectile.SetProjectileData(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
-                projectile.Shoot();
-            }
+            Projectile projectile = Instantiate(weapon.projectilePrefab, weapon.transform.position, rotation);
+            projectile.SetProjectileData(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
+            projectile.Shoot();
+            
 
         }
     }

@@ -24,6 +24,9 @@ public class Weapon : MonoBehaviour
     protected float shootDelay = 0.5f;
     public WaitForSeconds continuousFireDelay { get; private set; }
 
+    //총알 프리팹 종류
+    [field: SerializeField] public Projectile projectilePrefab { get; private set; } //총알 종류
+
     //무기 정보들
     [field: SerializeField] public Sprite WeaponIcon { get; protected set; }
     [field:SerializeField] public WeaponDataSO weaponDataSO;
