@@ -781,6 +781,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04e8328b0fc3dfa43ad842b267fafc59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CastleWall
+  hp: 1500
+  defense: 5
 --- !u!1 &472379106
 GameObject:
   m_ObjectHideFlags: 0
@@ -908,7 +910,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 742555066167652320, guid: 5b21a7fa11010b841920a34f0ec6d603, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8279865305493288214, guid: 5b21a7fa11010b841920a34f0ec6d603, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1120,6 +1122,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelUpUI
   levelText: {fileID: 1141809349}
   experienceText: {fileID: 1236311509}
+--- !u!1 &641703852
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 641703854}
+  - component: {fileID: 641703853}
+  m_Layer: 0
+  m_Name: StageManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &641703853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641703852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd5ac43dcc7bb244382b5385030d44db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StageManager
+  testStageData: {fileID: 11400000, guid: 521f0df8e1fe77a49a0cba1be72e4e24, type: 2}
+  spawnTime: 0.1
+--- !u!4 &641703854
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641703852}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.57, y: 0, z: 12.22}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &736144560
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1134,7 +1182,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2450116274702652271, guid: ccdbd8c1029f5414bb6487fe9cccde88, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4434644998502113503, guid: ccdbd8c1029f5414bb6487fe9cccde88, type: 3}
       propertyPath: basicAugmentDataSOList.Array.size
@@ -2022,7 +2070,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5436079660900290403, guid: 1507aa7b94215d54d9e1db54ffed3359, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2606,3 +2654,4 @@ SceneRoots:
   - {fileID: 1485472199}
   - {fileID: 914665697}
   - {fileID: 1789944352}
+  - {fileID: 641703854}

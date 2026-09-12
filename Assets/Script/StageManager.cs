@@ -1,0 +1,101 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class StageManager : MonoBehaviour
+{
+    //어떤 스테이지를 선택하면 해당 스테이지의 정보대로 적을 소환한다. -> 일단 직렬화로 테스트 
+    [SerializeField] StageDataSO testStageData;
+
+    [SerializeField] float spawnTime = 0.1f;
+    WaitForSeconds delay;
+    int curWaveIndex = 0;
+    float nextWaveStartTime = 1f;
+    //bool isSpawning = false;
+
+    //현재 웨이브에서 살아있는 적 갯수
+    int remainSpawnCount = 0;
+    List<Enemy> aliveEnemyList = new List<Enemy>();
+
+    private void Start()
+    {
+        delay = new WaitForSeconds(spawnTime);
+        curWaveIndex = 0;
+        StartWave(curWaveIndex);
+
+    }
+    private void OnDestroy()
+    {
+        CancelInvoke();
+        foreach (var item in aliveEnemyList)
+        {
+            if (item != null) { item.OnEnemyDead -= EnemyDead; }
+        }
+        aliveEnemyList.Clear();
+    }
+    private void StartWave(int index)
+    {
+        MyLog.Log($"{index}번째 웨이브 시작");
+        if (index < 0 || index >= testStageData.WaveDataList.Count)
+        {
+            MyLog.LogError("웨이브 인덱스가 이상함");
+            return;
+        }
+        var curWaveData = testStageData.WaveDataList[index];
+        StartCoroutine(spawnCor(curWaveData,index));
+    }
+
+    IEnumerator spawnCor(WaveDataSO waveData,int waveIndex)
+    {
+        remainSpawnCount = waveData.EnemieList.Count;
+        int cnt = 0;
+        while (cnt < waveData.EnemieList.Count)
+        {
+            Enemy enemyData = waveData.EnemieList[cnt];
+            Enemy enemyObj =  Instantiate(enemyData, transform);
+            float value = Random.Range(0f, 10f);
+            Vector3 pos = enemyObj.transform.position;
+            pos.x = value;
+            enemyObj.transform.position = pos;
+            enemyObj.OnEnemyDead += EnemyDead;
+            aliveEnemyList.Add(enemyObj);
+            cnt++;
+            yield return delay;
+        }
+    }
+
+    private void EnemyDead(Enemy enemy)
+    {
+        if(aliveEnemyList.Contains(enemy))
+        {
+            remainSpawnCount--;
+            enemy.OnEnemyDead -= EnemyDead;
+            aliveEnemyList.Remove(enemy);
+        }
+        else
+        {
+            MyLog.LogError("뭔가 이상. 여기에 무조건 있어야함");
+        }
+        //몬스터가 전부 죽었다면, 다음 스테이지가 있는지 확인하고 스테이지 시작해줌
+        if(CheckWaveClear())
+        {
+            Invoke(nameof(StartNextWaveDelyed), nextWaveStartTime);
+        }
+        
+    }
+    private void StartNextWaveDelyed()
+    {
+        curWaveIndex += 1;
+        StartWave(curWaveIndex);
+
+    }
+
+    private bool CheckWaveClear()
+    {
+        if (remainSpawnCount != 0) return false;
+        if (curWaveIndex + 1 >= testStageData.WaveDataList.Count) return false;
+
+        return true;
+    }
+
+}

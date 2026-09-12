@@ -65,6 +65,9 @@ public class Enemy : MonoBehaviour
     private int stunCount = 0;
     bool isStun = false;
 
+    //데미지 처리를 위한 것
+    DamageInfo damageInfo = new DamageInfo();
+
     public int GetEnemyAromr()
     {
         return runtimeStat.GetArmorInfo();
@@ -95,7 +98,9 @@ public class Enemy : MonoBehaviour
             curAttackRate = runtimeStat.attackRate;
             delay = new WaitForSeconds(curAttackRate);
         }
-        
+
+        //데미지 처리를 위한 데미지 set;
+        damageInfo.SetDamageInfo(runtimeStat.attack, 0, 0, runtimeStat.penetration, 0);
     }
 
     private void OnEnable()
@@ -173,7 +178,7 @@ public class Enemy : MonoBehaviour
         while(true)
         {
             if (castleWall == null) break;
-            castleWall.TakeDamage(runtimeStat.attack);
+            castleWall.TakeDamage(damageInfo);
             yield return delay;
         }
     }

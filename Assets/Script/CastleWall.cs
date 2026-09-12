@@ -2,11 +2,16 @@ using UnityEngine;
 
 public class CastleWall : MonoBehaviour
 {
-    int hp = 1500;
-    public void TakeDamage(int dmg)
+    [SerializeField] int hp = 1500;
+    [SerializeField] int defense = 0;
+
+    //public void TakeDamage(int dmg)
+    public void TakeDamage(DamageInfo damageInfo)
     {
+        damageInfo.SetDamageInfo(damageInfo.attackerAttack, 0, 0, damageInfo.attackerArmorPenetrate, defense);
+        int dmg = DamageManager.Instance.CalcDamage(damageInfo);
         hp -= dmg;
-        //Debug.Log($"HP {hp}");
+        MyLog.Log($"HP {hp}");
     }
 
 }
