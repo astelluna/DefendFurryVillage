@@ -227,7 +227,7 @@ GameObject:
   - component: {fileID: -1805444175364053157}
   - component: {fileID: 4252497606840152300}
   m_Layer: 7
-  m_Name: Enemy
+  m_Name: Enemy_Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -311,7 +311,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   rb: {fileID: 4180865111708144461}
   statusEffectController: {fileID: 4252497606840152300}
-  enemyDataSO: {fileID: 11400000, guid: 5f7c1b18f22cb6a4fa76c3796e220792, type: 2}
+  enemyDataSO: {fileID: 0}
 --- !u!114 &4252497606840152300
 MonoBehaviour:
   m_ObjectHideFlags: 0

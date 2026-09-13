@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -67,6 +68,8 @@ public class Enemy : MonoBehaviour
 
     //데미지 처리를 위한 것
     DamageInfo damageInfo = new DamageInfo();
+    //성벽 Collider 
+    Collider castleCollider;
 
     public int GetEnemyAromr()
     {
@@ -136,7 +139,50 @@ public class Enemy : MonoBehaviour
             exitGraceCor = null;
         }
     }
+    private void Update()
+    {
+        if (enemyDataSO.CanRangedAttack())
+        {
+            //원거리 공격이 가능하다면 여기에서 처리
+            Collider[] collider = Physics.OverlapSphere(this.transform.position, enemyDataSO.attackRange, TargetManager.Instance.CastleWallLayer);
+            if (attackCor == null)
+            {
+                //null일때만 등록
+
+                //일단 성벽은 무조건 1개일거니까 1개로 하자
+                if (collider.Length > 0)
+                {
+                    this.castleCollider = collider[0];
+                    AttackRegister(this.castleCollider);
+                }
+            }
+            else
+            {
+                //만약 넉백으로 인해 성벽이 감지가 안되었다면? 공격 해제를 해줘야함.
+                if (attackCor != null && collider.Length == 0 && exitGraceCor == null)
+                {
+                    //공격 종료
+                    if (this.castleCollider != null)
+                    {
+                        StartAttakStopAction(this.castleCollider);
+                    }
+                }
+            }
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
+    {
+        //만약 원거리 공격하는 적이라면 공격 체크는 안한다.
+        if (enemyDataSO.CanRangedAttack()) return;
+
+        AttackRegister(other);
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        StartAttakStopAction(other);
+    }
+    private void AttackRegister(Collider other)
     {
         //성벽이 아니었다면 return;
         if ((TargetManager.Instance.CastleWallLayer.value & (1 << other.gameObject.layer)) == 0) return;
@@ -150,7 +196,7 @@ public class Enemy : MonoBehaviour
         //TODO. 이제 성벽을 공격해야함.
         if (other.TryGetComponent(out CastleWall castleWall))
         {
-            if(attackCor == null)
+            if (attackCor == null)
             {
                 attackCor = StartCoroutine(AttackRoutine(castleWall));
             }
@@ -160,10 +206,8 @@ public class Enemy : MonoBehaviour
             MyLog.LogError("성벽 레이어인데 스크립트가 없습니다.");
         }
         isMove = false;
-
     }
-
-    private void OnTriggerExit(Collider other)
+    private void StartAttakStopAction(Collider other)
     {
         if ((TargetManager.Instance.CastleWallLayer.value & (1 << other.gameObject.layer)) == 0) return;
 

@@ -10,7 +10,13 @@ public class EnemyDataSO : ScriptableObject
     [field: SerializeField] public float moveSpeed { get; private set; } = 1.0f;
     [field: SerializeField] public float penetration { get; private set; }
     [field: SerializeField] public int experience { get; private set; } = 1;
+    [field: SerializeField] public float attackRange { get; private set; } = 0f; //기본0 -> 근접. 아니라면? 원거리 공격 개시
 
+    public bool CanRangedAttack()
+    {
+        if (attackRange > 0) return true;
+        return false;
+    }
 
 }
 

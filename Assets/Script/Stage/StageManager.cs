@@ -8,6 +8,10 @@ public class StageManager : MonoBehaviour
     [SerializeField] StageDataSO testStageData;
 
     [SerializeField] float spawnTime = 0.1f;
+
+    //스테이지 정보 표시하는 UI
+    [SerializeField] StagePanel stagePanel;
+
     WaitForSeconds delay;
     int curWaveIndex = 0;
     float nextWaveStartTime = 1f;
@@ -49,6 +53,9 @@ public class StageManager : MonoBehaviour
     {
         remainSpawnCount = waveData.EnemieList.Count;
         int cnt = 0;
+        //UI 갱신
+        RequestUpdateStagePanel();
+        //적 소환 시작
         while (cnt < waveData.EnemieList.Count)
         {
             Enemy enemyData = waveData.EnemieList[cnt];
@@ -76,13 +83,21 @@ public class StageManager : MonoBehaviour
         {
             MyLog.LogError("뭔가 이상. 여기에 무조건 있어야함");
         }
+        //UI 갱신
+        RequestUpdateStagePanel();
+
         //몬스터가 전부 죽었다면, 다음 스테이지가 있는지 확인하고 스테이지 시작해줌
-        if(CheckWaveClear())
+        if (CheckWaveClear())
         {
             Invoke(nameof(StartNextWaveDelyed), nextWaveStartTime);
         }
         
     }
+    private void RequestUpdateStagePanel()
+    {
+        stagePanel.UpdateStageInfo(curWaveIndex + 1, testStageData.WaveDataList.Count, aliveEnemyList.Count);
+    }
+
     private void StartNextWaveDelyed()
     {
         curWaveIndex += 1;
