@@ -71,6 +71,9 @@ public class Enemy : MonoBehaviour
     //성벽 Collider 
     Collider castleCollider;
 
+    //어느 오브젝트풀에서 생성되었는가 
+    ObjPool<Enemy> enemyPool;
+
     public int GetEnemyAromr()
     {
         return runtimeStat.GetArmorInfo();
@@ -207,6 +210,11 @@ public class Enemy : MonoBehaviour
         }
         isMove = false;
     }
+
+    public void SetObjectPool(ObjPool<Enemy> pool)
+    {
+        enemyPool = pool;
+    }
     private void StartAttakStopAction(Collider other)
     {
         if ((TargetManager.Instance.CastleWallLayer.value & (1 << other.gameObject.layer)) == 0) return;
@@ -256,7 +264,13 @@ public class Enemy : MonoBehaviour
         MyLog.Log("사망처리");
         LevelUpManager.Instance.GetExperience(enemyDataSO.experience);
         OnEnemyDead?.Invoke(this);
-        Destroy(this.gameObject);
+        enemyPool.ReturnObject(this);
+        //Destroy(this.gameObject);
+    }
+
+    public void ReturnToPool()
+    {
+        enemyPool?.ReturnObject(this);
     }
 
     public void OnHitDelay(int dmg, float delayTime)

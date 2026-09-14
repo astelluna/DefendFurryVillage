@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawnerTest : MonoBehaviour
 {
     [SerializeField] GameObject obj;
     [SerializeField] float spawnTime = 5;

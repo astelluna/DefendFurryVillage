@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StageManager : MonoBehaviour
@@ -25,9 +26,32 @@ public class StageManager : MonoBehaviour
     {
         delay = new WaitForSeconds(spawnTime);
         curWaveIndex = 0;
-        StartWave(curWaveIndex);
-
+        RegisterEnemySpawner();
     }
+    private void RegisterEnemySpawner()
+    {
+        //Enemy 오브젝트풀에 현재 스테이지 정보로 적을 생성하라고 지시. 이벤트를 통해서 다 설정되면 웨이브가 시작됨
+        HashSet<Enemy> enemyHash = new HashSet<Enemy>();
+        foreach(var item in testStageData.WaveDataList)
+        {
+            foreach(var enemy in item.EnemieList)
+            {
+                if(!enemyHash.Contains(enemy))
+                {
+                    enemyHash.Add(enemy);
+                }
+            }
+        }
+        //모든 종류를 파악한다음에 EnemySpawner에 위임.
+        EnemySpawner.Instance.OnSpawnEnd += WaveStart;
+        EnemySpawner.Instance.MakeEnemy(enemyHash.ToList());
+    }
+    private void WaveStart()
+    {
+        EnemySpawner.Instance.OnSpawnEnd -= WaveStart;
+        StartWave(curWaveIndex);
+    }
+
     private void OnDestroy()
     {
         CancelInvoke();
@@ -58,8 +82,13 @@ public class StageManager : MonoBehaviour
         //적 소환 시작
         while (cnt < waveData.EnemieList.Count)
         {
+            //오브젝트풀에서 가져오도록 하자.
+
+
+
             Enemy enemyData = waveData.EnemieList[cnt];
-            Enemy enemyObj =  Instantiate(enemyData, transform);
+            Enemy enemyObj = EnemySpawner.Instance.GetPrefabByPool(transform, enemyData);
+            //Enemy enemyObj =  Instantiate(enemyData, transform);
             float value = Random.Range(0f, 10f);
             Vector3 pos = enemyObj.transform.position;
             pos.x = value;
