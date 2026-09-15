@@ -76,8 +76,8 @@ public class Missile : Projectile
         
     }
 
-    protected override void DestroySelf()
+    protected override void DestroySelfSpecial()
     {
-        Destroy(this.gameObject);
+        //Destroy(this.gameObject);
     }
 }

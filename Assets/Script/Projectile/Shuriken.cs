@@ -116,11 +116,11 @@ public class Shuriken : Projectile
         }
         
     }
-    protected override void DestroySelf()
+    protected override void DestroySelfSpecial()
     {
         UnSubscribeAll();
         takeDamaeEnemyDict.Clear();
-        Destroy(this.gameObject);
+        //Destroy(this.gameObject);
     }
 
     protected override void Init()

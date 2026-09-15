@@ -6,15 +6,14 @@ public class AugmentManager : MonoBehaviour
 {
     public static AugmentManager Instance { get; private set; }
 
-    //현재 플레이어 리스트
-    private List<Player> playerList = new List<Player>();
-
     [SerializeField] AugmentPanel augmentPanel;
 
     List<WeaponAugment> selectedAugmentList = new List<WeaponAugment>();
     List<Player> haveAugmentPlyerList = new List<Player>();
 
     private bool isShowingPanel = false; //현재 패널 띄워져있는지 플래그
+
+    int maxShowCount;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -41,14 +40,6 @@ public class AugmentManager : MonoBehaviour
         ClearSelectAugmentList();
     }
 
-    public void AddPlayer(Player ply)
-    {
-        playerList.Add(ply);
-    }
-
-    int maxShowCount;
-    //int curShowCount;
-
     public void SetAndShowAugmentUI(int cnt)
     {
         //maxShowCount = cnt;
@@ -71,8 +62,7 @@ public class AugmentManager : MonoBehaviour
         
         for(int i=0; i< 3; i++)
         {
-            haveAugmentPlyerList.Clear();
-            haveAugmentPlyerList = playerList.FindAll(n => n.HaveRemainWeaponAugment());
+            haveAugmentPlyerList = PlayerManager.Instance.GetHaveAugmentPlayerList();
             if (haveAugmentPlyerList.Count == 0)
             {
                 if(i==0)

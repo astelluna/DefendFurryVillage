@@ -21,9 +21,9 @@ public class Falling : Projectile
         canMove = true;
     }
 
-    protected override void DestroySelf()
+    protected override void DestroySelfSpecial()
     {
-        Destroy(this.gameObject);
+        //Destroy(this.gameObject);
     }
 
     protected override void Init()

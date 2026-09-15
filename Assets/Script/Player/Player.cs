@@ -54,7 +54,7 @@ public class Player : MonoBehaviour
         basicWeapon.SetWeaponInfo(this.playerDataSO);
         specialWeapon.SetWeaponInfo(this.playerDataSO);
 
-        AugmentManager.Instance.AddPlayer(this);
+        PlayerManager.Instance.AddPlayer(this);
     }
 
     public WeaponAugment GetAugment()

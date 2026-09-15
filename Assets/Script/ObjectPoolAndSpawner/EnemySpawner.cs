@@ -5,13 +5,8 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     //오브젝트풀 프리팹,사이즈 , 선언
-    //[SerializeField] Enemy _enemyPrefab;
-    [SerializeField] int poolSize = 10;
-    ObjPool<Enemy> _enemyPool;
-    public event Action<int> _getExpPoint;
-
-
     public static EnemySpawner Instance { get; private set; }
+    [SerializeField] int poolSize = 10;   
 
     //주의 : 원본 프리팹의 Enemy만 검색하면서 쓰고 풀에서 꺼낸 Enemy는 사용하면 안됨
     Dictionary<Enemy, ObjPool<Enemy>> enemyDict = new Dictionary<Enemy, ObjPool<Enemy>>();

@@ -109,9 +109,9 @@ public class Bullet : Projectile
         transform.localScale = scale;
     }
 
-    protected override void DestroySelf()
+    protected override void DestroySelfSpecial()
     {
         Init();
-        Destroy(this.gameObject);
+        //Destroy(this.gameObject);
     }
 }

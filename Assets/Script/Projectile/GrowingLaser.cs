@@ -101,7 +101,7 @@ public class GrowingLaser : Projectile
             yield return null;
         }
         //전부 끝나면 바로 레이저 삭제
-        DestroySelf();
+        DestroySelfSpecial();
     }
 
     protected override void Init()
@@ -109,9 +109,9 @@ public class GrowingLaser : Projectile
         
     }
 
-    protected override void DestroySelf()
+    protected override void DestroySelfSpecial()
     {
         curLifeTime = 0;
-        Destroy(this.gameObject);
+        //Destroy(this.gameObject);
     }
 }

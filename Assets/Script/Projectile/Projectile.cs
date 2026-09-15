@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +13,15 @@ public abstract class Projectile : MonoBehaviour
 
 
     protected int curPierceCount = 0;
+
+    //오브젝트 풀
+    ObjPool<Projectile> projectilePool;
+    public event Action<Projectile> OnProjectileDestroy;
+
+    public void SetObjectPool(ObjPool<Projectile> pool)
+    {
+        projectilePool = pool;
+    }
 
     protected virtual void OnEnable()
     {
@@ -31,6 +41,11 @@ public abstract class Projectile : MonoBehaviour
         weaponRuntimeData = data;
         //null이면 빈거 넣음
         augmentSpecialDataSOList = (specialDataSOs == null) ? new List<AugmentSpecialDataSO>() : specialDataSOs;
+    }
+
+    public void SetProjectilePool(ObjPool<Projectile> pool)
+    {
+        projectilePool = pool;
     }
 
     protected virtual DamageInfo MakeDamageInfo(Enemy enemy)
@@ -81,5 +96,17 @@ public abstract class Projectile : MonoBehaviour
 
     protected abstract void Init();
     //TODO.//추후 여기서 그냥 오브젝트풀에 반환하도록 구현해둘수있을듯?
-    protected abstract void DestroySelf();
+    protected virtual void DestroySelf()
+    {
+        //파괴 이벤트를 보내고 풀도 스스로 반환시킴
+        OnProjectileDestroy?.Invoke(this);
+        
+        //총알마다 따로 처리해야할 작업들은 여기서 한다
+        DestroySelfSpecial();
+    }
+    public void ReturnToPool()
+    {
+        projectilePool.ReturnObject(this);
+    }
+    protected abstract void DestroySelfSpecial();
 }
