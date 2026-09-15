@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d00af80f0c2694b905668dce31ea1c, type: 3}
   m_Name: LaserData
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDataSO
-  <bulletPrefab>k__BackingField: {fileID: 2928852933022596369, guid: 16992d3a229a39641865545c79e36a8b, type: 3}
   <baseRange>k__BackingField: 8
   <baseAttackRate>k__BackingField: 8
   <baseDamage>k__BackingField: 10
+  <WeaponDescription>k__BackingField: "\uB808\uC774\uC800\uB97C \uBC1C\uC0AC\uD569\uB2C8\uB2E4"

@@ -9,6 +9,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4758910680683297653, guid: 43c486e69eb509b48ba4162cf631e811, type: 3}
+      propertyPath: <ProjectilePrefab>k__BackingField
+      value: 
+      objectReference: {fileID: 8330173378043018533, guid: b3859af650b29c3428a48fe8c6a0315e, type: 3}
+    - target: {fileID: 4758910680683297653, guid: 43c486e69eb509b48ba4162cf631e811, type: 3}
       propertyPath: <projectilePrefab>k__BackingField
       value: 
       objectReference: {fileID: 8330173378043018533, guid: b3859af650b29c3428a48fe8c6a0315e, type: 3}

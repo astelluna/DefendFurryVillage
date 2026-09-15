@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d00af80f0c2694b905668dce31ea1c, type: 3}
   m_Name: BasicGunData
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDataSO
-  <bulletPrefab>k__BackingField: {fileID: 3543824175731101463, guid: f003a98c35903f3409438966b5dffd55, type: 3}
   <baseRange>k__BackingField: 8
   <baseAttackRate>k__BackingField: 5
   <baseDamage>k__BackingField: 10
+  <WeaponDescription>k__BackingField: "\uAE30\uBCF8 \uBB34\uAE30\uC785\uB2C8\uB2E4"

@@ -12,7 +12,19 @@ public class AugmentPanel : MonoBehaviour
             MyLog.LogError("증강 UI index가 너무 큽니다");
             return;
         }
+        augmentList[index].Init();
         augmentList[index].SetData(weaponAugment, characterSprite);
+        augmentList[index].gameObject.SetActive(true);
+    }
+    public void AddData(Player player, int index)
+    {
+        if (index >= augmentList.Count)
+        {
+            MyLog.LogError("증강 UI index가 너무 큽니다");
+            return;
+        }
+        augmentList[index].Init();
+        augmentList[index].SetData(player);
         augmentList[index].gameObject.SetActive(true);
     }
 

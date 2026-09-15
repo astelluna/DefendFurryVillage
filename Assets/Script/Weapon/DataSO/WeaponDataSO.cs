@@ -8,5 +8,6 @@ public class WeaponDataSO : ScriptableObject
     [field: SerializeField] public float baseRange { get; private set; }
     [field:SerializeField] public float baseAttackRate { get; private set; }
     [field:SerializeField] public int baseDamage { get; private set; }
+    [field: SerializeField] public string WeaponDescription { get; private set;} //이 무기는 어떤 무기인지 설명하는 텍스트
 
 }

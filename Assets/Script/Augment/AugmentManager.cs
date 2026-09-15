@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.HableCurve;
 
 public class AugmentManager : MonoBehaviour
 {
@@ -10,10 +11,15 @@ public class AugmentManager : MonoBehaviour
 
     List<WeaponAugment> selectedAugmentList = new List<WeaponAugment>();
     List<Player> haveAugmentPlyerList = new List<Player>();
+    List<Player> selectedPlayerList = new List<Player>();
+
 
     private bool isShowingPanel = false; //현재 패널 띄워져있는지 플래그
-
     int maxShowCount;
+    //const로 적용된 증강 최대갯수, 캐릭터 확률
+    const int Character_Pick_Percent = 80;
+    const int Total_Augment_Slot = 3;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -24,12 +30,10 @@ public class AugmentManager : MonoBehaviour
 
         Instance = this;
     }
-
     private void Start()
     {
-        //TEST
-        //Invoke( nameof(ShowAugmentUI), 3.0f);
-        //ShowAugmentUI();
+        //시작하면 1번 띄우자 패널을 
+        SetAndShowAugmentUI(1);
     }
 
     private void OnDestroy()
@@ -38,6 +42,7 @@ public class AugmentManager : MonoBehaviour
             Instance = null;
         if (isShowingPanel) Time.timeScale = 1f;
         ClearSelectAugmentList();
+        ClearSelectPlayerList();
     }
 
     public void SetAndShowAugmentUI(int cnt)
@@ -51,6 +56,17 @@ public class AugmentManager : MonoBehaviour
         ShowAugmentUI();
     }
 
+    private bool NeedPlayerSpawn(List<Player> remainPlayers)
+    {
+        if (remainPlayers.Count == 0) return false;
+        if (!PlayerManager.Instance.HavePlayer()) return true;
+        int characterPercent = Character_Pick_Percent; //80퍼센트 확률로 캐릭터 먼저 제공
+        int value = Random.Range(1, 101);
+        if (value > characterPercent) { return false; }
+
+        return true;
+    }
+
     private void ShowAugmentUI()
     {
 
@@ -59,31 +75,51 @@ public class AugmentManager : MonoBehaviour
         //UI를 보여주고 현재 플레이어중 1개를 선택해서 쭉쭉 내려간다음에 증강 1개를 선택해서 가져온다.
         bool needShowPanel = false;
         ClearSelectAugmentList();
-        
-        for(int i=0; i< 3; i++)
+        ClearSelectPlayerList();
+
+        //미리 남은 플레이어 항목 리스트를 받아둠.
+        List<Player> remainPlayerList = PlayerManager.Instance.GetRemainPlayer();
+        for(int i=0; i< Total_Augment_Slot; i++)
         {
-            haveAugmentPlyerList = PlayerManager.Instance.GetHaveAugmentPlayerList();
-            if (haveAugmentPlyerList.Count == 0)
+            if(NeedPlayerSpawn(remainPlayerList))
             {
-                if(i==0)
-                {
-                    //단 1번이라도 실행이 안되었었다면? 시간 다시 흘러가야함
-                    Time.timeScale = 1f;
-                    isShowingPanel = false;
-                    maxShowCount = 0;
-                }
-                MyLog.LogWarning("더이상 증강이 남아있는 플레이어가 없습니다");
-                break;
+                //플레이어중 한명을 선택해서 패널에 띄우도록
+                int randIndex = Random.Range(0, remainPlayerList.Count);
+                Player selPlayer = remainPlayerList[randIndex];
+                remainPlayerList.Remove(selPlayer);
+                augmentPanel.AddData(selPlayer, i);
+                selectedPlayerList.Add(selPlayer);
+                selPlayer.OnStartPlayerSpawn += OnPlayerSelected;
             }
-            int playerNo = Random.Range(0, haveAugmentPlyerList.Count);
-            Player curPlayer = haveAugmentPlyerList[playerNo];
+            else
+            {
+                //증강 소환
+                //증강이 있는 플레이어를 확인한다.
+                haveAugmentPlyerList = PlayerManager.Instance.GetHaveAugmentPlayerList();
+                if (haveAugmentPlyerList.Count == 0)
+                {
+                    if (i == 0)
+                    {
+                        //단 1번이라도 실행이 안되었었다면? 시간 다시 흘러가야함
+                        Time.timeScale = 1f;
+                        isShowingPanel = false;
+                        maxShowCount = 0;
+                    }
+                    MyLog.LogWarning("더이상 증강이 남아있는 플레이어가 없습니다");
+                    break;
+                }
+                int playerNo = Random.Range(0, haveAugmentPlyerList.Count);
+                Player curPlayer = haveAugmentPlyerList[playerNo];
 
-            WeaponAugment data = curPlayer.GetAugment(); //정보를 하나 가져와보자.
-            augmentPanel.AddData(data,curPlayer.Portrait,i); //여기서 알아서 i번째 UI에 UI를 넣도록 함.
+                WeaponAugment data = curPlayer.GetAugment(); //정보를 하나 가져와보자.
+                augmentPanel.AddData(data, curPlayer.Portrait, i); //여기서 알아서 i번째 UI에 UI를 넣도록 함.
 
-            //이벤트 등록
-            selectedAugmentList.Add(data);
-            data.OnSelected += OnSelectedAugment;
+                //이벤트 등록
+                selectedAugmentList.Add(data);
+                data.OnSelected += OnSelectedAugment;
+            }
+
+                
             needShowPanel = true;
         }
         if(needShowPanel)
@@ -91,14 +127,31 @@ public class AugmentManager : MonoBehaviour
             augmentPanel.Show();
         }
     }
+
+    public void OnPlayerSelected(Player player)
+    {
+        //선택된 플레이어  소환. 그리고 WeaponAugment도 클리어시키자;
+        MyLog.Log("이벤트 발동 - 플레이어");
+        WeaponAugmentProcess(null); //증강 초기화. 다 비워준다.
+        PlayerProcess(player); //플레이어 처리 
+        CheckPanelClose(); //패널 처리
+    }
+
+
     public void OnSelectedAugment(WeaponAugment augment)
     {
-        MyLog.Log("이벤트 발동");
-        //선택된거 1개 제외 모두 다시 반환하도록 한다.
+        //증강 선택되었으므로 해당 증강 적용해주고 플레이어 정보는 싹 지워주자
+        MyLog.Log("이벤트 발동 - 증강");
+        WeaponAugmentProcess(augment);  //무기 선택된거 1개 제외 모두 다시 반환하도록 한다.
+        PlayerProcess(null); //플레이어 null 처리로 클리어
+        CheckPanelClose(); //패널 처리
+    }
+    private void WeaponAugmentProcess(WeaponAugment augment)
+    {
         HashSet<Weapon> weaponNeedUptate = new HashSet<Weapon>();
-        foreach(var item in selectedAugmentList)
+        foreach (var item in selectedAugmentList)
         {
-            if(item != augment)
+            if (item != augment)
             {
                 //선택 안한 증강은 다시 넣어주자 
                 item.weapon.ReturnAugment(item.dataSO);
@@ -106,14 +159,30 @@ public class AugmentManager : MonoBehaviour
             weaponNeedUptate.Add(item.weapon);
         }
         //업데이트를 return 시켜줬기때문에 다시 다 Update 해줘야함.
-        foreach(var weapon in weaponNeedUptate)
+        foreach (var weapon in weaponNeedUptate)
         {
             weapon.UpdateWeaponData();
         }
-
         ClearSelectAugmentList();
+    }
+    private void PlayerProcess(Player player)
+    {
+        foreach (var curPlayer in selectedPlayerList)
+        {
+            if (curPlayer == player)
+            {
+                //플레이어 소환 요청
+                PlayerManager.Instance.SpawnPlayer(curPlayer);
+                break;
+            }
+        }
+        ClearSelectPlayerList();
+    }
+
+    private void CheckPanelClose()
+    {
         augmentPanel.Close();
-        if(maxShowCount <= 0)
+        if (maxShowCount <= 0)
         {
             Time.timeScale = 1f;
             isShowingPanel = false;
@@ -125,7 +194,17 @@ public class AugmentManager : MonoBehaviour
             ShowAugmentUI();
         }
     }
-
+    private void ClearSelectPlayerList()
+    {
+        foreach(var item in selectedPlayerList)
+        {
+            if(item != null)
+            {
+                item.OnStartPlayerSpawn -= OnPlayerSelected;
+            }
+        }
+        selectedPlayerList.Clear();
+    }
     private void ClearSelectAugmentList()
     {
         foreach (var item in selectedAugmentList)

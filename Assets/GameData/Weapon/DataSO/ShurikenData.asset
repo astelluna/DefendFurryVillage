@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d00af80f0c2694b905668dce31ea1c, type: 3}
   m_Name: ShurikenData
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDataSO
-  <bulletPrefab>k__BackingField: {fileID: 2087869031058388614, guid: 8ed067863a58b834dbf6dba9485c251c, type: 3}
   <baseRange>k__BackingField: 8
   <baseAttackRate>k__BackingField: 6
   <baseDamage>k__BackingField: 1
+  <WeaponDescription>k__BackingField: "\uD68C\uC804\uD558\uB294 \uC218\uB9AC\uAC80\uC744
+    \uB358\uC9D1\uB2C8\uB2E4"

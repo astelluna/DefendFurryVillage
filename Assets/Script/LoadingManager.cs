@@ -2,15 +2,5 @@ using UnityEngine;
 
 public class LoadingManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    //인게임창에서 로딩을 담당하자.
 }

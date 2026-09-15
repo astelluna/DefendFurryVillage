@@ -10,6 +10,7 @@ public class AugmentUI : MonoBehaviour
     [SerializeField] Button augmentButton;
 
     WeaponAugment weaponAugment;
+    Player ply;
 
     private void Awake()
     {
@@ -22,7 +23,14 @@ public class AugmentUI : MonoBehaviour
     private void AugmentButtonClick()
     {
         MyLog.Log("버튼 클릭");
-        weaponAugment.SelectedEventInvoke(weaponAugment);
+        if(weaponAugment != null)
+        {
+            weaponAugment.SelectedEventInvoke(weaponAugment);
+        }
+        else if(ply != null)
+        {
+            ply.PlayerSpawnEventInvoke();
+        }
     }
 
     public void SetData(WeaponAugment augment, Sprite charcterSprite)
@@ -31,5 +39,17 @@ public class AugmentUI : MonoBehaviour
         characterImage.sprite = charcterSprite;
         iconImage.sprite = weaponAugment.weapon.WeaponIcon;
         descriptionText.text = weaponAugment.dataSO.GetDataDescription();
+    }
+    public void SetData(Player playerData)
+    {
+        ply = playerData;
+        characterImage.sprite = ply.Portrait;
+        iconImage.sprite = ply.GetSpecialWeaponIcon();
+        descriptionText.text = ply.GetSpecialWeaponDesc();
+    }
+    public void Init()
+    {
+        weaponAugment = null;
+        ply = null;
     }
 }

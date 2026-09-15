@@ -161,7 +161,7 @@ PrefabInstance:
     - target: {fileID: 688327806511031720, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
       propertyPath: playerDataSO
       value: 
-      objectReference: {fileID: 11400000, guid: 3189704a8b391aa428a1565fae590c9a, type: 2}
+      objectReference: {fileID: 11400000, guid: 132b7349903ee1749b59717c38ed479b, type: 2}
     - target: {fileID: 688327806511031720, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
       propertyPath: specialWeapon
       value: 

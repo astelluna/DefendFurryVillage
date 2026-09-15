@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,23 @@ public struct WeaponRuntimeData
     public float criticalDamgeRate;
     public float armorPenetrate;
 }
+public class WeaponAugment
+{
+    public Weapon weapon;
+    public AugmentDataSO dataSO;
+    public event Action<WeaponAugment> OnSelected;
+    public WeaponAugment(Weapon wp, AugmentDataSO data)
+    {
+        weapon = wp;
+        dataSO = data;
+    }
+
+    public void SelectedEventInvoke(WeaponAugment augment)
+    {
+        OnSelected?.Invoke(augment);
+    }
+
+}
 public class Weapon : MonoBehaviour
 {
     
@@ -25,7 +43,7 @@ public class Weapon : MonoBehaviour
     public WaitForSeconds continuousFireDelay { get; private set; }
 
     //총알 프리팹 종류
-    [field: SerializeField] public Projectile projectilePrefab { get; private set; } //총알 종류
+    [field: SerializeField] public Projectile ProjectilePrefab { get; private set; } //총알 종류
 
     //무기 정보들
     [field: SerializeField] public Sprite WeaponIcon { get; protected set; }
@@ -112,7 +130,7 @@ public class Weapon : MonoBehaviour
     public AugmentDataSO GetRandomAugmentData()
     {
         if (unUsedUpgradeAugmentDataList.Count == 0) return null;
-        int index = Random.Range(0, unUsedUpgradeAugmentDataList.Count);
+        int index = UnityEngine.Random.Range(0, unUsedUpgradeAugmentDataList.Count);
         AugmentDataSO dataSO = unUsedUpgradeAugmentDataList[index];
         unUsedUpgradeAugmentDataList.Remove(dataSO);
         usedUpgradeAugmentDataList.Add(dataSO);
