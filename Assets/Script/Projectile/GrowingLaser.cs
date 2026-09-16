@@ -101,7 +101,7 @@ public class GrowingLaser : Projectile
             yield return null;
         }
         //전부 끝나면 바로 레이저 삭제
-        DestroySelfSpecial();
+        DestroySelf();
     }
 
     protected override void Init()

@@ -12,7 +12,8 @@ public class ShurikenExecuteSO : WeaponExecuteSO
         //Projectile projectile = Instantiate(weapon.ProjectilePrefab, weapon.transform.position, rotation);
         Projectile projectile = ProjectileSpawner.Instance.GetPrefabByPool(weapon.transform, weapon.ProjectilePrefab);
         projectile.SetProjectileData(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
-        projectile.SetTargetPos(enemyTarget.position);
+        projectile.SetDirectionToEnemyPosition(enemyTarget.position);
+        //projectile.SetTargetPos(enemyTarget.position);
         projectile.Shoot();
     }
 }

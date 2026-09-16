@@ -4,7 +4,7 @@ using UnityEngine;
 public class Falling : Projectile
 {
     float yPos = 10f;
-    float fallingSpeed = 6f;
+    float fallingSpeed = 8f;
 
     bool canMove = false;
     [SerializeField] Rigidbody rb;

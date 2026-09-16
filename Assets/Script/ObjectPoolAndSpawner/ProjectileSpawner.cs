@@ -56,7 +56,7 @@ public class ProjectileSpawner : MonoBehaviour
         //현재는 enemy에서 직접 반환해서 안씀
         //추후에 필요할때 넣자
         projectile.OnProjectileDestroy -= ReturnPrefabToPool;
-        projectile.ReturnToPool();
+        
 
         //if (!enemyDict.ContainsKey(enemy)) { return null; } //주의. 이렇게 딕셔너리로 검색하면 안된다 -> enemy는 원본 프리팹이 아니라 꺼낸 프리팹임
 

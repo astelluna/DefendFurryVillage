@@ -23,6 +23,8 @@ public class ShooGunExecuteSO : WeaponExecuteSO
             //Projectile projectile = Instantiate(weapon.ProjectilePrefab, weapon.transform.position, rotation);
             Projectile projectile = ProjectileSpawner.Instance.GetPrefabByPool(weapon.transform, weapon.ProjectilePrefab);
             projectile.SetProjectileData(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
+            projectile.SetDirectionRotation(rotation);
+
             projectile.Shoot();
             
 

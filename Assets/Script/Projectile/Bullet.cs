@@ -10,7 +10,7 @@ public class Bullet : Projectile
     [SerializeField] Rigidbody rb;
 
     //TODO. 원래는 외부에서 속도를 받아야하긴하는데. 그냥 고정 속도로 해보자. 그게 나을듯
-    float bulletSpeed = 5;
+    float bulletSpeed = 8;
 
     bool isTriggered = false; //두개 이상 객체에 동시에 충돌해서 추가
 

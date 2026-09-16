@@ -1448,7 +1448,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd5ac43dcc7bb244382b5385030d44db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StageManager
-  testStageData: {fileID: 11400000, guid: 521f0df8e1fe77a49a0cba1be72e4e24, type: 2}
+  testStageData: {fileID: 11400000, guid: 45217be1e1908df4796564979cfbc1d5, type: 2}
   spawnTime: 0.1
   stagePanel: {fileID: 80954981}
 --- !u!4 &641703854

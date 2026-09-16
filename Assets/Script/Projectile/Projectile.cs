@@ -35,7 +35,24 @@ public abstract class Projectile : MonoBehaviour
     public virtual void SetMoveTartgetPos(Vector3 pos) => transform.position = pos; //위에서 떨어지는 공격을 위해 자신의 위치를 타겟 바로위로 지정
     public virtual void SetTargetPos(Vector3 pos) => targetPos = pos; //타겟 위치로 날아가야할때 사용
     public virtual void SetExplodeRadius(float amount) => explodeRadius = amount; //폭발 범위가 필요할때 사용
-    
+                                                                                  //총알 날아가는 방향 지정
+    public virtual void SetDirectionToEnemyPosition(Vector3 dir)
+    {
+        //몬스터 방향 위치으로 날아가야하면 이렇게
+        this.transform.LookAt(dir);
+    }
+    public virtual void SetDirectionToDirection(Vector3 enemyPos, Vector3 dir)
+    {
+        //앞쪽, 뒤쪽,왼쪽 이런식으로 특정 방향을 봐야하는거면 이렇게
+        transform.position = enemyPos;
+        this.transform.LookAt(transform.position + dir);
+        Init();
+    }
+    public virtual void SetDirectionRotation(Quaternion rotation)
+    {
+        transform.rotation = rotation;
+    }
+
     public virtual void SetProjectileData(WeaponRuntimeData data, List<AugmentSpecialDataSO> specialDataSOs)
     {
         weaponRuntimeData = data;
@@ -76,26 +93,13 @@ public abstract class Projectile : MonoBehaviour
         }
     }
 
-    //총알 날아가는 방향 지정
-    public virtual void SetDirectionToEnemyPosition(Vector3 dir)
-    {
-        //몬스터 방향 위치으로 날아가야하면 이렇게
-        this.transform.LookAt(dir);
-    }
-    public virtual void SetDirectionToDirection(Vector3 enemyPos, Vector3 dir)
-    {
-        //앞쪽, 뒤쪽,왼쪽 이런식으로 특정 방향을 봐야하는거면 이렇게
-        transform.position = enemyPos;
-        this.transform.LookAt(transform.position + dir);
-        Init();
-    }
+
 
     public abstract void Shoot();
 
     protected abstract void Move();
 
     protected abstract void Init();
-    //TODO.//추후 여기서 그냥 오브젝트풀에 반환하도록 구현해둘수있을듯?
     protected virtual void DestroySelf()
     {
         //파괴 이벤트를 보내고 풀도 스스로 반환시킴
@@ -103,8 +107,11 @@ public abstract class Projectile : MonoBehaviour
         
         //총알마다 따로 처리해야할 작업들은 여기서 한다
         DestroySelfSpecial();
+
+        //자기자신 스스로 풀에 처리 
+        ReturnToPool();
     }
-    public void ReturnToPool()
+    private void ReturnToPool()
     {
         projectilePool.ReturnObject(this);
     }
