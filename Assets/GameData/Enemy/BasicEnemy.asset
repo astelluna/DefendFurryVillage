@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 834e8e7f7b487654db77651fb461e0b7, type: 3}
   m_Name: BasicEnemy
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDataSO
-  <attack>k__BackingField: 100
-  <defense>k__BackingField: 100
+  <attack>k__BackingField: 11
+  <defense>k__BackingField: 10
   <maxHp>k__BackingField: 15
   <attackRate>k__BackingField: 1
   <moveSpeed>k__BackingField: 3
   <penetration>k__BackingField: 0
   <experience>k__BackingField: 1
+  <attackRange>k__BackingField: 0

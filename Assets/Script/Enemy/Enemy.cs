@@ -2,7 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 
 public struct EnemyRuntimeStat
@@ -53,8 +56,12 @@ public class Enemy : MonoBehaviour
     Vector3 magnetPos;
     float magnetSpeed = 50;
 
-    //몬스터 능력치들을 SO로 등록할수있게
-    [SerializeField] EnemyDataSO enemyDataSO;
+    //몬스터 능력치들을 SO로 등록할수있게 
+    [SerializeField] AssetReferenceT<EnemyDataSO> enemyData;
+    EnemyDataSO enemyDataSO;
+    AsyncOperationHandle<EnemyDataSO> enemyDataHandle;
+
+
     //int experience;
     int curHp;
     EnemyRuntimeStat runtimeStat;
@@ -73,6 +80,19 @@ public class Enemy : MonoBehaviour
 
     //어느 오브젝트풀에서 생성되었는가 
     ObjPool<Enemy> enemyPool;
+    private void Awake()
+    {
+        LoadAddressable();
+    }
+    private void LoadAddressable()
+    {
+        enemyDataHandle = Addressables.LoadAssetAsync<EnemyDataSO>(enemyData);
+        enemyDataSO = enemyDataHandle.WaitForCompletion();
+    }
+    private void UnLoadAddressable()
+    {
+        Addressables.Release(enemyDataHandle);
+    }
 
     public int GetEnemyAromr()
     {

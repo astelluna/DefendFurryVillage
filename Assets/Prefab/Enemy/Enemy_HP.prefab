@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: enemyDataSO
       value: 
       objectReference: {fileID: 11400000, guid: eb6c65b87d4523240a75fb221e35c5ea, type: 2}
+    - target: {fileID: -1805444175364053157, guid: 08f3cbd2d3c819146a81abf2d6614e86, type: 3}
+      propertyPath: enemyData.m_AssetGUID
+      value: eb6c65b87d4523240a75fb221e35c5ea
+      objectReference: {fileID: 0}
     - target: {fileID: 36528516482159606, guid: 08f3cbd2d3c819146a81abf2d6614e86, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

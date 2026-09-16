@@ -18,167 +18,200 @@ MonoBehaviour:
   - m_GUID: 017c22824731db147ad60410ffa6afb9
     m_Address: Weapon/ExecuteSO/ShurikenExecuteSO.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 04ca601f25511cb4f9a4f7791a786beb
     m_Address: Weapon/Augment/Data/New Augment Data SO_Damage.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0be125480aa0fc64c94a12097c9e4f6c
     m_Address: Weapon/Augment/Special/New Augment Special Spread Projectile SO.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1df4d1f490c9cfd46b6dc4527f80aeba
     m_Address: Weapon/Augment/Data/New Augment Data SO_SpreadProjectile.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2fca14ecf7120614caa8585dec96b446
     m_Address: Weapon/Augment/Data/New Augment Data SO_Stun.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3189704a8b391aa428a1565fae590c9a
     m_Address: Player/New Player Data SO.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3738ee7248c21104c8c232637a338d4a
     m_Address: Weapon/Augment/Special/New Augment Special Delay Damage SO.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 40b630265fb20d24891d1c81973e6a3b
     m_Address: Weapon/DataSO/ShotGunData.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4169b52b029961d469ac88e5346cb7cb
     m_Address: Weapon/ExecuteSO/MissileExecuteSO.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 46f09c2ded11ed34783afa69be63d9d6
     m_Address: Weapon/Augment/Special/New Augment Special Magnet SO.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 521f0df8e1fe77a49a0cba1be72e4e24
     m_Address: StageAndWave/New Stage Data SO.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5c10d71bed5783044b7eddc2fd585fdf
     m_Address: Weapon/Augment/Data/New Augment Data SO_Burn.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5f7c1b18f22cb6a4fa76c3796e220792
     m_Address: Enemy/BasicEnemy.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 636f71782d852a94a9e10cef198b95fc
     m_Address: Enemy_Armor.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6590bca789d848e46a757a552239d652
     m_Address: Enemy_MoveSpeed.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 663115480594cea48a7c636f52959fac
     m_Address: Weapon/Augment/Special/New Augment Special Knock Back SO.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6a37eddf7e8e02844aa5ddcfa1e2d9df
     m_Address: Weapon/Augment/Data/New Augment Data SO_KnockBack.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6ed34ffc7e13d674cac7570af6153405
     m_Address: Weapon/ExecuteSO/ShooGunExecuteSO.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7d4d26dd4243506449ec7af6eefaf482
     m_Address: Weapon/DataSO/MissileData.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8fc8e4e3050d8394e917cbf8247c9334
     m_Address: Weapon/DataSO/ShurikenData.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 92ef890d3541103418fbffba27542068
     m_Address: Weapon/ExecuteSO/LaserExecuteSO.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a3ae040eb6253ef4382b596de0c18973
     m_Address: Weapon/Augment/Special/New Augment State Effect Burn SO.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b03f93eba77166248a9af0e85d41b585
     m_Address: Weapon/DataSO/BasicGunData.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c1a97758e9c5a9f43b5676f3df960814
     m_Address: Weapon/DataSO/FallingData.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c678d708c9f668045b82850ed7ee812f
     m_Address: Weapon/ExecuteSO/FallingExecuteSO.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d156de8f394aa3143abeb00f8a6b3d83
     m_Address: Enemy_Boss.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d24d07f40bac9b4408d68e690d7ee31d
     m_Address: Weapon/ExecuteSO/BasicGunExecuteSO.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d80ee27ad959335478b02b61bff92c41
     m_Address: StageAndWave/New Wave Data SO.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: df576e89de0ec2e41b65797c231e200e
     m_Address: Weapon/DataSO/LaserData.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e18c68d152f365a4d80a440279995931
     m_Address: Weapon/Augment/Data/New Augment Data SO_Magnet.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eb6c65b87d4523240a75fb221e35c5ea
     m_Address: Enemy_HP.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f72be02a9b1c8114a893d0032e6a0882
     m_Address: Weapon/Augment/Data/New Augment Data SO_Delay.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa5fbf8b0b14f0e43aa913e0298e1f32
     m_Address: Weapon/Augment/Special/New Augment State Effect Stun SO.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 1790af479a7d04e44a48b99ebc4c8d54, type: 2}
