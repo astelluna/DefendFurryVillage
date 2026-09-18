@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
@@ -16,6 +17,10 @@ public class PlayerManager : MonoBehaviour
     //스폰위치 전용 스크립트 
     [SerializeField] PlayerSpawnPosition playerSpawnPosition;
 
+    //외부에서 플레이어 매니저 초기화 작업 끝났는지 확인하는 Task
+    private Task initalizePlayerTask;
+    public Task InitalizePlayerTask => initalizePlayerTask;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -29,11 +34,19 @@ public class PlayerManager : MonoBehaviour
     private void Start()
     {
         //Test -> 총알을 미리 생성해둔다.
+        initalizePlayerTask = SetPlayersInit();
+    }
+    private async Task SetPlayersInit()
+    {
+        //총알 풀과, 어드레서블을 통한 플레이어 DataSO와 플레이어 안의 무기SO를 미리 등록.
         foreach(Player player in testAvailablePlayerList)
         {
             player.MakeWeaponProjectilePool();
+            await player.Init_Preload();
         }
     }
+
+
     private void Update()
     {
         int k = 20;
@@ -46,12 +59,12 @@ public class PlayerManager : MonoBehaviour
             Instance = null;
     }
     
-    public void SpawnPlayer(Player playerPrefab)
+    public async void SpawnPlayer(Player playerPrefab)
     {
         Transform spawnTrf = playerSpawnPosition.GetTransform(spawnedPlayerList.Count);
         Player playerObj =  Instantiate(playerPrefab, spawnTrf.position, spawnTrf.rotation, this.transform); //플레이어는 그냥 생성해주자
         spawnedPlayerList.Add(playerObj);
-
+        await playerObj.Init();
     }
     public List<Player> GetHaveAugmentPlayerList()
     {

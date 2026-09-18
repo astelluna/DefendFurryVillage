@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using static UnityEngine.Rendering.HableCurve;
 
@@ -45,10 +46,9 @@ public class AugmentManager : MonoBehaviour
         ClearSelectPlayerList();
     }
 
-    public void SetAndShowAugmentUI(int cnt)
+    public async void SetAndShowAugmentUI(int cnt)
     {
-        //maxShowCount = cnt;
-        //if (curShowCount >= maxShowCount) return;
+        await PlayerManager.Instance.InitalizePlayerTask;
         maxShowCount += cnt;
         if (maxShowCount <= 0) return;
         if (isShowingPanel) return;

@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 public struct WeaponRuntimeData
 {
     public int attackdamage;
@@ -47,7 +50,10 @@ public class Weapon : MonoBehaviour
 
     //무기 정보들
     [field: SerializeField] public Sprite WeaponIcon { get; protected set; }
-    [field:SerializeField] public WeaponDataSO weaponDataSO;
+
+    [SerializeField] AssetReferenceT<WeaponDataSO> weaponDataAddressable;
+    //AsyncOperationHandle<WeaponDataSO> weaponDataHandle;
+    public WeaponDataSO weaponDataSO { get; private set; }
     [field: SerializeField] public WeaponExecuteSO weaponExecuteSO { get; private set; }
     protected Coroutine shootCor;
     
@@ -63,11 +69,21 @@ public class Weapon : MonoBehaviour
     [SerializeField] protected List<AugmentDataSO> existUpgradeAugmentDataList = new List<AugmentDataSO>();
     protected List<AugmentDataSO> unUsedUpgradeAugmentDataList = new List<AugmentDataSO>(); //증강 업그레이드 선택하면 여기에 들어옴
     protected List<AugmentDataSO> usedUpgradeAugmentDataList = new List<AugmentDataSO>(); //증강 업그레이드 선택하면 여기에 들어옴
-    protected virtual void Awake()
+
+    public async Task Init()
     {
         unUsedUpgradeAugmentDataList = new List<AugmentDataSO>(existUpgradeAugmentDataList);
-
+        await LoadAddressable();
     }
+    public void StartWeapon()
+    {
+        if (shootCor == null)
+        {
+            shootCor = StartCoroutine(weaponExecuteSO.ShootWeapon(this));
+        }
+        SetWeaponCoolTime();
+    }
+
     protected virtual void OnDestroy()
     {
         if (shootCor != null)
@@ -76,6 +92,16 @@ public class Weapon : MonoBehaviour
             shootCor = null;
         }
     }
+
+    private async Task LoadAddressable()
+    {
+        if (weaponDataSO != null) return;
+        AsyncOperationHandle<WeaponDataSO> weaponDataHandle = Addressables.LoadAssetAsync<WeaponDataSO>(weaponDataAddressable);
+        //weaponDataSO = weaponDataHandle.WaitForCompletion();
+        weaponDataSO = await weaponDataHandle.Task;
+        Addressables.Release(weaponDataHandle);
+    }
+
     //증강이 선택되면 현재 무기의 런타임 정보를 갱신한다.
     public void UpdateWeaponData()
     {
@@ -152,13 +178,8 @@ public class Weapon : MonoBehaviour
     {
         continuousFireDelay = new WaitForSeconds(shootDelay);
         playerData = plyData;
-
-        if (shootCor == null)
-        {
-            shootCor = StartCoroutine(weaponExecuteSO.ShootWeapon(this));
-        }
         UpdateWeaponData();
-        SetWeaponCoolTime();
+        
     }
 
     public void SetWeaponCoolTime()

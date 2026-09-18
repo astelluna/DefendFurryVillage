@@ -93,6 +93,10 @@ PrefabInstance:
       propertyPath: specialWeapon
       value: 
       objectReference: {fileID: 2295909736576940121}
+    - target: {fileID: 688327806511031720, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
+      propertyPath: playerDataAddressable.m_AssetGUID
+      value: 3189704a8b391aa428a1565fae590c9a
+      objectReference: {fileID: 0}
     - target: {fileID: 1289823973057343240, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
       propertyPath: m_Name
       value: Player_Laser

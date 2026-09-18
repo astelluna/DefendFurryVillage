@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: <projectilePrefab>k__BackingField
       value: 
       objectReference: {fileID: 8330173378043018533, guid: b3859af650b29c3428a48fe8c6a0315e, type: 3}
+    - target: {fileID: 4758910680683297653, guid: 43c486e69eb509b48ba4162cf631e811, type: 3}
+      propertyPath: weaponDataAddressable.m_AssetGUID
+      value: 7d4d26dd4243506449ec7af6eefaf482
+      objectReference: {fileID: 0}
     - target: {fileID: 6907058573780463924, guid: 43c486e69eb509b48ba4162cf631e811, type: 3}
       propertyPath: m_Name
       value: Weapon_Missile_Basic

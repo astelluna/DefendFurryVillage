@@ -56,6 +56,10 @@ PrefabInstance:
       propertyPath: <projectilePrefab>k__BackingField
       value: 
       objectReference: {fileID: 3388270326369481334, guid: 8ed067863a58b834dbf6dba9485c251c, type: 3}
+    - target: {fileID: 3240579016178394530, guid: 5226ef27c69561f4e9c9e42ca41b51bd, type: 3}
+      propertyPath: weaponDataAddressable.m_AssetGUID
+      value: 8fc8e4e3050d8394e917cbf8247c9334
+      objectReference: {fileID: 0}
     - target: {fileID: 3542389328931287011, guid: 5226ef27c69561f4e9c9e42ca41b51bd, type: 3}
       propertyPath: m_Name
       value: Weapon_Shuriken_Basic

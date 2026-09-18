@@ -93,6 +93,10 @@ PrefabInstance:
       propertyPath: specialWeapon
       value: 
       objectReference: {fileID: 2934305776628097249}
+    - target: {fileID: 688327806511031720, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
+      propertyPath: playerDataAddressable.m_AssetGUID
+      value: 6f4f9493806e2cd46af1bd20005187b4
+      objectReference: {fileID: 0}
     - target: {fileID: 1289823973057343240, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
       propertyPath: m_Name
       value: Player_Shriken

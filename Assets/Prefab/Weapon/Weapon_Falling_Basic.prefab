@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: <projectilePrefab>k__BackingField
       value: 
       objectReference: {fileID: 569769945707048736, guid: 33630871dec1a1740b31c74420d5cd1d, type: 3}
+    - target: {fileID: 5501902449686567930, guid: 50ad13dd1bb5e3845aa10232177e5e2c, type: 3}
+      propertyPath: weaponDataAddressable.m_AssetGUID
+      value: c1a97758e9c5a9f43b5676f3df960814
+      objectReference: {fileID: 0}
     - target: {fileID: 5875911089620505019, guid: 50ad13dd1bb5e3845aa10232177e5e2c, type: 3}
       propertyPath: m_Name
       value: Weapon_Falling_Basic

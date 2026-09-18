@@ -93,6 +93,10 @@ PrefabInstance:
       propertyPath: specialWeapon
       value: 
       objectReference: {fileID: 1203028579578801830}
+    - target: {fileID: 688327806511031720, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
+      propertyPath: playerDataAddressable.m_AssetGUID
+      value: 8eed1262298b4c14db3249d092e91bcd
+      objectReference: {fileID: 0}
     - target: {fileID: 1289823973057343240, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
       propertyPath: m_Name
       value: Player_ShootGun

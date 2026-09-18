@@ -162,6 +162,10 @@ public class Enemy : MonoBehaviour
             exitGraceCor = null;
         }
     }
+    private void OnDestroy()
+    {
+        UnLoadAddressable();
+    }
     private void Update()
     {
         if (enemyDataSO.CanRangedAttack())

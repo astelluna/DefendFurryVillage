@@ -5,10 +5,13 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.AddressableAssets.ResourceLocators;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.UIElements;
 
 public class AddressableUpdateManager : MonoBehaviour
 {
     public static AddressableUpdateManager Instance { get; private set; }
+
+    [SerializeField] ProgressBarUI progressBarUI;
 
     private void Awake()
     {
@@ -228,6 +231,7 @@ public class AddressableUpdateManager : MonoBehaviour
                 $"[Addressables] 다운로드 진행률 : " +
                 $"{downloadHandle.PercentComplete * 100f:F1}%"
             );
+            progressBarUI.SetImageRatio(downloadHandle.PercentComplete);
 
             yield return null;
         }
@@ -255,7 +259,7 @@ public class AddressableUpdateManager : MonoBehaviour
         }
 
         Debug.Log("[Addressables] 콘텐츠 다운로드 완료");
-
+        progressBarUI.SetImageRatio(1);
         Addressables.Release(downloadHandle);
 
 

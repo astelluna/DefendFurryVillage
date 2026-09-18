@@ -33,6 +33,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 132b7349903ee1749b59717c38ed479b
+    m_Address: Assets/GameData/Player/PlayerDataSO_Missile.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1df4d1f490c9cfd46b6dc4527f80aeba
     m_Address: Weapon/Augment/Data/New Augment Data SO_SpreadProjectile.asset
     m_ReadOnly: 0
@@ -41,6 +47,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2fca14ecf7120614caa8585dec96b446
     m_Address: Weapon/Augment/Data/New Augment Data SO_Stun.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 316d088be4a7c7047b9848cff17f5a68
+    m_Address: Assets/GameData/Player/PlayerDataSO_Falling.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
@@ -123,8 +135,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6f4f9493806e2cd46af1bd20005187b4
+    m_Address: Assets/GameData/Player/PlayerDataSO_Shriken.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7d4d26dd4243506449ec7af6eefaf482
     m_Address: Weapon/DataSO/MissileData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8eed1262298b4c14db3249d092e91bcd
+    m_Address: Assets/GameData/Player/PlayerDataSO_ShootGun.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
