@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -20,6 +21,9 @@ public class PlayerManager : MonoBehaviour
     //외부에서 플레이어 매니저 초기화 작업 끝났는지 확인하는 Task
     private Task initalizePlayerTask;
     public Task InitalizePlayerTask => initalizePlayerTask;
+
+    //이벤트
+    public event Action<Player> OnPlayerSpawnEnd; //플레이어 소환 종료
 
     private void Awake()
     {
@@ -65,6 +69,8 @@ public class PlayerManager : MonoBehaviour
         Player playerObj =  Instantiate(playerPrefab, spawnTrf.position, spawnTrf.rotation, this.transform); //플레이어는 그냥 생성해주자
         spawnedPlayerList.Add(playerObj);
         await playerObj.Init();
+
+        OnPlayerSpawnEnd?.Invoke(playerObj);
     }
     public List<Player> GetHaveAugmentPlayerList()
     {

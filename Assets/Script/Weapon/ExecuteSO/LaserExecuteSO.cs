@@ -10,7 +10,7 @@ public class LaserExecuteSO : WeaponExecuteSO
         Projectile projectile = ProjectileSpawner.Instance.GetPrefabByPool(weapon.transform, weapon.ProjectilePrefab);
         projectile.gameObject.SetActive(false);
         projectile.SetDirectionToEnemyPosition(enemyTarget.position);
-        projectile.SetProjectileData(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
+        projectile.SetProjectileDataAndInit(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
         projectile.gameObject.SetActive(true);
         projectile.Shoot();
     }

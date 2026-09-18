@@ -12,7 +12,7 @@ public class FallingExecuteSO : WeaponExecuteSO
 
 
         float explodeRadius = basicExplodeRadius + weapon.runtimeData.bulletScale;
-        projectile.SetProjectileData(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
+        projectile.SetProjectileDataAndInit(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
         projectile.SetMoveTartgetPos(enemyTarget.position);
         projectile.SetExplodeRadius(explodeRadius);
         projectile.Shoot();

@@ -77,11 +77,11 @@ public class Weapon : MonoBehaviour
     }
     public void StartWeapon()
     {
+        SetWeaponCoolTime();
         if (shootCor == null)
         {
             shootCor = StartCoroutine(weaponExecuteSO.ShootWeapon(this));
         }
-        SetWeaponCoolTime();
     }
 
     protected virtual void OnDestroy()

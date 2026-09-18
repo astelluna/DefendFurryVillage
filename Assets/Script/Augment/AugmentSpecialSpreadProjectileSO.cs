@@ -3,8 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Weapon/Augment/AugmentSpecialSpread")]
 public class AugmentSpecialSpreadProjectileSO : AugmentSpecialDataSO, IOnHit
 {
-    //TODO. 발사체인 Projectile 스크립트로 바꿀거임
-    [SerializeField] GameObject projectilePrefab;
+    [SerializeField] Projectile projectilePrefab;
 
     List<Vector3> directionList;
     public override string GetDescription()
@@ -26,16 +25,22 @@ public class AugmentSpecialSpreadProjectileSO : AugmentSpecialDataSO, IOnHit
         //방향으로 생성해서 설정
         for(int i=0; i< directionList.Count; i++)
         {
-            Projectile projectile = Instantiate(projectilePrefab).GetComponent<Projectile>();
+            //Projectile projectile = Instantiate(projectilePrefab).GetComponent<Projectile>();
+            //만약 흩날리는 총알이 오브젝트풀에 등록 안되있다면 등록시키고, 꺼내옴
+            ProjectileSpawner.Instance.MakeProjectile(projectilePrefab);
+            Projectile projectile = ProjectileSpawner.Instance.GetPrefabByPool(enemy.transform, projectilePrefab);
             projectile.gameObject.SetActive(false);
-            projectile.SetDirectionToDirection(enemy.transform.position, directionList[i]);
-            projectile.SetProjectileData(weaponRuntimeData, null); //null로 해서 다른 특수효과 재귀적으로 호출되지않게 해야할듯
+            
             //그냥 해당 enemy무시처리하지말고 기본 2명이상 관통하는거로 하자
-            if (weaponRuntimeData.maxPierce < 1)
+            if (weaponRuntimeData.maxPierce <= 1)
             {
-                weaponRuntimeData.maxPierce = 2;
+                weaponRuntimeData.maxPierce = 30;
             }
+            projectile.SetProjectileDataAndInit(weaponRuntimeData, null); //null로 해서 다른 특수효과 재귀적으로 호출되지않게 해야할듯
+            projectile.SetDirectionToDirection(enemy.transform.position, directionList[i]);
+            projectile.Shoot();
             projectile.gameObject.SetActive(true);
+            
 
 
             //Bullet bullet = Instantiate(projectilePrefab).GetComponent<Bullet>();

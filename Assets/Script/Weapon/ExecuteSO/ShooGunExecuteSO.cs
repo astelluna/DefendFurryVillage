@@ -22,7 +22,7 @@ public class ShooGunExecuteSO : WeaponExecuteSO
             //발사체로 Bullet.cs쓴다
             //Projectile projectile = Instantiate(weapon.ProjectilePrefab, weapon.transform.position, rotation);
             Projectile projectile = ProjectileSpawner.Instance.GetPrefabByPool(weapon.transform, weapon.ProjectilePrefab);
-            projectile.SetProjectileData(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
+            projectile.SetProjectileDataAndInit(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
             projectile.SetDirectionRotation(rotation);
 
             projectile.Shoot();

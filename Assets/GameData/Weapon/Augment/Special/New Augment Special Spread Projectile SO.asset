@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd675f59a21f0049a96b1d726166439, type: 3}
   m_Name: New Augment Special Spread Projectile SO
   m_EditorClassIdentifier: Assembly-CSharp::AugmentSpecialSpreadProjectileSO
-  projectilePrefab: {fileID: 3543824175731101463, guid: f003a98c35903f3409438966b5dffd55, type: 3}
+  projectilePrefab: {fileID: 6306563915319577575, guid: f003a98c35903f3409438966b5dffd55, type: 3}

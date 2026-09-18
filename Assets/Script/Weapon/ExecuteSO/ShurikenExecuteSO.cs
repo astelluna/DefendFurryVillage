@@ -11,7 +11,7 @@ public class ShurikenExecuteSO : WeaponExecuteSO
         Quaternion rotation = Quaternion.LookRotation(direction);
         //Projectile projectile = Instantiate(weapon.ProjectilePrefab, weapon.transform.position, rotation);
         Projectile projectile = ProjectileSpawner.Instance.GetPrefabByPool(weapon.transform, weapon.ProjectilePrefab);
-        projectile.SetProjectileData(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
+        projectile.SetProjectileDataAndInit(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
         projectile.SetDirectionToEnemyPosition(enemyTarget.position);
         //projectile.SetTargetPos(enemyTarget.position);
         projectile.Shoot();

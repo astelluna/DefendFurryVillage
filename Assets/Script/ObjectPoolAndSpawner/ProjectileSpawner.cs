@@ -41,6 +41,13 @@ public class ProjectileSpawner : MonoBehaviour
         if (!projectileDict.ContainsKey(projectile)) { return null; }
 
         ObjPool<Projectile> projectilePool = projectileDict[projectile];
+
+        if(projectilePool == null)
+        {
+            MyLog.LogError("풀이 에러");
+        }
+
+
         Projectile projectileBuf = projectilePool.GetObject();
         projectileBuf.transform.position = trf.position;
         projectileBuf.transform.rotation = trf.rotation;

@@ -21,7 +21,7 @@ public class ObjPool<T> where T : MonoBehaviour
             T instance;
             if (poolParent == null)
             {
-                instance = Object.Instantiate(prefab, poolParent);
+                instance = Object.Instantiate(prefab);
             }
             else
             {

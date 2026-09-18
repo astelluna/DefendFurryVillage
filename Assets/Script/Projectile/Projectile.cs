@@ -2,6 +2,20 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public interface IProjectileDirectionSetter
+{
+    void Apply(Projectile projectile);
+}
+
+public struct ProjectileSpawnContext
+{
+    public WeaponRuntimeData WeaponData;
+    public List<AugmentSpecialDataSO> augmentDataList;
+    public IProjectileDirectionSetter DirectionSetter;
+    public Vector3? TargetPos;
+    public float? ExplodeRadius;
+}
+
 public abstract class Projectile : MonoBehaviour
 {
     //기본 데이터
@@ -46,23 +60,19 @@ public abstract class Projectile : MonoBehaviour
         //앞쪽, 뒤쪽,왼쪽 이런식으로 특정 방향을 봐야하는거면 이렇게
         transform.position = enemyPos;
         this.transform.LookAt(transform.position + dir);
-        Init();
     }
     public virtual void SetDirectionRotation(Quaternion rotation)
     {
         transform.rotation = rotation;
     }
 
-    public virtual void SetProjectileData(WeaponRuntimeData data, List<AugmentSpecialDataSO> specialDataSOs)
+    public virtual void SetProjectileDataAndInit(WeaponRuntimeData data, List<AugmentSpecialDataSO> specialDataSOs)
     {
         weaponRuntimeData = data;
         //null이면 빈거 넣음
         augmentSpecialDataSOList = (specialDataSOs == null) ? new List<AugmentSpecialDataSO>() : specialDataSOs;
-    }
-
-    public void SetProjectilePool(ObjPool<Projectile> pool)
-    {
-        projectilePool = pool;
+        //총알 크기를 weaponRunTimeData만큼 키우거나 그래야한다면 Init에서 하자
+        Init();
     }
 
     protected virtual DamageInfo MakeDamageInfo(Enemy enemy)

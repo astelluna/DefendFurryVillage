@@ -89,11 +89,12 @@ public class StageManager : MonoBehaviour
             Enemy enemyData = waveData.EnemieList[cnt];
             Enemy enemyObj = EnemySpawner.Instance.GetPrefabByPool(transform, enemyData);
             //Enemy enemyObj =  Instantiate(enemyData, transform);
-            float value = Random.Range(0f, 10f);
+            float value = Random.Range(0f, 8f);
             Vector3 pos = enemyObj.transform.position;
             pos.x = value;
             enemyObj.transform.position = pos;
             enemyObj.OnEnemyDead += EnemyDead;
+            enemyObj.gameObject.SetActive(true);
             aliveEnemyList.Add(enemyObj);
             cnt++;
             yield return delay;

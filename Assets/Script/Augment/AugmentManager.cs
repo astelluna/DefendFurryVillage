@@ -21,6 +21,8 @@ public class AugmentManager : MonoBehaviour
     const int Character_Pick_Percent = 80;
     const int Total_Augment_Slot = 3;
 
+    private TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>(); // SetResult로 성공/실패 여부 설정
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -30,6 +32,10 @@ public class AugmentManager : MonoBehaviour
         }
 
         Instance = this;
+    }
+    private void OnEnable()
+    {
+        PlayerManager.Instance.OnPlayerSpawnEnd += OnPlayerSpawnCompleted;
     }
     private void Start()
     {
@@ -127,13 +133,24 @@ public class AugmentManager : MonoBehaviour
             augmentPanel.Show();
         }
     }
-
     public void OnPlayerSelected(Player player)
     {
         //선택된 플레이어  소환. 그리고 WeaponAugment도 클리어시키자;
         MyLog.Log("이벤트 발동 - 플레이어");
+        //플레이어는 소환되고나서  이벤트를 2단계로 나눠야함. 
+        //1단계: 증강카드에 어떤 플레이어 소환되는지. 정보만 설정.
+        //1-2: 특정 증강 카드가 선택됨(어떤 플레이어 소환해라) 
+        //2단계: 해당 플레이어를 소환해달라고 PlayerManager에 요청. 
+        //3단계: 플레이어 소환이 끝났다면? 이제 여기서 아래의 것들을 실행하면 됨
+
         WeaponAugmentProcess(null); //증강 초기화. 다 비워준다.
         PlayerProcess(player); //플레이어 처리 
+
+        //이거 끝나고 PlayerManager에서 Spanwn 끝나면 OnPlayerSpawnCompleted 이벤트를 호출해줘서 다시 패널 띄워야하는지 체크할거임
+    }
+    private void OnPlayerSpawnCompleted(Player player)
+    {
+        //전부 끝나면 다시 패널 띄워야하는지 체크해보자
         CheckPanelClose(); //패널 처리
     }
 

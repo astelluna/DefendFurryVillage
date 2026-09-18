@@ -14,7 +14,7 @@ public class BasicGunExecuteSO : WeaponExecuteSO
         Projectile projectile = ProjectileSpawner.Instance.GetPrefabByPool(weapon.transform, weapon.ProjectilePrefab);
 
         projectile.gameObject.SetActive(false);
-        projectile.SetProjectileData(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
+        projectile.SetProjectileDataAndInit(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
         projectile.SetDirectionToEnemyPosition(enemyTarget.position);
         projectile.Shoot();
         projectile.gameObject.SetActive(true);

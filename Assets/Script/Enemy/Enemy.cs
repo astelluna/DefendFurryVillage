@@ -91,7 +91,10 @@ public class Enemy : MonoBehaviour
     }
     private void UnLoadAddressable()
     {
-        Addressables.Release(enemyDataHandle);
+        if (enemyDataHandle.IsValid())
+        {
+            Addressables.Release(enemyDataHandle);
+        }
     }
 
     public int GetEnemyAromr()
