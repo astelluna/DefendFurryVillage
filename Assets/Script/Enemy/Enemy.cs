@@ -80,15 +80,32 @@ public class Enemy : MonoBehaviour
 
     //어느 오브젝트풀에서 생성되었는가 
     ObjPool<Enemy> enemyPool;
-    private void Awake()
+
+    Task setAddressableTask;
+    bool isDataLoaded = false;
+
+    private async void Awake()
     {
-        LoadAddressable();
+        setAddressableTask = LoadAddressable();
+        await setAddressableTask;
+        
+        //await LoadAddressable();
     }
-    private void LoadAddressable()
+    private void LoadAddressableBasic()
     {
+        //기본 방식으로 어드레서블 불러오기. (여기선 동기 방식으로 했다)
         enemyDataHandle = Addressables.LoadAssetAsync<EnemyDataSO>(enemyData);
         enemyDataSO = enemyDataHandle.WaitForCompletion();
     }
+
+    private async Task LoadAddressable()
+    {
+        //미리 Preload하고, 불러오기
+        enemyDataSO = await AddressablePreloadManager.Instance.GetAsync<EnemyDataSO>(enemyData);
+        isDataLoaded = true;
+    }
+
+
     private void UnLoadAddressable()
     {
         if (enemyDataHandle.IsValid())
@@ -132,8 +149,9 @@ public class Enemy : MonoBehaviour
         damageInfo.SetDamageInfo(runtimeStat.attack, 0, 0, runtimeStat.penetration, 0);
     }
 
-    private void OnEnable()
+    private async void OnEnable()
     {
+        await setAddressableTask;
         isStun = false;
         isMove = true;
         attackCor = null;
@@ -171,6 +189,9 @@ public class Enemy : MonoBehaviour
     }
     private void Update()
     {
+        //어드레서블 데이터 안채워졌다면 return;
+        if (!isDataLoaded) return;
+
         if (enemyDataSO.CanRangedAttack())
         {
             //원거리 공격이 가능하다면 여기에서 처리

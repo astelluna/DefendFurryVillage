@@ -54,11 +54,15 @@ public class Player : MonoBehaviour
         specialWeapon.StartWeapon();
     }
 
-    public async Task LoadAddressable()
+    public async Task LoadAddressable_basic()
     {
         AsyncOperationHandle<PlayerDataSO> playerDataHandle = Addressables.LoadAssetAsync<PlayerDataSO>(playerDataAddressable);
         playerDataSO = await playerDataHandle.Task;
         Addressables.Release(playerDataHandle); //사용하고 바로 풀어주기 (다른곳에서 안씀)
+    }
+    public async Task LoadAddressable()
+    {
+        playerDataSO = await AddressablePreloadManager.Instance.GetAsync<PlayerDataSO>(playerDataAddressable);
     }
 
     public void PlayerSpawnEventInvoke()

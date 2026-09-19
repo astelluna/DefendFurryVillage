@@ -93,13 +93,19 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    private async Task LoadAddressable()
+    private async Task LoadAddressable_basic()
     {
         if (weaponDataSO != null) return;
         AsyncOperationHandle<WeaponDataSO> weaponDataHandle = Addressables.LoadAssetAsync<WeaponDataSO>(weaponDataAddressable);
         //weaponDataSO = weaponDataHandle.WaitForCompletion();
         weaponDataSO = await weaponDataHandle.Task;
         Addressables.Release(weaponDataHandle);
+    }
+
+    private async Task LoadAddressable()
+    {
+        if (weaponDataSO != null) return;
+        weaponDataSO = await AddressablePreloadManager.Instance.GetAsync<WeaponDataSO>(weaponDataAddressable);
     }
 
     //증강이 선택되면 현재 무기의 런타임 정보를 갱신한다.
