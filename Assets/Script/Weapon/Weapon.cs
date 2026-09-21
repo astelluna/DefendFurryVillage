@@ -70,6 +70,14 @@ public class Weapon : MonoBehaviour
     protected List<AugmentDataSO> unUsedUpgradeAugmentDataList = new List<AugmentDataSO>(); //증강 업그레이드 선택하면 여기에 들어옴
     protected List<AugmentDataSO> usedUpgradeAugmentDataList = new List<AugmentDataSO>(); //증강 업그레이드 선택하면 여기에 들어옴
 
+    //무기 발사했다는 이벤트
+    public event Action OnWeaponShoot;
+
+    public void InvokeWeaponShootEvent()
+    {
+        OnWeaponShoot?.Invoke();
+    }
+
     public async Task Init()
     {
         unUsedUpgradeAugmentDataList = new List<AugmentDataSO>(existUpgradeAugmentDataList);
@@ -95,6 +103,7 @@ public class Weapon : MonoBehaviour
 
     private async Task LoadAddressable_basic()
     {
+        //프리로드 하는 방식이 아니라 수동 로드할때는 이렇게 하자
         if (weaponDataSO != null) return;
         AsyncOperationHandle<WeaponDataSO> weaponDataHandle = Addressables.LoadAssetAsync<WeaponDataSO>(weaponDataAddressable);
         //weaponDataSO = weaponDataHandle.WaitForCompletion();
@@ -104,6 +113,7 @@ public class Weapon : MonoBehaviour
 
     private async Task LoadAddressable()
     {
+        //어드레서블 프리로드한 곳에서 어드레서블 정보를 가져온다.
         if (weaponDataSO != null) return;
         weaponDataSO = await AddressablePreloadManager.Instance.GetAsync<WeaponDataSO>(weaponDataAddressable);
     }

@@ -29,6 +29,20 @@ public class Player : MonoBehaviour
 
     public event Action<Player> OnStartPlayerSpawn;
 
+    //애니메이션
+    [SerializeField] PlayerAnimation playerAnimation;
+
+    private void Start()
+    {
+        basicWeapon.OnWeaponShoot += playerAnimation.PlayAttackBasic;
+        specialWeapon.OnWeaponShoot += playerAnimation.PlayAttackSpecial;
+    }
+    private void OnDestroy()
+    {
+        basicWeapon.OnWeaponShoot -= playerAnimation.PlayAttackBasic;
+        specialWeapon.OnWeaponShoot -= playerAnimation.PlayAttackSpecial;
+    }
+
     private async Task Preload_Data()
     {
         if (playerDataSO == null)

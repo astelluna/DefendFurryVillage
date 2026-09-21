@@ -11,7 +11,7 @@ public class CastleWall : MonoBehaviour
         damageInfo.SetDamageInfo(damageInfo.attackerAttack, 0, 0, damageInfo.attackerArmorPenetrate, defense);
         int dmg = DamageManager.Instance.CalcDamage(damageInfo);
         hp -= dmg;
-        MyLog.Log($"HP {hp}");
+        //MyLog.Log($"HP {hp}");
     }
 
 }

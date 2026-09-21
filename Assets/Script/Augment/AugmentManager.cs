@@ -145,13 +145,12 @@ public class AugmentManager : MonoBehaviour
 
         WeaponAugmentProcess(null); //증강 초기화. 다 비워준다.
         PlayerProcess(player); //플레이어 처리 
-
+        CheckPanelClose();
         //이거 끝나고 PlayerManager에서 Spanwn 끝나면 OnPlayerSpawnCompleted 이벤트를 호출해줘서 다시 패널 띄워야하는지 체크할거임
     }
     private void OnPlayerSpawnCompleted(Player player)
     {
-        //전부 끝나면 다시 패널 띄워야하는지 체크해보자
-        CheckPanelClose(); //패널 처리
+        //플레이어 소환 끝나면 해야할 행동들
     }
 
 
@@ -208,7 +207,7 @@ public class AugmentManager : MonoBehaviour
         else
         {
             //연속 레벨업을 체크해야하므로 추가로 계속 해준다.
-            ShowAugmentUI();
+            ShowAugmentUI(); 
         }
     }
     private void ClearSelectPlayerList()

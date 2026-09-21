@@ -10,7 +10,6 @@ public abstract class WeaponExecuteSO : ScriptableObject
     {
         while (true)
         {
-            //TODO. 추후 오브젝트풀로 바꿔야함
             int attackCount = weapon.runtimeData.plusAttackCount;
             List<Transform> enemyTargetList = TargetManager.Instance.GetEnemyTarget(weapon.weaponDataSO.baseRange, attackCount);
             //무기 쿨타임이 지났고, 타겟을 확인헀다면 발사
@@ -32,6 +31,7 @@ public abstract class WeaponExecuteSO : ScriptableObject
                     }
                     ShootAt(trf, weapon);
                     weapon.SetWeaponCoolTime();
+                    weapon.InvokeWeaponShootEvent();
                     yield return weapon.continuousFireDelay;
                 }
             }

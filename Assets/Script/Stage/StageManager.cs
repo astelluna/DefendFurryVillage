@@ -49,6 +49,12 @@ public class StageManager : MonoBehaviour
     private void WaveStart()
     {
         EnemySpawner.Instance.OnSpawnEnd -= WaveStart;
+
+        Invoke(nameof(StartWaveDelay_Test),3f);
+        //StartWave(curWaveIndex);
+    }
+    private void StartWaveDelay_Test()
+    {
         StartWave(curWaveIndex);
     }
 

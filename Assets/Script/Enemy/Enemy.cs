@@ -42,8 +42,22 @@ public class Enemy : MonoBehaviour
     [SerializeField] Rigidbody rb;
     //상태이상 처리
     [SerializeField] EnemyStatusEffectController statusEffectController;
+    [SerializeField] EnemyAnimation enemyAnimation;
 
-    bool isMove = true;
+    bool _isMove = true;
+
+    bool isMove {
+        get
+        {
+            return _isMove;
+        }
+        set 
+        {
+            _isMove = value;
+            SetAnimationMove();
+        } 
+    }
+
     float curAttackRate;
     WaitForSeconds delay;
     Coroutine attackCor;
@@ -118,6 +132,21 @@ public class Enemy : MonoBehaviour
     {
         return runtimeStat.GetArmorInfo();
     }
+    private void SetAnimationMove()
+    {
+        enemyAnimation.UpdateWallDetectState(!CanMove());
+    }
+    private bool CanMove()
+    {
+        if (isMove && !isMagnet && !isStun)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     private void Init()
     {
@@ -161,14 +190,13 @@ public class Enemy : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if(isMove && !isMagnet && !isStun)
+        if(CanMove())
         {
-            if(runtimeStat.moveSpeed > 0)
+            if (runtimeStat.moveSpeed > 0)
             {
                 rb.MovePosition(transform.position + transform.forward * -runtimeStat.moveSpeed * Time.fixedDeltaTime);
             }
         }
-        
     }
     private void OnDisable()
     {
