@@ -314,6 +314,7 @@ MonoBehaviour:
   rb: {fileID: 4180865111708144461}
   statusEffectController: {fileID: 4252497606840152300}
   enemyAnimation: {fileID: 265386055606643478}
+  modelObject: {fileID: 7450853655413377045}
   enemyData:
     m_AssetGUID: 
     m_SubObjectName: 

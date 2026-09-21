@@ -44,6 +44,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] EnemyStatusEffectController statusEffectController;
     [SerializeField] EnemyAnimation enemyAnimation;
 
+    //모델 프리팹 위치 
+    [SerializeField] GameObject modelObject;
+
     bool _isMove = true;
 
     bool isMove {
@@ -102,7 +105,10 @@ public class Enemy : MonoBehaviour
     {
         setAddressableTask = LoadAddressable();
         await setAddressableTask;
-        
+
+
+        modelObject.transform.Rotate(new Vector3(0, 180, 0));
+
         //await LoadAddressable();
     }
     private void LoadAddressableBasic()

@@ -512,11 +512,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerManager
   testAvailablePlayerList:
-  - {fileID: 1307481545901499712, guid: 5b21a7fa11010b841920a34f0ec6d603, type: 3}
-  - {fileID: 5988621788042528195, guid: 1507aa7b94215d54d9e1db54ffed3359, type: 3}
-  - {fileID: 6191609909696452917, guid: 4cae73a034d09974f9d94f5548e60f8b, type: 3}
-  - {fileID: 4209600846550178255, guid: ccdbd8c1029f5414bb6487fe9cccde88, type: 3}
-  - {fileID: 7141372781045220110, guid: 710fc5e8b49fcdc409040f2928ce5ebc, type: 3}
+  - {fileID: 1307481545901499712, guid: dd3cbd05845c1ff4d9029809354530e7, type: 3}
+  - {fileID: 5988621788042528195, guid: 9e23dce93975c064bbe2547d0a657fc7, type: 3}
+  - {fileID: 6191609909696452917, guid: 6ad676ecdcf1268418d433d85432f65c, type: 3}
+  - {fileID: 4209600846550178255, guid: 58a77103edd617c49b60f5c32198d299, type: 3}
+  - {fileID: 7141372781045220110, guid: bbf98ca8fafc5a1429be7654bee10e2b, type: 3}
   playerSpawnPosition: {fileID: 226745542}
 --- !u!4 &306736494
 Transform:
