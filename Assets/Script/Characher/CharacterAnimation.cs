@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerAnimation : MonoBehaviour
+public class CharacterAnimation : MonoBehaviour
 {
     private Animator animator;
     //애니메이터의 파라미터 -> 트리거 항목을 켜준다.

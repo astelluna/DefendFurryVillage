@@ -59,7 +59,7 @@ public class Weapon : MonoBehaviour
     
     public float nextAttackTime { get; private set; }
 
-    protected PlayerDataSO playerData;
+    protected CharacterDataSO characterData;
 
     //현재 적용중인 증강 리스트
     protected List<AugmentDataSO> augmentDataList = new List<AugmentDataSO>();
@@ -154,14 +154,14 @@ public class Weapon : MonoBehaviour
         }
 
         //runtimeData = new WeaponRuntimeData();
-        runtimeData.attackdamage = playerData.attack + weaponDataSO.baseDamage + (int)(weaponDataSO.baseDamage * damagePercent);
+        runtimeData.attackdamage = characterData.attack + weaponDataSO.baseDamage + (int)(weaponDataSO.baseDamage * damagePercent);
         runtimeData.attackRate = weaponDataSO.baseAttackRate + (weaponDataSO.baseAttackRate * ratePercent);
         runtimeData.bulletScale = 1f + (1f * bulletSizePercent);
         runtimeData.plusAttackCount = attackCount;
         runtimeData.maxPierce = 1 + pierceCount;
-        runtimeData.criticalPercent = playerData.criticalPercent;
-        runtimeData.criticalDamgeRate = playerData.criticalDamageRate;
-        runtimeData.armorPenetrate = playerData.armorPenetration;
+        runtimeData.criticalPercent = characterData.criticalPercent;
+        runtimeData.criticalDamgeRate = characterData.criticalDamageRate;
+        runtimeData.armorPenetrate = characterData.armorPenetration;
 
         //후처리
         if (runtimeData.attackdamage < 1) runtimeData.attackdamage = 1;
@@ -189,11 +189,10 @@ public class Weapon : MonoBehaviour
         unUsedUpgradeAugmentDataList.Add(augment);
         usedUpgradeAugmentDataList.Remove(augment);
     }
-    //public void SetWeaponInfo(PlayerStat stat, float attackRate, float range)
-    public void SetWeaponInfo(PlayerDataSO plyData)
+    public void SetWeaponInfo(CharacterDataSO ChaData)
     {
         continuousFireDelay = new WaitForSeconds(shootDelay);
-        playerData = plyData;
+        characterData = ChaData;
         UpdateWeaponData();
         
     }

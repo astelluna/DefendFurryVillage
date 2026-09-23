@@ -16,7 +16,7 @@ public class AugmentPanel : MonoBehaviour
         augmentList[index].SetData(weaponAugment, characterSprite);
         augmentList[index].gameObject.SetActive(true);
     }
-    public void AddData(Player player, int index)
+    public void AddData(CharacterDataSO characterSO, int index)
     {
         if (index >= augmentList.Count)
         {
@@ -24,7 +24,7 @@ public class AugmentPanel : MonoBehaviour
             return;
         }
         augmentList[index].Init();
-        augmentList[index].SetData(player);
+        augmentList[index].SetData(characterSO);
         augmentList[index].gameObject.SetActive(true);
     }
 

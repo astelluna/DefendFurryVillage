@@ -9,10 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4234e99e6317f84b91ba75511ed3ffa, type: 3}
-  m_Name: PlayerDataSO_Missile
+  m_Script: {fileID: 11500000, guid: d57c636b95b496c43991771e936a238d, type: 3}
+  m_Name: CharacherDataSO_Laser
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDataSO
+  <CharacterId>k__BackingField: Laser
+  <CharacterName>k__BackingField: "\uB808\uC774\uC800"
+  <CharacterSprite>k__BackingField: {fileID: 21300000, guid: 5201e9f690b7c23438a6fdc34f3cc4ab, type: 3}
   <attack>k__BackingField: 10
-  <criticalPercent>k__BackingField: 50
+  <criticalPercent>k__BackingField: 2
   <criticalDamageRate>k__BackingField: 2
-  <armorPenetration>k__BackingField: 50
+  <armorPenetration>k__BackingField: 4

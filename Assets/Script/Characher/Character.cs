@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class PlayerStat
+public class CharacterStat
 {
     [field: SerializeField] public int attack { get; private set; } = 10;
     [field:SerializeField] public int criticalPercent { get; private set; } = 0; //크리 확률
@@ -14,48 +14,53 @@ public class PlayerStat
     [field: SerializeField] public float armorPenetration { get; private set; } = 0; //방어 관통률
 }
 
-public class Player : MonoBehaviour
+public class Character : MonoBehaviour
 {
     //캐릭터 기본 스텟
-    [SerializeField] AssetReferenceT<PlayerDataSO> playerDataAddressable;
-    PlayerDataSO playerDataSO;
+    //[SerializeField] AssetReferenceT<CharacterDataSO> characterDataAddressable; asdasf설정 다시해야함
+    public CharacterDataSO CharacterDataSO { get; private set; }
 
     //플레이어가 가지고있는 Weapon
     [SerializeField] Weapon basicWeapon;
     [SerializeField] Weapon specialWeapon;
 
     //캐릭터의 초상화 sprite 
-    [field: SerializeField] public Sprite Portrait { get; private set; }
+    //[field: SerializeField] public Sprite Portrait { get; private set; }
 
-    public event Action<Player> OnStartPlayerSpawn;
+    public event Action<CharacterDataSO> OnStartCharacterSpawn;
 
     //애니메이션
-    [SerializeField] PlayerAnimation playerAnimation;
+    [SerializeField] CharacterAnimation characterAnimation;
 
     private void Start()
     {
-        basicWeapon.OnWeaponShoot += playerAnimation.PlayAttackBasic;
-        specialWeapon.OnWeaponShoot += playerAnimation.PlayAttackSpecial;
+        basicWeapon.OnWeaponShoot += characterAnimation.PlayAttackBasic;
+        specialWeapon.OnWeaponShoot += characterAnimation.PlayAttackSpecial;
     }
     private void OnDestroy()
     {
-        basicWeapon.OnWeaponShoot -= playerAnimation.PlayAttackBasic;
-        specialWeapon.OnWeaponShoot -= playerAnimation.PlayAttackSpecial;
+        basicWeapon.OnWeaponShoot -= characterAnimation.PlayAttackBasic;
+        specialWeapon.OnWeaponShoot -= characterAnimation.PlayAttackSpecial;
     }
 
     private async Task Preload_Data()
     {
-        if (playerDataSO == null)
-        {
-            await LoadAddressable();
-        }
+        //if (characterDataSO == null)
+        //{
+        //    await LoadAddressable();
+        //}
         await basicWeapon.Init();
         await specialWeapon.Init();
-        basicWeapon.SetWeaponInfo(this.playerDataSO);
-        specialWeapon.SetWeaponInfo(this.playerDataSO);
+        basicWeapon.SetWeaponInfo(this.CharacterDataSO);
+        specialWeapon.SetWeaponInfo(this.CharacterDataSO);
+    }
+    public void SetCharacterSO(CharacterDataSO dataSO)
+    {
+        CharacterDataSO = dataSO;
     }
     public async Task Init_Preload()
     {
+        
         //원본 프리팹에서 어드레서블로 되어있어서 정보만 Load하기 위한 메서드
         await Preload_Data();
     }
@@ -70,23 +75,23 @@ public class Player : MonoBehaviour
 
     public async Task LoadAddressable_basic()
     {
-        AsyncOperationHandle<PlayerDataSO> playerDataHandle = Addressables.LoadAssetAsync<PlayerDataSO>(playerDataAddressable);
-        playerDataSO = await playerDataHandle.Task;
-        Addressables.Release(playerDataHandle); //사용하고 바로 풀어주기 (다른곳에서 안씀)
+        //AsyncOperationHandle<CharacterDataSO> characterDataHandle = Addressables.LoadAssetAsync<CharacterDataSO>(characterDataAddressable);
+        //characterDataSO = await characterDataHandle.Task;
+        //Addressables.Release(characterDataHandle); //사용하고 바로 풀어주기 (다른곳에서 안씀)
     }
     public async Task LoadAddressable()
     {
-        playerDataSO = await AddressablePreloadManager.Instance.GetAsync<PlayerDataSO>(playerDataAddressable);
+        //characterDataSO = await AddressablePreloadManager.Instance.GetAsync<CharacterDataSO>(characterDataAddressable);
     }
 
-    public void PlayerSpawnEventInvoke()
+    public void CharacterSpawnEventInvoke()
     {
-        OnStartPlayerSpawn?.Invoke(this);
+        OnStartCharacterSpawn?.Invoke(CharacterDataSO);
     }
 
-    public bool ComparePlayerSame(Player otherPlayer)
+    public bool CompareCharacterSame(Character otherCharacter)
     {
-        if (this.playerDataSO == otherPlayer.playerDataSO) return true;
+        if (this.CharacterDataSO == otherCharacter.CharacterDataSO) return true;
         return false;
     }
 
@@ -130,6 +135,10 @@ public class Player : MonoBehaviour
     public string GetSpecialWeaponDesc()
     {
         return specialWeapon.weaponDataSO.WeaponDescription;
+    }
+    public CharacterDataSO GetCharacterDataSO()
+    {
+        return CharacterDataSO;
     }
 
 }

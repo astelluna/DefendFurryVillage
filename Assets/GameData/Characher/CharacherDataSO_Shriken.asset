@@ -9,10 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4234e99e6317f84b91ba75511ed3ffa, type: 3}
-  m_Name: PlayerDataSO_Falling
+  m_Script: {fileID: 11500000, guid: d57c636b95b496c43991771e936a238d, type: 3}
+  m_Name: CharacherDataSO_Shriken
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDataSO
+  <CharacterId>k__BackingField: Shuriken
+  <CharacterName>k__BackingField: "\uC218\uB9AC\uAC80"
+  <CharacterSprite>k__BackingField: {fileID: 21300000, guid: b8c8183371049e4418e2d3d4aa8e2ec1, type: 3}
   <attack>k__BackingField: 10
-  <criticalPercent>k__BackingField: 50
+  <criticalPercent>k__BackingField: 5
   <criticalDamageRate>k__BackingField: 2
-  <armorPenetration>k__BackingField: 50
+  <armorPenetration>k__BackingField: 1

@@ -1,7 +1,20 @@
 using UnityEngine;
-[CreateAssetMenu(menuName = "Player/PlayerDataSO")]
-public class PlayerDataSO : ScriptableObject
+[CreateAssetMenu(menuName = "Character/CharacterDataSO")]
+public class CharacterDataSO : ScriptableObject
 {
+    //표시되는 정보 
+    [Header("캐릭터 정보")]
+    [field: SerializeField] public string CharacterId { get; private set; }
+    [field: SerializeField] public string CharacterName { get; private set; }
+    [Header("캐릭터 이미지")]
+    [field: SerializeField] public Sprite CharacterBodySprite { get; private set; }
+    [field: SerializeField] public Sprite CharacterPortraitSprite { get; private set; }
+    [Header("캐릭터 프리팹")]
+    [field: SerializeField] public Character CharacterPrefab;
+
+
+    //인게임 정보
+    [Header("아래부터 인게임 정보")]
     [field: SerializeField] public int attack { get; private set; } = 10; //플레이어 기본 공격력
     [field: Header("크리확률 0~100까지 설정")]
     [field: SerializeField] public int criticalPercent { get; private set; } = 0; //크리 확률 0~100

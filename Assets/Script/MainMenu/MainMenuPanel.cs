@@ -10,7 +10,7 @@ public class MainMenuPanel : MonoBehaviour
     [SerializeField] Button shopButton;
     [SerializeField] Button ingmaeButton;
 
-    EquipmentPanel equipmentPanel;
+    [SerializeField] EquipmentPanel equipmentPanel;
 
     private void Awake()
     {

@@ -11,9 +11,10 @@ public class AugmentManager : MonoBehaviour
     [SerializeField] AugmentPanel augmentPanel;
 
     List<WeaponAugment> selectedAugmentList = new List<WeaponAugment>();
-    List<Player> haveAugmentPlyerList = new List<Player>();
-    List<Player> selectedPlayerList = new List<Player>();
-
+    //List<Character> haveAugmentCharacterList = new List<Character>();
+    //List<Character> selectedCharacterList = new List<Character>();
+    List<CharacterDataSO> haveAugmentCharacterList = new List<CharacterDataSO>();
+    List<CharacterDataSO> selectedCharacterList = new List<CharacterDataSO>();
 
     private bool isShowingPanel = false; //현재 패널 띄워져있는지 플래그
     int maxShowCount;
@@ -35,7 +36,7 @@ public class AugmentManager : MonoBehaviour
     }
     private void OnEnable()
     {
-        PlayerManager.Instance.OnPlayerSpawnEnd += OnPlayerSpawnCompleted;
+        CharacterManager.Instance.OnCharacterSpawnEnd += OnCharacterSpawnCompleted;
     }
     private void Start()
     {
@@ -49,12 +50,12 @@ public class AugmentManager : MonoBehaviour
             Instance = null;
         if (isShowingPanel) Time.timeScale = 1f;
         ClearSelectAugmentList();
-        ClearSelectPlayerList();
+        ClearSelectCharacterList();
     }
 
     public async void SetAndShowAugmentUI(int cnt)
     {
-        await PlayerManager.Instance.InitalizePlayerTask;
+        await CharacterManager.Instance.InitalizeCharacterTask;
         maxShowCount += cnt;
         if (maxShowCount <= 0) return;
         if (isShowingPanel) return;
@@ -62,10 +63,10 @@ public class AugmentManager : MonoBehaviour
         ShowAugmentUI();
     }
 
-    private bool NeedPlayerSpawn(List<Player> remainPlayers)
+    private bool NeedCharacterSpawn(List<CharacterDataSO> remainCharacters)
     {
-        if (remainPlayers.Count == 0) return false;
-        if (!PlayerManager.Instance.HavePlayer()) return true;
+        if (remainCharacters.Count == 0) return false;
+        if (!CharacterManager.Instance.HaveCharacter()) return true;
         int characterPercent = Character_Pick_Percent; //80퍼센트 확률로 캐릭터 먼저 제공
         int value = Random.Range(1, 101);
         if (value > characterPercent) { return false; }
@@ -81,28 +82,28 @@ public class AugmentManager : MonoBehaviour
         //UI를 보여주고 현재 플레이어중 1개를 선택해서 쭉쭉 내려간다음에 증강 1개를 선택해서 가져온다.
         bool needShowPanel = false;
         ClearSelectAugmentList();
-        ClearSelectPlayerList();
+        ClearSelectCharacterList();
 
         //미리 남은 플레이어 항목 리스트를 받아둠.
-        List<Player> remainPlayerList = PlayerManager.Instance.GetRemainPlayer();
+        List<CharacterDataSO> remainCharacterList = CharacterManager.Instance.GetRemainCharacter();
         for(int i=0; i< Total_Augment_Slot; i++)
         {
-            if(NeedPlayerSpawn(remainPlayerList))
+            if(NeedCharacterSpawn(remainCharacterList))
             {
                 //플레이어중 한명을 선택해서 패널에 띄우도록
-                int randIndex = Random.Range(0, remainPlayerList.Count);
-                Player selPlayer = remainPlayerList[randIndex];
-                remainPlayerList.Remove(selPlayer);
-                augmentPanel.AddData(selPlayer, i);
-                selectedPlayerList.Add(selPlayer);
-                selPlayer.OnStartPlayerSpawn += OnPlayerSelected;
+                int randIndex = Random.Range(0, remainCharacterList.Count);
+                CharacterDataSO selCharacterSO = remainCharacterList[randIndex];
+                remainCharacterList.Remove(selCharacterSO);
+                augmentPanel.AddData(selCharacterSO, i);
+                selectedCharacterList.Add(selCharacterSO);
+                selCharacterSO.CharacterPrefab.OnStartCharacterSpawn += OnCharacterSelected;
             }
             else
             {
                 //증강 소환
                 //증강이 있는 플레이어를 확인한다.
-                haveAugmentPlyerList = PlayerManager.Instance.GetHaveAugmentPlayerList();
-                if (haveAugmentPlyerList.Count == 0)
+                haveAugmentCharacterList = CharacterManager.Instance.GetHaveAugmentCharacterList();
+                if (haveAugmentCharacterList.Count == 0)
                 {
                     if (i == 0)
                     {
@@ -114,11 +115,11 @@ public class AugmentManager : MonoBehaviour
                     MyLog.LogWarning("더이상 증강이 남아있는 플레이어가 없습니다");
                     break;
                 }
-                int playerNo = Random.Range(0, haveAugmentPlyerList.Count);
-                Player curPlayer = haveAugmentPlyerList[playerNo];
+                int CharacterNo = Random.Range(0, haveAugmentCharacterList.Count);
+                CharacterDataSO characterSO = haveAugmentCharacterList[CharacterNo];
 
-                WeaponAugment data = curPlayer.GetAugment(); //정보를 하나 가져와보자.
-                augmentPanel.AddData(data, curPlayer.Portrait, i); //여기서 알아서 i번째 UI에 UI를 넣도록 함.
+                WeaponAugment data = characterSO.CharacterPrefab.GetAugment(); //정보를 하나 가져와보자.
+                augmentPanel.AddData(data, characterSO.CharacterPortraitSprite, i); //여기서 알아서 i번째 UI에 UI를 넣도록 함.
 
                 //이벤트 등록
                 selectedAugmentList.Add(data);
@@ -133,22 +134,22 @@ public class AugmentManager : MonoBehaviour
             augmentPanel.Show();
         }
     }
-    public void OnPlayerSelected(Player player)
+    public void OnCharacterSelected(CharacterDataSO characterSO)
     {
         //선택된 플레이어  소환. 그리고 WeaponAugment도 클리어시키자;
         MyLog.Log("이벤트 발동 - 플레이어");
         //플레이어는 소환되고나서  이벤트를 2단계로 나눠야함. 
         //1단계: 증강카드에 어떤 플레이어 소환되는지. 정보만 설정.
         //1-2: 특정 증강 카드가 선택됨(어떤 플레이어 소환해라) 
-        //2단계: 해당 플레이어를 소환해달라고 PlayerManager에 요청. 
+        //2단계: 해당 플레이어를 소환해달라고 CharacterManager에 요청. 
         //3단계: 플레이어 소환이 끝났다면? 이제 여기서 아래의 것들을 실행하면 됨
 
         WeaponAugmentProcess(null); //증강 초기화. 다 비워준다.
-        PlayerProcess(player); //플레이어 처리 
+        CharacterProcess(characterSO); //플레이어 처리 
         CheckPanelClose();
-        //이거 끝나고 PlayerManager에서 Spanwn 끝나면 OnPlayerSpawnCompleted 이벤트를 호출해줘서 다시 패널 띄워야하는지 체크할거임
+        //이거 끝나고 CharacterManager에서 Spanwn 끝나면 OnCharacterSpawnCompleted 이벤트를 호출해줘서 다시 패널 띄워야하는지 체크할거임
     }
-    private void OnPlayerSpawnCompleted(Player player)
+    private void OnCharacterSpawnCompleted(Character character)
     {
         //플레이어 소환 끝나면 해야할 행동들
     }
@@ -159,7 +160,7 @@ public class AugmentManager : MonoBehaviour
         //증강 선택되었으므로 해당 증강 적용해주고 플레이어 정보는 싹 지워주자
         MyLog.Log("이벤트 발동 - 증강");
         WeaponAugmentProcess(augment);  //무기 선택된거 1개 제외 모두 다시 반환하도록 한다.
-        PlayerProcess(null); //플레이어 null 처리로 클리어
+        CharacterProcess(null); //플레이어 null 처리로 클리어
         CheckPanelClose(); //패널 처리
     }
     private void WeaponAugmentProcess(WeaponAugment augment)
@@ -181,18 +182,18 @@ public class AugmentManager : MonoBehaviour
         }
         ClearSelectAugmentList();
     }
-    private void PlayerProcess(Player player)
+    private void CharacterProcess(CharacterDataSO characterSO)
     {
-        foreach (var curPlayer in selectedPlayerList)
+        foreach (var curCharacter in selectedCharacterList)
         {
-            if (curPlayer == player)
+            if (curCharacter == characterSO.CharacterPrefab)
             {
                 //플레이어 소환 요청
-                PlayerManager.Instance.SpawnPlayer(curPlayer);
+                CharacterManager.Instance.SpawnCharacter(curCharacter);
                 break;
             }
         }
-        ClearSelectPlayerList();
+        ClearSelectCharacterList();
     }
 
     private void CheckPanelClose()
@@ -210,16 +211,16 @@ public class AugmentManager : MonoBehaviour
             ShowAugmentUI(); 
         }
     }
-    private void ClearSelectPlayerList()
+    private void ClearSelectCharacterList()
     {
-        foreach(var item in selectedPlayerList)
+        foreach(var item in selectedCharacterList)
         {
             if(item != null)
             {
-                item.OnStartPlayerSpawn -= OnPlayerSelected;
+                item.CharacterPrefab.OnStartCharacterSpawn -= OnCharacterSelected;
             }
         }
-        selectedPlayerList.Clear();
+        selectedCharacterList.Clear();
     }
     private void ClearSelectAugmentList()
     {
