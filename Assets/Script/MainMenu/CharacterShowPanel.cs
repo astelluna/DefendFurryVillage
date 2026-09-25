@@ -32,6 +32,7 @@ public class CharacterShowPanel : MonoBehaviour
 
         foreach (CharacterDataSO item in characterDataSOList)
         {
+            //TODO. 추후에 캐릭터 많아지면 이거도 오브젝트풀 해두기
             CharacterInfoButton buttonPrefab = Instantiate(characterButtonPrefab, makePosition);
             buttonPrefab.SetCharacterData(item);
             buttonPrefab.OnCharcterBtnClick += OnShowCharacterInfoPanel;

@@ -12,9 +12,16 @@ public class CharacterManager : MonoBehaviour
 
     //모든 플레이어 데이터를 어드레서블로 가지고있고 첫 로드해서 allCharacterSOList에 넣어서 사용
     [SerializeField] List<AssetReferenceT<CharacterDataSO>> characterAddressableSOList = new List<AssetReferenceT<CharacterDataSO>>();
+    //전체 캐릭터 목록
     List<CharacterDataSO> allCharacterSOList = new List<CharacterDataSO>();
-    Dictionary<string, CharacterDataSO> allCharacterSoDict = new Dictionary<string, CharacterDataSO>();
-    public IReadOnlyList<CharacterDataSO> AllCharacterSOList => allCharacterSOList;
+    public IReadOnlyList<CharacterDataSO> AllCharacterSOList => allCharacterSOList; //전체 캐릭터를 편하게 리스트로 받아올때 사용
+    Dictionary<string, CharacterDataSO> allCharacterSODict = new Dictionary<string, CharacterDataSO>(); //검색용 딕셔너리
+
+    //플레이어가 가지고있는 캐릭터 목록으로 저장된 딕셔너리
+    List<CharacterDataSO> haveCharacterSOList = new List<CharacterDataSO>();
+    public IReadOnlyList<CharacterDataSO> HaveCharacterSOList => haveCharacterSOList;
+    Dictionary<string, CharacterDataSO> haveCharacterSoDict = new Dictionary<string, CharacterDataSO>();
+    
     //public IReadOnlyList<CharacterDataSO> CharacterDataSOList => characterDataSOList;
 
     //선택한 캐릭터 아이디 목록
@@ -70,16 +77,20 @@ public class CharacterManager : MonoBehaviour
         foreach (var item in characterAddressableSOList)
         {
             CharacterDataSO characterDataSO = await AddressablePreloadManager.Instance.GetAsync<CharacterDataSO>(item);
-            allCharacterSOList.Add(characterDataSO);
-            if(allCharacterSoDict.ContainsKey(characterDataSO.CharacterId))
+            if(allCharacterSODict.ContainsKey(characterDataSO.CharacterId))
             {
                 MyLog.LogError("SO에 캐릭터ID가 중복입니다");
                 continue;
             }
             //초기화
+            allCharacterSOList.Add(characterDataSO);
+            allCharacterSODict.Add(characterDataSO.CharacterId, characterDataSO);
             characterDataSO.CharacterPrefab.Init_Preload();
 
-            allCharacterSoDict.Add(characterDataSO.CharacterId, characterDataSO);
+            //ToDo. 추후 DB에서 현재 플레이어가 가지고있는 캐릭터 목록으로 바꿔서 처리하기 (지금은 그냥 전체 다 넣음) 
+            haveCharacterSOList.Add(characterDataSO);
+            haveCharacterSoDict.Add(characterDataSO.CharacterId, characterDataSO);
+            
         }
     }
 
@@ -91,12 +102,12 @@ public class CharacterManager : MonoBehaviour
         runtimeCharacterPrefabList.Clear();
         foreach(string id in selectedCharacterList)
         {
-            if (!allCharacterSoDict.ContainsKey(id))
+            if (!allCharacterSODict.ContainsKey(id))
             {
                 MyLog.LogError("찾으려는 캐릭터 ID가 없음. DB와 SO 확인 필요");
                 continue;
             }
-            CharacterDataSO characterSO = allCharacterSoDict[id];
+            CharacterDataSO characterSO = allCharacterSODict[id];
             runtimeCharacterPrefabList.Add(characterSO);
         }
 

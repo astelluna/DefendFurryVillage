@@ -9,15 +9,16 @@ public class CharacterInfoPanel : MonoBehaviour
 
     [SerializeField] Image characterImage;
     [SerializeField] TextMeshProUGUI characterNameText;
-    [SerializeField] SkillIcon basicSkillIcon;
-    [SerializeField] SkillIcon specialSkillIcon;
+    
     [SerializeField] Button closeButton;
 
-    //캐릭터 스텟표시.
-    [SerializeField] StatIcon attackStatIcon;
-    [SerializeField] StatIcon criticalPercentStatIcon;
-    [SerializeField] StatIcon criticalRatioStatIcon;
-    [SerializeField] StatIcon armorPenetrateStatIcon;
+    //캐릭터 스텟 및 스킬 표시.
+    [SerializeField] StatIconAll statIconAll;
+    [SerializeField] SkillIconAll skillIconAll;
+    //[SerializeField] StatIcon attackStatIcon;
+    //[SerializeField] StatIcon criticalPercentStatIcon;
+    //[SerializeField] StatIcon criticalRatioStatIcon;
+    //[SerializeField] StatIcon armorPenetrateStatIcon;
 
     private void Awake()
     {
@@ -38,15 +39,9 @@ public class CharacterInfoPanel : MonoBehaviour
         //플레이어 정보 넣기
         characterImage.sprite = characterDataSO.CharacterBodySprite;
         characterNameText.text = characterDataSO.CharacterName;
-        //스킬 정보 셋팅
-        basicSkillIcon.SetIconInfo(characterDataSO.CharacterPrefab.GetBasicWeaponIcon(), characterDataSO.CharacterPrefab.GetBasicWeaponDesc());
-        specialSkillIcon.SetIconInfo(characterDataSO.CharacterPrefab.GetSpecialWeaponIcon(), characterDataSO.CharacterPrefab.GetSpecialWeaponDesc());
-        //스탯 정보 설정
-        attackStatIcon.SetText(characterDataSO.attack.ToString());
-        criticalPercentStatIcon.SetText(characterDataSO.criticalPercent.ToString());
-        criticalRatioStatIcon.SetText(characterDataSO.criticalDamageRate.ToString());
-        armorPenetrateStatIcon.SetText(characterDataSO.armorPenetration.ToString());
-        
+        //스킬 및 스탯 정보 셋팅
+        skillIconAll.SetIcon(characterDataSO);
+        statIconAll.SetIcon(characterDataSO);
 
         this.gameObject.SetActive(true);
     }
