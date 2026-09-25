@@ -225,6 +225,14 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 22100000, guid: 48c53a57004160d40a1418b73bfe0239, type: 2}
+    - target: {fileID: 216995662533711243, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
+      propertyPath: basicWeapon
+      value: 
+      objectReference: {fileID: 705086260946961239}
+    - target: {fileID: 216995662533711243, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
+      propertyPath: specialWeapon
+      value: 
+      objectReference: {fileID: 3345873929461157904}
     - target: {fileID: 688327806511031720, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
       propertyPath: basicWeapon
       value: 
@@ -243,7 +251,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1289823973057343240, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
       propertyPath: m_Name
-      value: Player_Missile 1
+      value: Character_Missile
       objectReference: {fileID: 0}
     - target: {fileID: 7588433807268214270, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
       propertyPath: m_LocalPosition.x

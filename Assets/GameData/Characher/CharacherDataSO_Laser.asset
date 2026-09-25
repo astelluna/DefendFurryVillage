@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDataSO
   <CharacterId>k__BackingField: Laser
   <CharacterName>k__BackingField: "\uB808\uC774\uC800"
-  <CharacterSprite>k__BackingField: {fileID: 21300000, guid: 5201e9f690b7c23438a6fdc34f3cc4ab, type: 3}
+  <CharacterBodySprite>k__BackingField: {fileID: 21300000, guid: 5fbc1606299a4a14499ac7acfee86780, type: 3}
+  <CharacterPortraitSprite>k__BackingField: {fileID: 21300000, guid: 3889cc23d6227e04ca1f2f1fdefd2b88, type: 3}
+  CharacterPrefab: {fileID: 6454882917854410208, guid: 9e23dce93975c064bbe2547d0a657fc7, type: 3}
   <attack>k__BackingField: 10
   <criticalPercent>k__BackingField: 2
   <criticalDamageRate>k__BackingField: 2

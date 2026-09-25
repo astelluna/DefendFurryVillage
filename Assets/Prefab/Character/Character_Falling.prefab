@@ -16,6 +16,14 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 22100000, guid: 0e10113bb4404644198582e768606c13, type: 2}
+    - target: {fileID: 216995662533711243, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
+      propertyPath: basicWeapon
+      value: 
+      objectReference: {fileID: 8104313269821846143}
+    - target: {fileID: 216995662533711243, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
+      propertyPath: specialWeapon
+      value: 
+      objectReference: {fileID: 8952908394075892764}
     - target: {fileID: 688327806511031720, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
       propertyPath: basicWeapon
       value: 
@@ -34,7 +42,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1289823973057343240, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
       propertyPath: m_Name
-      value: Player_Falling 1
+      value: Character_Falling
       objectReference: {fileID: 0}
     - target: {fileID: 7588433807268214270, guid: 3130f610c921e2e4ba2067a17d05c939, type: 3}
       propertyPath: m_LocalPosition.x

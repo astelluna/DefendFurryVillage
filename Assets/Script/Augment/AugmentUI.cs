@@ -37,7 +37,7 @@ public class AugmentUI : MonoBehaviour
     {
         weaponAugment = augment;
         characterImage.sprite = charcterSprite;
-        iconImage.sprite = weaponAugment.weapon.WeaponIcon;
+        iconImage.sprite = weaponAugment.weapon.weaponDataSO.WeaponIcon;
         descriptionText.text = weaponAugment.dataSO.GetDataDescription();
     }
     public void SetData(CharacterDataSO characterData)

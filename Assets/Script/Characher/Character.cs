@@ -66,8 +66,12 @@ public class Character : MonoBehaviour
     }
     public async Task Init()
     {
-        //실제 인게임에서 원본 프리팹을 통해 Instantiate하고. 그 정보로 Weapon 발사 설정까지 진행
+        //실제 플레이어 소환되고 처리해야할 Init 동작
         await Preload_Data();
+        WeaponAttackStart();
+    }
+    public void WeaponAttackStart()
+    {
         //공격 명령
         basicWeapon.StartWeapon();
         specialWeapon.StartWeapon();
@@ -128,9 +132,20 @@ public class Character : MonoBehaviour
         if(basicWeapon.HaveAugmentUpgrade() || specialWeapon.HaveAugmentUpgrade() ) { return true; }
         return false;
     }
+
+
+    #region 리소스 가져오기
+    public Sprite GetBasicWeaponIcon()
+    {
+        return basicWeapon.weaponDataSO.WeaponIcon;
+    }
+    public string GetBasicWeaponDesc()
+    {
+        return basicWeapon.weaponDataSO.WeaponDescription;
+    }
     public Sprite GetSpecialWeaponIcon()
     {
-        return specialWeapon.WeaponIcon;
+        return specialWeapon.weaponDataSO.WeaponIcon;
     }
     public string GetSpecialWeaponDesc()
     {
@@ -140,5 +155,6 @@ public class Character : MonoBehaviour
     {
         return CharacterDataSO;
     }
+    #endregion
 
 }

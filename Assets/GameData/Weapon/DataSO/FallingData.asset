@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d00af80f0c2694b905668dce31ea1c, type: 3}
   m_Name: FallingData
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDataSO
+  <WeaponIcon>k__BackingField: {fileID: 21300000, guid: 3889cc23d6227e04ca1f2f1fdefd2b88, type: 3}
   <baseRange>k__BackingField: 8
   <baseAttackRate>k__BackingField: 5
   <baseDamage>k__BackingField: 10

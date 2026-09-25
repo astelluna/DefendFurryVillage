@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDataSO
   <CharacterId>k__BackingField: ShootGun
   <CharacterName>k__BackingField: "\uC0F7\uAC74"
-  <CharacterSprite>k__BackingField: {fileID: 21300000, guid: 2e32e2f96a8e6bb4bafdd0559900000d, type: 3}
+  <CharacterBodySprite>k__BackingField: {fileID: 21300000, guid: 7f6fe63b77269fe4fbcfee208a01ecc7, type: 3}
+  <CharacterPortraitSprite>k__BackingField: {fileID: 21300000, guid: 3889cc23d6227e04ca1f2f1fdefd2b88, type: 3}
+  CharacterPrefab: {fileID: 3522944877384755692, guid: 58a77103edd617c49b60f5c32198d299, type: 3}
   <attack>k__BackingField: 10
   <criticalPercent>k__BackingField: 4
   <criticalDamageRate>k__BackingField: 2

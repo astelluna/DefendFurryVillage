@@ -81,6 +81,7 @@ public class AddressablePreloadManager : Singleton<AddressablePreloadManager>
 
         if (assetDict.TryGetValue(primaryKey, out var handle) && handle.IsValid())
             return handle.Result as T;
+        MyLog.LogError($"Addressable 에셋을 찾을 수 없습니다. RuntimeKey: {guid}, PrimaryKey: {primaryKey}");
 
         return null;
     }

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d00af80f0c2694b905668dce31ea1c, type: 3}
   m_Name: MissileData
   m_EditorClassIdentifier: Assembly-CSharp::WeaponDataSO
+  <WeaponIcon>k__BackingField: {fileID: 21300000, guid: a50a1f7ed45ab6644b83cfd8e443aa99, type: 3}
   <baseRange>k__BackingField: 8
   <baseAttackRate>k__BackingField: 6
   <baseDamage>k__BackingField: 10

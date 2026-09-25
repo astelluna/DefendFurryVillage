@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDataSO
   <CharacterId>k__BackingField: Shuriken
   <CharacterName>k__BackingField: "\uC218\uB9AC\uAC80"
-  <CharacterSprite>k__BackingField: {fileID: 21300000, guid: b8c8183371049e4418e2d3d4aa8e2ec1, type: 3}
+  <CharacterBodySprite>k__BackingField: {fileID: 21300000, guid: 5fbc1606299a4a14499ac7acfee86780, type: 3}
+  <CharacterPortraitSprite>k__BackingField: {fileID: 21300000, guid: 3889cc23d6227e04ca1f2f1fdefd2b88, type: 3}
+  CharacterPrefab: {fileID: 7607919718113637165, guid: bbf98ca8fafc5a1429be7654bee10e2b, type: 3}
   <attack>k__BackingField: 10
   <criticalPercent>k__BackingField: 5
   <criticalDamageRate>k__BackingField: 2

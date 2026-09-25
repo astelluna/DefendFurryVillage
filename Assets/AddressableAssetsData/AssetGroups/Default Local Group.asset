@@ -34,7 +34,7 @@ MonoBehaviour:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 132b7349903ee1749b59717c38ed479b
-    m_Address: Assets/GameData/Player/PlayerDataSO_Missile.asset
+    m_Address: Characher/CharacherDataSO_Missile.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
@@ -52,13 +52,13 @@ MonoBehaviour:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 316d088be4a7c7047b9848cff17f5a68
-    m_Address: Assets/GameData/Player/PlayerDataSO_Falling.asset
+    m_Address: Characher/CharacherDataSO_Falling.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3189704a8b391aa428a1565fae590c9a
-    m_Address: Player/New Player Data SO.asset
+    m_Address: Characher/CharacherDataSO_Laser.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
@@ -136,7 +136,7 @@ MonoBehaviour:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6f4f9493806e2cd46af1bd20005187b4
-    m_Address: Assets/GameData/Player/PlayerDataSO_Shriken.asset
+    m_Address: Characher/CharacherDataSO_Shriken.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
@@ -148,7 +148,7 @@ MonoBehaviour:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8eed1262298b4c14db3249d092e91bcd
-    m_Address: Assets/GameData/Player/PlayerDataSO_ShootGun.asset
+    m_Address: Characher/CharacherDataSO_ShootGun.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload

@@ -49,9 +49,10 @@ public class Weapon : MonoBehaviour
     [field: SerializeField] public Projectile ProjectilePrefab { get; private set; } //총알 종류
 
     //무기 정보들
-    [field: SerializeField] public Sprite WeaponIcon { get; protected set; }
+    //[field: SerializeField] public Sprite WeaponIcon { get; protected set; }
 
     [SerializeField] AssetReferenceT<WeaponDataSO> weaponDataAddressable;
+    Task<WeaponDataSO> weaponDataTask;
     //AsyncOperationHandle<WeaponDataSO> weaponDataHandle;
     public WeaponDataSO weaponDataSO { get; private set; }
     [field: SerializeField] public WeaponExecuteSO weaponExecuteSO { get; private set; }
@@ -81,7 +82,9 @@ public class Weapon : MonoBehaviour
     public async Task Init()
     {
         unUsedUpgradeAugmentDataList = new List<AugmentDataSO>(existUpgradeAugmentDataList);
-        await LoadAddressable();
+
+        weaponDataTask = AddressablePreloadManager.Instance.GetAsync<WeaponDataSO>(weaponDataAddressable);
+        weaponDataSO = await weaponDataTask;
     }
     public void StartWeapon()
     {
@@ -111,7 +114,7 @@ public class Weapon : MonoBehaviour
         Addressables.Release(weaponDataHandle);
     }
 
-    private async Task LoadAddressable()
+    private async Task LoadAddressableㅁㄴㅁㄶㅁㄶㄴ()
     {
         //어드레서블 프리로드한 곳에서 어드레서블 정보를 가져온다.
         if (weaponDataSO != null) return;
