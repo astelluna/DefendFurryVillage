@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipmentPanel : MonoBehaviour
+public class EquipmentPanel : MonoBehaviour, IMainMenuPanel
 {
     [SerializeField] EquipmentUI equipmentUIPrefab;
     [SerializeField] Transform makeTransform; //스코롤뷰 위치 지정(프리팹이 생성될 위치)
@@ -18,9 +18,13 @@ public class EquipmentPanel : MonoBehaviour
         equipmentUIList.Clear();
     }
 
-    public void ShowPanel()
+    public void ShowPanel(bool isShow)
     {
-        this.gameObject.SetActive(true);
+        this.gameObject.SetActive(isShow);
+        if (!isShow)
+        {
+            return;
+        }
         //생성을 할거임. 현재 아이템매니저에 있는 장비 갯수만큼 아래 인벤토리에 표시를 할것
         equipmentUIList.Clear();
         //foreach문 돌면서 장비 확인

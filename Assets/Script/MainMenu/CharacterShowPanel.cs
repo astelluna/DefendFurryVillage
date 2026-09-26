@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterShowPanel : MonoBehaviour
+public class CharacterShowPanel : MonoBehaviour, IMainMenuPanel
 {
     //패널을 열면 모든 캐릭터에 대해서 버튼으로 프리팹을 하나 생성해준다. 
     [SerializeField] CharacterInfoButton characterButtonPrefab;
@@ -43,6 +43,14 @@ public class CharacterShowPanel : MonoBehaviour
     private void OnShowCharacterInfoPanel(CharacterDataSO data)
     {
         characterInfoPanel.SetAndShowPanel(data);
+    }
+    public void ShowPanel(bool isShow)
+    {
+        this.gameObject.SetActive(isShow);
+        if (!isShow)
+        {
+            return;
+        }
     }
 
 }

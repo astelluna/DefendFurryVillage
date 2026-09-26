@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterSelectPanel : MonoBehaviour
+public class CharacterSelectPanel : MonoBehaviour, IMainMenuPanel
 {
     [SerializeField] StatIconAll statIconAll;
     [SerializeField] SkillIconAll skillIconAll;
@@ -34,5 +34,13 @@ public class CharacterSelectPanel : MonoBehaviour
             selectButton.UpdateCheckImage(selected);
         }
 
+    }
+    public void ShowPanel(bool isShow)
+    {
+        this.gameObject.SetActive(isShow);
+        if (!isShow)
+        {
+            return;
+        }
     }
 }
