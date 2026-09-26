@@ -23,7 +23,8 @@ public class CharacterSelectedShowUI : MonoBehaviour
 
     public void OnSelectedButtonClick()
     {
-        CancelUI();
+        //CancelUI();
+        //그냥 캐릭터 이름이 뜨도록 할까? 일단 보류
     }
     public void CancelUI()
     {

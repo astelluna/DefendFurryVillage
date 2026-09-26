@@ -24,6 +24,7 @@ public class CharacterSelectButton : MonoBehaviour
     public void SetCharacterSelectButton(CharacterDataSO data)
     {
         characterDataSO = data;
+        button.image.sprite = characterDataSO.CharacterPortraitSprite;
     }
 
     private void OnCharacterButtonClick()
