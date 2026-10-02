@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class CharacterManager : MonoBehaviour
 {
@@ -21,19 +23,14 @@ public class CharacterManager : MonoBehaviour
     List<CharacterDataSO> haveCharacterSOList = new List<CharacterDataSO>();
     public IReadOnlyList<CharacterDataSO> HaveCharacterSOList => haveCharacterSOList;
     Dictionary<string, CharacterDataSO> haveCharacterSoDict = new Dictionary<string, CharacterDataSO>();
-    
-    //public IReadOnlyList<CharacterDataSO> CharacterDataSOList => characterDataSOList;
 
     //선택한 캐릭터 아이디 목록
     List<string> selectedCharacterList = new List<string>();
 
     //런타임중에 소환될수있는 캐릭터, 현재 소환중인 캐릭터 리스트
-    //private List<Character> runtimeCharacterPrefabList = new List<Character>();
-    private List<CharacterDataSO> runtimeCharacterPrefabList = new List<CharacterDataSO>();
+    //private List<CharacterDataSO> runtimeCharacterPrefabList = new List<CharacterDataSO>();
+    private List<Character> unSpawnedCharacterList = new List<Character>();
     private List<Character> spawnedCharacterList = new List<Character>();
-
-    //테스트용. 추후에 어떤 캐릭터가 등장하는지 다른곳에 등록을 해두자
-    //public List<Character> testAvailableCharacterList = new List<Character>();
 
     //스폰위치 전용 스크립트 
     [SerializeField] CharacterSpawnPosition characterSpawnPosition;
@@ -44,7 +41,10 @@ public class CharacterManager : MonoBehaviour
 
     //이벤트
     public event Action<Character> OnCharacterSpawnEnd; //플레이어 소환 종료
+    public event Action OnCharacterInitEnd; //초기 캐릭터 초기화 과정 완료.
 
+    //SO
+    private readonly Dictionary<string, AsyncOperationHandle> handles = new();
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -54,22 +54,83 @@ public class CharacterManager : MonoBehaviour
         }
 
         Instance = this;
+
+        
     }
     private void OnDestroy()
     {
         if (Instance == this)
             Instance = null;
     }
+
+    private void OnEnable()
+    {
+        //추후에 Awake로 바꿔도될듯
+        //Test1 -> 처음 화면에서 캐릭터 데이터 SO를 가져온다.
+        
+    }
     private void Start()
     {
-        //Test1 -> 처음 화면에서 캐릭터 데이터 SO를 가져온다.
-        initalizeCharacterTask = LoadCharacterDataSO();
+        Invoke(nameof(TestDelayTaskStart), 3f);
 
         //Test2 -> 런타임에서 총알을 미리 생성해둔다.
         //initalizeCharacterTask = SetCharactersInit(); // -> 이거 런타임 시작되면 인게임 씬에서 하도록 해야함
 
     }
+    private void TestDelayTaskStart()
+    {
+        initalizeCharacterTask = LoadCharacterDataSO();
 
+    }
+
+    public async Task<T> AddressableLoadFunc<T>(AssetReference assetRef) where T : UnityEngine.Object
+    {
+        string key = assetRef.RuntimeKey.ToString();
+
+        if (typeof(Component).IsAssignableFrom(typeof(T)))
+        {
+            var handle = Addressables.LoadAssetAsync<GameObject>(assetRef);
+            await handle.Task;
+
+            if (handle.Status != AsyncOperationStatus.Succeeded)
+            {
+                MyLog.LogError($"프리팹 로드 실패: {key}");
+                Addressables.Release(handle);
+                return null;
+            }
+
+            var comp = handle.Result.GetComponent<T>();
+            if (comp == null)
+            {
+                MyLog.LogError($"프리팹에 {typeof(T).Name} 컴포넌트가 없습니다: {handle.Result.name}");
+                Addressables.Release(handle);
+                return null;
+            }
+
+            handles[key] = handle; // 나중에 Release 하기 위해 저장
+            return comp;
+        }
+
+        var h = Addressables.LoadAssetAsync<T>(assetRef);
+        await h.Task;
+        if (h.Status != AsyncOperationStatus.Succeeded)
+        {
+            Addressables.Release(h);
+            return null;
+        }
+
+        handles[key] = h;
+        return h.Result;
+    }
+    public void Release(AssetReference assetReference)
+    {
+        string key = assetReference.RuntimeKey.ToString();
+        if(handles.TryGetValue(key, out var handle ))
+        {
+            Addressables.Release(handle);
+            handles.Remove(key);
+        }
+    }
 
     private async Task LoadCharacterDataSO()
     {
@@ -85,75 +146,56 @@ public class CharacterManager : MonoBehaviour
             //초기화
             allCharacterSOList.Add(characterDataSO);
             allCharacterSODict.Add(characterDataSO.CharacterId, characterDataSO);
-            characterDataSO.CharacterPrefab.Init_Preload();
 
-            //ToDo. 추후 DB에서 현재 플레이어가 가지고있는 캐릭터 목록으로 바꿔서 처리하기 (지금은 그냥 전체 다 넣음) 
+            //캐릭터 프리팹을 불러와야함.
+            Character characterOrigin = await AddressableLoadFunc<Character>(characterDataSO.CharacterReferencePrefab);
+
+            //하나 프리팹을 만들고. 그것을 미리 생성해두자. 
+            Character character = Instantiate(characterOrigin, this.transform);
+            character.CharacterActive(false);
+            unSpawnedCharacterList.Add(character);
+            //캐릭터 초기화 및 풀 생성
+            character.SetCharacterSO(characterDataSO);
+            await character.Init();
+            character.MakeWeaponProjectilePool();
+            //리스트와 딕셔너리에 넣기
             haveCharacterSOList.Add(characterDataSO);
             haveCharacterSoDict.Add(characterDataSO.CharacterId, characterDataSO);
-            
         }
     }
 
-    private async Task SetRuntimeCharactersInit()
-    {
-        //TODO. 인게임 진입하면 이 코드 실행해야함
-        //인게임에 선택된 캐릭터들 전용 메서드. 총알 풀과, 어드레서블을 통한 플레이어 DataSO와 플레이어 안의 무기SO를 미리 등록.
-        //리스트로 일단 하나씩 가져온다.
-        runtimeCharacterPrefabList.Clear();
-        foreach(string id in selectedCharacterList)
-        {
-            if (!allCharacterSODict.ContainsKey(id))
-            {
-                MyLog.LogError("찾으려는 캐릭터 ID가 없음. DB와 SO 확인 필요");
-                continue;
-            }
-            CharacterDataSO characterSO = allCharacterSODict[id];
-            runtimeCharacterPrefabList.Add(characterSO);
-        }
-
-        foreach(var characterSO in runtimeCharacterPrefabList)
-        {
-            characterSO.CharacterPrefab.MakeWeaponProjectilePool();
-        }
-    }
-
-    
-
-    //public async void SpawnCharacter(Character characterPrefab)
-    public async void SpawnCharacter(CharacterDataSO characterSO)
+    public async void SpawnCharacter(Character characterPrefab)
     {
         Transform spawnTrf = characterSpawnPosition.GetTransform(spawnedCharacterList.Count);
-        Character characterObj =  Instantiate(characterSO.CharacterPrefab, spawnTrf.position, spawnTrf.rotation, this.transform); //플레이어는 그냥 생성해주자
-        spawnedCharacterList.Add(characterObj);
-        characterObj.SetCharacterSO(characterSO);
-        await characterObj.Init();
-        OnCharacterSpawnEnd?.Invoke(characterObj);
+        //Character characterPrefab = await AddressableLoadFunc(characterSO.CharacterRefecrencePrefab);
+
+        //Character characterObj =  Instantiate(characterPrefab, spawnTrf.position, spawnTrf.rotation, this.transform); //플레이어는 그냥 생성해주자
+        foreach( var item in unSpawnedCharacterList)
+        {
+            if(item.CharacterDataSO.CharacterId == characterPrefab.CharacterDataSO.CharacterId)
+            {
+                Character characterObj = item;
+                characterObj.transform.position = spawnTrf.position;
+                characterObj.transform.rotation = spawnTrf.rotation;
+                characterObj.CharacterActive(true);
+                unSpawnedCharacterList.Remove(characterObj);
+                spawnedCharacterList.Add(characterObj);
+                OnCharacterSpawnEnd?.Invoke(characterObj);
+                break;
+            }
+        }
     }
-    public List<CharacterDataSO> GetHaveAugmentCharacterList()
+    public List<Character> GetHaveAugmentCharacterList()
     {
         return spawnedCharacterList
-            .FindAll(n => n.HaveRemainWeaponAugment())
-            .ConvertAll(n => n.CharacterDataSO);
+            .FindAll(n => n.HaveRemainWeaponAugment());
     }
-    public List<CharacterDataSO> GetRemainCharacter()
+    public List<Character> GetRemainCharacter()
     {
-        List<CharacterDataSO> remainCharacterList = new List<CharacterDataSO>();
-
-        foreach(var curCharacterSO in runtimeCharacterPrefabList)
+        List<Character> remainCharacterList = new List<Character>();
+        foreach(var item in unSpawnedCharacterList)
         {
-            bool isSame = false;
-            foreach(var spawnedCharacter in spawnedCharacterList)
-            {
-                if(curCharacterSO == spawnedCharacter.CharacterDataSO)
-                {
-                    isSame = true;
-                    break;
-                }
-            }
-            if(!isSame)
-            {
-                remainCharacterList.Add(curCharacterSO);
-            }
+            remainCharacterList.Add(item);
         }
         return remainCharacterList;
     }

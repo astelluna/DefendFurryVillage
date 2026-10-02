@@ -11,7 +11,7 @@ public abstract class WeaponExecuteSO : ScriptableObject
         while (true)
         {
             int attackCount = weapon.runtimeData.plusAttackCount;
-            List<Transform> enemyTargetList = TargetManager.Instance.GetEnemyTarget(weapon.weaponDataSO.baseRange, attackCount);
+            List<Transform> enemyTargetList = TargetManager.Instance.GetEnemyTarget(weapon.WeaponDataSO.baseRange, attackCount);
             //무기 쿨타임이 지났고, 타겟을 확인헀다면 발사
             if (Time.time >= weapon.nextAttackTime && enemyTargetList != null && enemyTargetList.Count > 0)
             {

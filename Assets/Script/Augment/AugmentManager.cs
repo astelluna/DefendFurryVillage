@@ -13,8 +13,9 @@ public class AugmentManager : MonoBehaviour
     List<WeaponAugment> selectedAugmentList = new List<WeaponAugment>();
     //List<Character> haveAugmentCharacterList = new List<Character>();
     //List<Character> selectedCharacterList = new List<Character>();
-    List<CharacterDataSO> haveAugmentCharacterList = new List<CharacterDataSO>();
-    List<CharacterDataSO> selectedCharacterList = new List<CharacterDataSO>();
+
+    List<Character> haveAugmentCharacterList = new List<Character>();
+    List<Character> selectedCharacterList = new List<Character>();
 
     private bool isShowingPanel = false; //현재 패널 띄워져있는지 플래그
     int maxShowCount;
@@ -41,7 +42,7 @@ public class AugmentManager : MonoBehaviour
     private void Start()
     {
         //시작하면 1번 띄우자 패널을 
-        SetAndShowAugmentUI(1);
+        //SetAndShowAugmentUI(1);
     }
 
     private void OnDestroy()
@@ -63,7 +64,8 @@ public class AugmentManager : MonoBehaviour
         ShowAugmentUI();
     }
 
-    private bool NeedCharacterSpawn(List<CharacterDataSO> remainCharacters)
+    //private bool NeedCharacterSpawn(List<CharacterDataSO> remainCharacters)
+    private bool NeedCharacterSpawn(List<Character> remainCharacters)
     {
         if (remainCharacters.Count == 0) return false;
         if (!CharacterManager.Instance.HaveCharacter()) return true;
@@ -85,18 +87,26 @@ public class AugmentManager : MonoBehaviour
         ClearSelectCharacterList();
 
         //미리 남은 플레이어 항목 리스트를 받아둠.
-        List<CharacterDataSO> remainCharacterList = CharacterManager.Instance.GetRemainCharacter();
-        for(int i=0; i< Total_Augment_Slot; i++)
+        //List<CharacterDataSO> remainCharacterList = CharacterManager.Instance.GetRemainCharacter();
+        List<Character> remainCharacterList = CharacterManager.Instance.GetRemainCharacter();
+        for (int i=0; i< Total_Augment_Slot; i++)
         {
             if(NeedCharacterSpawn(remainCharacterList))
             {
                 //플레이어중 한명을 선택해서 패널에 띄우도록
                 int randIndex = Random.Range(0, remainCharacterList.Count);
-                CharacterDataSO selCharacterSO = remainCharacterList[randIndex];
-                remainCharacterList.Remove(selCharacterSO);
-                augmentPanel.AddData(selCharacterSO, i);
-                selectedCharacterList.Add(selCharacterSO);
-                selCharacterSO.CharacterPrefab.OnStartCharacterSpawn += OnCharacterSelected;
+
+                Character selCharacter = remainCharacterList[randIndex];
+                remainCharacterList.Remove(selCharacter);
+                augmentPanel.AddData(selCharacter, i);
+                selectedCharacterList.Add(selCharacter);
+                selCharacter.OnStartCharacterSpawn += OnCharacterSelected;
+
+                //CharacterDataSO selCharacterSO = remainCharacterList[randIndex];
+                //remainCharacterList.Remove(selCharacterSO);
+                //augmentPanel.AddData(selCharacterSO, i);
+                //selectedCharacterList.Add(selCharacterSO);
+                //selCharacterSO.CharacterPrefab.OnStartCharacterSpawn += OnCharacterSelected;
             }
             else
             {
@@ -115,11 +125,12 @@ public class AugmentManager : MonoBehaviour
                     MyLog.LogWarning("더이상 증강이 남아있는 플레이어가 없습니다");
                     break;
                 }
-                int CharacterNo = Random.Range(0, haveAugmentCharacterList.Count);
-                CharacterDataSO characterSO = haveAugmentCharacterList[CharacterNo];
+                int characterNo = Random.Range(0, haveAugmentCharacterList.Count);
+                //CharacterDataSO characterSO = haveAugmentCharacterList[CharacterNo];
+                Character character = haveAugmentCharacterList[characterNo];
 
-                WeaponAugment data = characterSO.CharacterPrefab.GetAugment(); //정보를 하나 가져와보자.
-                augmentPanel.AddData(data, characterSO.CharacterPortraitSprite, i); //여기서 알아서 i번째 UI에 UI를 넣도록 함.
+                WeaponAugment data = character.GetAugment(); //정보를 하나 가져와보자.
+                augmentPanel.AddData(data, character.CharacterDataSO.CharacterPortraitSprite, i); //여기서 알아서 i번째 UI에 UI를 넣도록 함.
 
                 //이벤트 등록
                 selectedAugmentList.Add(data);
@@ -134,7 +145,7 @@ public class AugmentManager : MonoBehaviour
             augmentPanel.Show();
         }
     }
-    public void OnCharacterSelected(CharacterDataSO characterSO)
+    public void OnCharacterSelected(Character character)
     {
         //선택된 플레이어  소환. 그리고 WeaponAugment도 클리어시키자;
         MyLog.Log("이벤트 발동 - 플레이어");
@@ -145,7 +156,7 @@ public class AugmentManager : MonoBehaviour
         //3단계: 플레이어 소환이 끝났다면? 이제 여기서 아래의 것들을 실행하면 됨
 
         WeaponAugmentProcess(null); //증강 초기화. 다 비워준다.
-        CharacterProcess(characterSO); //플레이어 처리 
+        CharacterProcess(character); //플레이어 처리 
         CheckPanelClose();
         //이거 끝나고 CharacterManager에서 Spanwn 끝나면 OnCharacterSpawnCompleted 이벤트를 호출해줘서 다시 패널 띄워야하는지 체크할거임
     }
@@ -182,11 +193,12 @@ public class AugmentManager : MonoBehaviour
         }
         ClearSelectAugmentList();
     }
-    private void CharacterProcess(CharacterDataSO characterSO)
+    private void CharacterProcess(Character character)
     {
         foreach (var curCharacter in selectedCharacterList)
         {
-            if (curCharacter == characterSO.CharacterPrefab)
+
+            if (curCharacter == character)
             {
                 //플레이어 소환 요청
                 CharacterManager.Instance.SpawnCharacter(curCharacter);
@@ -217,7 +229,7 @@ public class AugmentManager : MonoBehaviour
         {
             if(item != null)
             {
-                item.CharacterPrefab.OnStartCharacterSpawn -= OnCharacterSelected;
+                item.OnStartCharacterSpawn -= OnCharacterSelected;
             }
         }
         selectedCharacterList.Clear();

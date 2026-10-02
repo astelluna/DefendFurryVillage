@@ -45,34 +45,30 @@ public class Weapon : MonoBehaviour
     protected float shootDelay = 0.5f;
     public WaitForSeconds continuousFireDelay { get; private set; }
 
-    //총알 프리팹 종류
-    [field: SerializeField] public Projectile ProjectilePrefab { get; private set; } //총알 종류
+
 
     //무기 정보들
     //[field: SerializeField] public Sprite WeaponIcon { get; protected set; }
+    public WeaponDataSO WeaponDataSO { get; private set; }
 
-    [SerializeField] AssetReferenceT<WeaponDataSO> weaponDataAddressable;
-    Task<WeaponDataSO> weaponDataTask;
-    //AsyncOperationHandle<WeaponDataSO> weaponDataHandle;
-    public WeaponDataSO weaponDataSO { get; private set; }
-    [field: SerializeField] public WeaponExecuteSO weaponExecuteSO { get; private set; }
     protected Coroutine shootCor;
     
     public float nextAttackTime { get; private set; }
 
     protected CharacterDataSO characterData;
 
-    //현재 적용중인 증강 리스트
-    protected List<AugmentDataSO> augmentDataList = new List<AugmentDataSO>();
-    //기본적으로 적용되는 증강 리스트
-    [SerializeField] protected List<AugmentDataSO> basicAugmentDataSOList = new List<AugmentDataSO>();
-    //레벨업 시 선택할수 있는 증강 리스트 (랜덤으로 하나 선택됨)
-    [SerializeField] protected List<AugmentDataSO> existUpgradeAugmentDataList = new List<AugmentDataSO>();
+    //증강 선택할때마다 아래 3개 리스트의 정보가 바뀜
+    protected List<AugmentDataSO> augmentDataList = new List<AugmentDataSO>(); //현재 적용중인 증강 리스트
+
     protected List<AugmentDataSO> unUsedUpgradeAugmentDataList = new List<AugmentDataSO>(); //증강 업그레이드 선택하면 여기에 들어옴
     protected List<AugmentDataSO> usedUpgradeAugmentDataList = new List<AugmentDataSO>(); //증강 업그레이드 선택하면 여기에 들어옴
 
     //무기 발사했다는 이벤트
     public event Action OnWeaponShoot;
+
+    //플레이어가 가지고있는 Weapon프리팹(어드레서블로 되어있고 캐릭터 불러올때 프리팹도 불러와서 설정)
+    public Projectile ProjectilePrefab { get; private set; }
+    //Projectile specialWeaponProjectile;
 
     public void InvokeWeaponShootEvent()
     {
@@ -81,17 +77,19 @@ public class Weapon : MonoBehaviour
 
     public async Task Init()
     {
-        unUsedUpgradeAugmentDataList = new List<AugmentDataSO>(existUpgradeAugmentDataList);
+        unUsedUpgradeAugmentDataList = new List<AugmentDataSO>(WeaponDataSO.ExistUpgradeAugmentDataList);
 
-        weaponDataTask = AddressablePreloadManager.Instance.GetAsync<WeaponDataSO>(weaponDataAddressable);
-        weaponDataSO = await weaponDataTask;
+
+
+        //weaponDataTask = AddressablePreloadManager.Instance.GetAsync<WeaponDataSO>(weaponDataAddressable);
+        //weaponDataSO = await weaponDataTask;
     }
     public void StartWeapon()
     {
         SetWeaponCoolTime();
         if (shootCor == null)
         {
-            shootCor = StartCoroutine(weaponExecuteSO.ShootWeapon(this));
+            shootCor = StartCoroutine(WeaponDataSO.weaponExecuteSO.ShootWeapon(this));
         }
     }
 
@@ -107,18 +105,18 @@ public class Weapon : MonoBehaviour
     private async Task LoadAddressable_basic()
     {
         //프리로드 하는 방식이 아니라 수동 로드할때는 이렇게 하자
-        if (weaponDataSO != null) return;
-        AsyncOperationHandle<WeaponDataSO> weaponDataHandle = Addressables.LoadAssetAsync<WeaponDataSO>(weaponDataAddressable);
+        //if (weaponDataSO != null) return;
+        //AsyncOperationHandle<WeaponDataSO> weaponDataHandle = Addressables.LoadAssetAsync<WeaponDataSO>(weaponDataAddressable);
         //weaponDataSO = weaponDataHandle.WaitForCompletion();
-        weaponDataSO = await weaponDataHandle.Task;
-        Addressables.Release(weaponDataHandle);
+        //weaponDataSO = await weaponDataHandle.Task;
+        //Addressables.Release(weaponDataHandle);
     }
 
     private async Task LoadAddressableㅁㄴㅁㄶㅁㄶㄴ()
     {
         //어드레서블 프리로드한 곳에서 어드레서블 정보를 가져온다.
-        if (weaponDataSO != null) return;
-        weaponDataSO = await AddressablePreloadManager.Instance.GetAsync<WeaponDataSO>(weaponDataAddressable);
+        //if (weaponDataSO != null) return;
+        //weaponDataSO = await AddressablePreloadManager.Instance.GetAsync<WeaponDataSO>(weaponDataAddressable);
     }
 
     //증강이 선택되면 현재 무기의 런타임 정보를 갱신한다.
@@ -134,7 +132,7 @@ public class Weapon : MonoBehaviour
         //증강을 basicAugmentDataSOList + usedUpgradeAugmentDataList로 변경해야함.
         augmentDataList.Clear();
         augmentSpecialDataSOList.Clear();
-        foreach (var item in basicAugmentDataSOList)
+        foreach (var item in WeaponDataSO.BasicAugmentDataSOList)
         {
             augmentDataList.Add(item);
         }
@@ -157,8 +155,8 @@ public class Weapon : MonoBehaviour
         }
 
         //runtimeData = new WeaponRuntimeData();
-        runtimeData.attackdamage = characterData.attack + weaponDataSO.baseDamage + (int)(weaponDataSO.baseDamage * damagePercent);
-        runtimeData.attackRate = weaponDataSO.baseAttackRate + (weaponDataSO.baseAttackRate * ratePercent);
+        runtimeData.attackdamage = characterData.attack + WeaponDataSO.baseDamage + (int)(WeaponDataSO.baseDamage * damagePercent);
+        runtimeData.attackRate = WeaponDataSO.baseAttackRate + (WeaponDataSO.baseAttackRate * ratePercent);
         runtimeData.bulletScale = 1f + (1f * bulletSizePercent);
         runtimeData.plusAttackCount = attackCount;
         runtimeData.maxPierce = 1 + pierceCount;
@@ -192,17 +190,20 @@ public class Weapon : MonoBehaviour
         unUsedUpgradeAugmentDataList.Add(augment);
         usedUpgradeAugmentDataList.Remove(augment);
     }
-    public void SetWeaponInfo(CharacterDataSO ChaData)
+    public void SetWeaponInfo(CharacterDataSO ChaData, WeaponDataSO weaponDataSO, Projectile projectile)
     {
-        continuousFireDelay = new WaitForSeconds(shootDelay);
+        WeaponDataSO = weaponDataSO;
         characterData = ChaData;
+        continuousFireDelay = new WaitForSeconds(shootDelay);
+        ProjectilePrefab = projectile;
+        unUsedUpgradeAugmentDataList = new List<AugmentDataSO>(WeaponDataSO.ExistUpgradeAugmentDataList);
         UpdateWeaponData();
         
     }
 
     public void SetWeaponCoolTime()
     {
-        nextAttackTime = Time.time + weaponDataSO.baseAttackRate;
+        nextAttackTime = Time.time + WeaponDataSO.baseAttackRate;
     }
 
     //무기 공격 동작 코루틴은 자식이 알아서 하도록 하자.

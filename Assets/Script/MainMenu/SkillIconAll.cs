@@ -7,7 +7,7 @@ public class SkillIconAll : MonoBehaviour
 
     public void SetIcon(CharacterDataSO characterDataSO)
     {
-        basicSkillIcon.SetIconInfo(characterDataSO.CharacterPrefab.GetBasicWeaponIcon(), characterDataSO.CharacterPrefab.GetBasicWeaponDesc());
-        specialSkillIcon.SetIconInfo(characterDataSO.CharacterPrefab.GetSpecialWeaponIcon(), characterDataSO.CharacterPrefab.GetSpecialWeaponDesc());
+        basicSkillIcon.SetIconInfo(characterDataSO.BasicWeaponDataSO.WeaponIcon, characterDataSO.BasicWeaponDataSO.WeaponDescription);
+        specialSkillIcon.SetIconInfo(characterDataSO.SpecialWeaponDataSO.WeaponIcon, characterDataSO.SpecialWeaponDataSO.WeaponDescription);
     }
 }

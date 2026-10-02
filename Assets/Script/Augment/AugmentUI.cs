@@ -10,7 +10,8 @@ public class AugmentUI : MonoBehaviour
     [SerializeField] Button augmentButton;
 
     WeaponAugment weaponAugment;
-    CharacterDataSO characterSO;
+    //CharacterDataSO characterSO;
+    Character characterPrefab;
 
     private void Awake()
     {
@@ -27,9 +28,9 @@ public class AugmentUI : MonoBehaviour
         {
             weaponAugment.SelectedEventInvoke(weaponAugment);
         }
-        else if(characterSO != null)
+        else if(characterPrefab != null)
         {
-            characterSO.CharacterPrefab.CharacterSpawnEventInvoke();
+            characterPrefab.CharacterSpawnEventInvoke();
         }
     }
 
@@ -37,19 +38,20 @@ public class AugmentUI : MonoBehaviour
     {
         weaponAugment = augment;
         characterImage.sprite = charcterSprite;
-        iconImage.sprite = weaponAugment.weapon.weaponDataSO.WeaponIcon;
+        iconImage.sprite = weaponAugment.weapon.WeaponDataSO.WeaponIcon;
         descriptionText.text = weaponAugment.dataSO.GetDataDescription();
     }
-    public void SetData(CharacterDataSO characterData)
+    public void SetData(Character character)
     {
-        characterSO = characterData;
-        characterImage.sprite = characterSO.CharacterPortraitSprite;
-        iconImage.sprite = characterSO.CharacterPrefab.GetSpecialWeaponIcon();
-        descriptionText.text = characterSO.CharacterPrefab.GetSpecialWeaponDesc();
+        characterPrefab = character;
+        characterImage.sprite = characterPrefab.CharacterDataSO.CharacterPortraitSprite;
+        iconImage.sprite = characterPrefab.CharacterDataSO.SpecialWeaponDataSO.WeaponIcon;
+        descriptionText.text = characterPrefab.CharacterDataSO.SpecialWeaponDataSO.WeaponDescription;
+
     }
     public void Init()
     {
         weaponAugment = null;
-        characterSO = null;
+        characterPrefab = null;
     }
 }

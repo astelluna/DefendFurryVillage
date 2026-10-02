@@ -24,10 +24,12 @@ public class Character : MonoBehaviour
     [SerializeField] Weapon basicWeapon;
     [SerializeField] Weapon specialWeapon;
 
+
+
     //캐릭터의 초상화 sprite 
     //[field: SerializeField] public Sprite Portrait { get; private set; }
 
-    public event Action<CharacterDataSO> OnStartCharacterSpawn;
+    public event Action<Character> OnStartCharacterSpawn;
 
     //애니메이션
     [SerializeField] CharacterAnimation characterAnimation;
@@ -36,6 +38,8 @@ public class Character : MonoBehaviour
     {
         basicWeapon.OnWeaponShoot += characterAnimation.PlayAttackBasic;
         specialWeapon.OnWeaponShoot += characterAnimation.PlayAttackSpecial;
+
+        //WeaponAttackStart();
     }
     private void OnDestroy()
     {
@@ -45,30 +49,25 @@ public class Character : MonoBehaviour
 
     private async Task Preload_Data()
     {
-        //if (characterDataSO == null)
-        //{
-        //    await LoadAddressable();
-        //}
-        await basicWeapon.Init();
-        await specialWeapon.Init();
-        basicWeapon.SetWeaponInfo(this.CharacterDataSO);
-        specialWeapon.SetWeaponInfo(this.CharacterDataSO);
+        //무기 데이터의 총알 프리팹 불러오기 
+        var basicTask = CharacterManager.Instance.AddressableLoadFunc<Projectile>(CharacterDataSO.BasicWeaponDataSO.ProjectileReferencePrefab);
+        var specialTask = CharacterManager.Instance.AddressableLoadFunc<Projectile>(CharacterDataSO.SpecialWeaponDataSO.ProjectileReferencePrefab);
+        await Task.WhenAll(basicTask, specialTask);
+        Projectile basicWeaponProjectile = basicTask.Result;
+        Projectile specialWeaponProjectile = specialTask.Result;
+        //무기 데이터 저장
+        basicWeapon.SetWeaponInfo(this.CharacterDataSO, this.CharacterDataSO.BasicWeaponDataSO, basicWeaponProjectile);
+        specialWeapon.SetWeaponInfo(this.CharacterDataSO, this.CharacterDataSO.SpecialWeaponDataSO, specialWeaponProjectile);
     }
     public void SetCharacterSO(CharacterDataSO dataSO)
     {
         CharacterDataSO = dataSO;
     }
-    public async Task Init_Preload()
-    {
-        
-        //원본 프리팹에서 어드레서블로 되어있어서 정보만 Load하기 위한 메서드
-        await Preload_Data();
-    }
     public async Task Init()
     {
         //실제 플레이어 소환되고 처리해야할 Init 동작
         await Preload_Data();
-        WeaponAttackStart();
+        
     }
     public void WeaponAttackStart()
     {
@@ -77,20 +76,10 @@ public class Character : MonoBehaviour
         specialWeapon.StartWeapon();
     }
 
-    public async Task LoadAddressable_basic()
-    {
-        //AsyncOperationHandle<CharacterDataSO> characterDataHandle = Addressables.LoadAssetAsync<CharacterDataSO>(characterDataAddressable);
-        //characterDataSO = await characterDataHandle.Task;
-        //Addressables.Release(characterDataHandle); //사용하고 바로 풀어주기 (다른곳에서 안씀)
-    }
-    public async Task LoadAddressable()
-    {
-        //characterDataSO = await AddressablePreloadManager.Instance.GetAsync<CharacterDataSO>(characterDataAddressable);
-    }
-
     public void CharacterSpawnEventInvoke()
     {
-        OnStartCharacterSpawn?.Invoke(CharacterDataSO);
+        
+        OnStartCharacterSpawn?.Invoke(this);
     }
 
     public bool CompareCharacterSame(Character otherCharacter)
@@ -133,27 +122,41 @@ public class Character : MonoBehaviour
         return false;
     }
 
+    public void CharacterActive(bool isActive)
+    {
+        this.gameObject.SetActive(isActive);
+
+        if(isActive)
+        {
+            WeaponAttackStart();
+        }
+    }
 
     #region 리소스 가져오기
     public Sprite GetBasicWeaponIcon()
     {
-        return basicWeapon.weaponDataSO.WeaponIcon;
+        //return basicWeapon.weaponDataSO.WeaponIcon;
+        return null;
     }
     public string GetBasicWeaponDesc()
     {
-        return basicWeapon.weaponDataSO.WeaponDescription;
+        //return basicWeapon.weaponDataSO.WeaponDescription;
+        return null;
     }
     public Sprite GetSpecialWeaponIcon()
     {
-        return specialWeapon.weaponDataSO.WeaponIcon;
+        //return specialWeapon.weaponDataSO.WeaponIcon;
+        return null;
     }
     public string GetSpecialWeaponDesc()
     {
-        return specialWeapon.weaponDataSO.WeaponDescription;
+        //return specialWeapon.weaponDataSO.WeaponDescription;
+        return null;
     }
     public CharacterDataSO GetCharacterDataSO()
     {
-        return CharacterDataSO;
+        //return CharacterDataSO;
+        return null;
     }
     #endregion
 

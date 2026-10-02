@@ -165,11 +165,22 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a0532b36c0da3ad45ae37fc07a4cacba
+    m_Address: Assets/GameData/Characher/Character DataSO_Dog.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a3ae040eb6253ef4382b596de0c18973
     m_Address: Weapon/Augment/Special/New Augment State Effect Burn SO.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac1d897a6c9335d4998149fcb133673a
+    m_Address: Assets/Prefab/Projectile/Bullet_Blue.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b03f93eba77166248a9af0e85d41b585
     m_Address: Weapon/DataSO/BasicGunData.asset
@@ -185,6 +196,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c678d708c9f668045b82850ed7ee812f
     m_Address: Weapon/ExecuteSO/FallingExecuteSO.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cb20d6b0d9ef221429a7572cfdb49eef
+    m_Address: Assets/Prefab/Character/Character_Fox.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
@@ -207,6 +224,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd3cbd05845c1ff4d9029809354530e7
+    m_Address: Assets/Prefab/Character/Character_Falling.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: df576e89de0ec2e41b65797c231e200e
     m_Address: Weapon/DataSO/LaserData.asset
     m_ReadOnly: 0
@@ -225,6 +248,17 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f003a98c35903f3409438966b5dffd55
+    m_Address: Assets/Prefab/Projectile/Bullet_Red.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f4302a321a1a3b0459bcc4256759fb4b
+    m_Address: Character/Character_Dog.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f72be02a9b1c8114a893d0032e6a0882
     m_Address: Weapon/Augment/Data/New Augment Data SO_Delay.asset
     m_ReadOnly: 0
@@ -233,6 +267,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa5fbf8b0b14f0e43aa913e0298e1f32
     m_Address: Weapon/Augment/Special/New Augment State Effect Stun SO.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ff336df504980a546adea7b50af359c5
+    m_Address: Assets/GameData/Characher/CharacherDataSO_Fox.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
