@@ -12,6 +12,10 @@ public class EnemyDataSO : ScriptableObject
     [field: SerializeField] public int experience { get; private set; } = 1;
     [field: SerializeField] public float attackRange { get; private set; } = 0f; //기본0 -> 근접. 아니라면? 원거리 공격 개시
 
+    [Header("몬스터 이미지 및 프리팹")]
+    [field: SerializeField] public Sprite Portrite { get; private set; }
+    [field: SerializeField] public AssetReferenceEnemy EnemyPrefab { get; private set; }
+
     public bool CanRangedAttack()
     {
         if (attackRange > 0) return true;

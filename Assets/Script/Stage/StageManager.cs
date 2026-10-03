@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class StageManager : MonoBehaviour
@@ -22,21 +23,23 @@ public class StageManager : MonoBehaviour
     int remainSpawnCount = 0;
     List<Enemy> aliveEnemyList = new List<Enemy>();
 
+    //선택된 웨이브 몬스터 어드레서블로 다 받아오는거 완료했는지 체크하는 Task
+    Task initWaveAddressableData;
+
     private void Start()
     {
         delay = new WaitForSeconds(spawnTime);
         curWaveIndex = 0;
         RegisterEnemySpawner();
     }
-    private void RegisterEnemySpawner()
+    private async void RegisterEnemySpawner()
     {
-        //Enemy 오브젝트풀에 현재 스테이지 정보로 적을 생성하라고 지시. 이벤트를 통해서 다 설정되면 웨이브가 시작됨
-        HashSet<Enemy> enemyHash = new HashSet<Enemy>();
-        foreach(var item in testStageData.WaveDataList)
+        HashSet<EnemyDataSO> enemyHash = new HashSet<EnemyDataSO>();
+        foreach (var item in testStageData.WaveDataList)
         {
-            foreach(var enemy in item.EnemieList)
+            foreach (var enemy in item.EnemieList)
             {
-                if(!enemyHash.Contains(enemy))
+                if (!enemyHash.Contains(enemy))
                 {
                     enemyHash.Add(enemy);
                 }
@@ -44,7 +47,8 @@ public class StageManager : MonoBehaviour
         }
         //모든 종류를 파악한다음에 EnemySpawner에 위임.
         EnemySpawner.Instance.OnSpawnEnd += WaveStart;
-        EnemySpawner.Instance.MakeEnemy(enemyHash.ToList());
+        await EnemySpawner.Instance.MakeEnemy(enemyHash.ToList());
+
     }
     private void WaveStart()
     {
@@ -90,9 +94,9 @@ public class StageManager : MonoBehaviour
         {
             //오브젝트풀에서 가져오도록 하자.
 
+            //Enemy enemyData = waveData.EnemieList[cnt];
+            EnemyDataSO enemyData = waveData.EnemieList[cnt];
 
-
-            Enemy enemyData = waveData.EnemieList[cnt];
             Enemy enemyObj = EnemySpawner.Instance.GetPrefabByPool(transform, enemyData);
             //Enemy enemyObj =  Instantiate(enemyData, transform);
             float value = Random.Range(0f, 8f);

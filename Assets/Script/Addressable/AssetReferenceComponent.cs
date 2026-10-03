@@ -27,6 +27,7 @@ public class AssetReferenceComponent<T> : AssetReferenceGameObject where T : Com
 }
 
 // 제네릭은 직렬화/드로어 문제가 생길 수 있어서 구체 클래스로 한 번 감싸기
+// 인스펙터에 프리팹을 드래그할 때 특정 컴포넌트(T)가 붙은 프리팹만 받아주는 Addressables 레퍼런스
 [Serializable]
 public class AssetReferenceCharacter : AssetReferenceComponent<Character>
 {
@@ -36,4 +37,9 @@ public class AssetReferenceCharacter : AssetReferenceComponent<Character>
 public class AssetReferenceProjectile : AssetReferenceComponent<Projectile>
 {
     public AssetReferenceProjectile(string guid) : base(guid){}
+}
+[Serializable]
+public class AssetReferenceEnemy : AssetReferenceComponent<Enemy>
+{
+    public AssetReferenceEnemy(string guid) : base(guid){}
 }

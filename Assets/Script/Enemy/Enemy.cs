@@ -75,8 +75,8 @@ public class Enemy : MonoBehaviour
 
     //몬스터 능력치들을 SO로 등록할수있게 
     [SerializeField] AssetReferenceT<EnemyDataSO> enemyData;
-    EnemyDataSO enemyDataSO;
-    AsyncOperationHandle<EnemyDataSO> enemyDataHandle;
+    public EnemyDataSO EnemyDataSO { get; private set; }
+    //AsyncOperationHandle<EnemyDataSO> enemyDataHandle;
 
 
     //int experience;
@@ -103,36 +103,36 @@ public class Enemy : MonoBehaviour
 
     private async void Awake()
     {
-        setAddressableTask = LoadAddressable();
-        await setAddressableTask;
+        //setAddressableTask = LoadAddressable();
+        //await setAddressableTask;
 
 
         modelObject.transform.Rotate(new Vector3(0, 180, 0));
 
         //await LoadAddressable();
     }
-    private void LoadAddressableBasic()
-    {
-        //기본 방식으로 어드레서블 불러오기. (여기선 동기 방식으로 했다)
-        enemyDataHandle = Addressables.LoadAssetAsync<EnemyDataSO>(enemyData);
-        enemyDataSO = enemyDataHandle.WaitForCompletion();
-    }
+    //private void LoadAddressableBasic()
+    //{
+    //    //기본 방식으로 어드레서블 불러오기. (여기선 동기 방식으로 했다)
+    //    enemyDataHandle = Addressables.LoadAssetAsync<EnemyDataSO>(enemyData);
+    //    EnemyDataSO = enemyDataHandle.WaitForCompletion();
+    //}
 
-    private async Task LoadAddressable()
-    {
-        //미리 Preload하고, 불러오기
-        enemyDataSO = await AddressablePreloadManager.Instance.GetAsync<EnemyDataSO>(enemyData);
-        isDataLoaded = true;
-    }
+    //private async Task LoadAddressable()
+    //{
+    //    //미리 Preload하고, 불러오기
+    //    EnemyDataSO = await AddressablePreloadManager.Instance.GetAsync<EnemyDataSO>(enemyData);
+    //    isDataLoaded = true;
+    //}
 
 
-    private void UnLoadAddressable()
-    {
-        if (enemyDataHandle.IsValid())
-        {
-            Addressables.Release(enemyDataHandle);
-        }
-    }
+    //private void UnLoadAddressable()
+    //{
+    //    if (enemyDataHandle.IsValid())
+    //    {
+    //        Addressables.Release(enemyDataHandle);
+    //    }
+    //}
 
     public int GetEnemyAromr()
     {
@@ -153,10 +153,14 @@ public class Enemy : MonoBehaviour
             return false;
         }
     }
-
-    private void Init()
+    public void SetEnemyDataSO(EnemyDataSO data)
     {
-        curHp = enemyDataSO.maxHp;
+        EnemyDataSO = data;
+    }
+
+    public void Init()
+    {
+        curHp = EnemyDataSO.maxHp;
         UpdateEnemyStat();
     }
 
@@ -165,11 +169,11 @@ public class Enemy : MonoBehaviour
         runtimeStat = new EnemyRuntimeStat();
         //기본 데이터와. 런타임 데이터를 합해서 업데이트.
         //베이직으로 기본 셋팅
-        int atk = enemyDataSO.attack;
-        int def = enemyDataSO.defense;
-        float atkRate = enemyDataSO.attackRate;
-        float moveSpeed = enemyDataSO.moveSpeed;
-        float penetration = enemyDataSO.penetration;
+        int atk = EnemyDataSO.attack;
+        int def = EnemyDataSO.defense;
+        float atkRate = EnemyDataSO.attackRate;
+        float moveSpeed = EnemyDataSO.moveSpeed;
+        float penetration = EnemyDataSO.penetration;
         //버프나 디버프는 아직없음. 추후 있으면 추가. 일단 이렇게만 만들어두자.
 
         //설정
@@ -186,13 +190,13 @@ public class Enemy : MonoBehaviour
 
     private async void OnEnable()
     {
-        await setAddressableTask;
+        //await setAddressableTask;
         isStun = false;
         isMove = true;
         attackCor = null;
         exitGraceCor = null;
 
-        Init();
+        //Init();
     }
     private void FixedUpdate()
     {
@@ -217,19 +221,15 @@ public class Enemy : MonoBehaviour
             exitGraceCor = null;
         }
     }
-    private void OnDestroy()
-    {
-        UnLoadAddressable();
-    }
     private void Update()
     {
         //어드레서블 데이터 안채워졌다면 return;
         if (!isDataLoaded) return;
 
-        if (enemyDataSO.CanRangedAttack())
+        if (EnemyDataSO.CanRangedAttack())
         {
             //원거리 공격이 가능하다면 여기에서 처리
-            Collider[] collider = Physics.OverlapSphere(this.transform.position, enemyDataSO.attackRange, TargetManager.Instance.CastleWallLayer);
+            Collider[] collider = Physics.OverlapSphere(this.transform.position, EnemyDataSO.attackRange, TargetManager.Instance.CastleWallLayer);
             if (attackCor == null)
             {
                 //null일때만 등록
@@ -259,7 +259,7 @@ public class Enemy : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //만약 원거리 공격하는 적이라면 공격 체크는 안한다.
-        if (enemyDataSO.CanRangedAttack()) return;
+        if (EnemyDataSO.CanRangedAttack()) return;
 
         AttackRegister(other);
     }
@@ -344,7 +344,7 @@ public class Enemy : MonoBehaviour
     private void Dead()
     {
         MyLog.Log("사망처리");
-        LevelUpManager.Instance.GetExperience(enemyDataSO.experience);
+        LevelUpManager.Instance.GetExperience(EnemyDataSO.experience);
         OnEnemyDead?.Invoke(this);
         enemyPool.ReturnObject(this);
         //Destroy(this.gameObject);

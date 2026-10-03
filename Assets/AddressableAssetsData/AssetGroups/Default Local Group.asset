@@ -39,6 +39,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 16992d3a229a39641865545c79e36a8b
+    m_Address: Assets/Prefab/Projectile/Laser.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1df4d1f490c9cfd46b6dc4527f80aeba
     m_Address: Weapon/Augment/Data/New Augment Data SO_SpreadProjectile.asset
     m_ReadOnly: 0
@@ -63,8 +69,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 33630871dec1a1740b31c74420d5cd1d
+    m_Address: Assets/Prefab/Projectile/Falling.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3738ee7248c21104c8c232637a338d4a
     m_Address: Weapon/Augment/Special/New Augment Special Delay Damage SO.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b2826e615640d3408071623896c2eb9
+    m_Address: Assets/Prefab/Enemy/Enemy_MoveSpeed.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
@@ -83,6 +101,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 46f09c2ded11ed34783afa69be63d9d6
     m_Address: Weapon/Augment/Special/New Augment Special Magnet SO.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ed091f2c66d84448ae1edf9a0ba6290
+    m_Address: Assets/Prefab/Enemy/Enemy_Armor.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
@@ -125,6 +149,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6a37eddf7e8e02844aa5ddcfa1e2d9df
     m_Address: Weapon/Augment/Data/New Augment Data SO_KnockBack.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6e20d878aec1ae4469de2e976677196e
+    m_Address: Assets/Prefab/Enemy/Enemy_Boss.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
@@ -180,10 +210,17 @@ MonoBehaviour:
   - m_GUID: ac1d897a6c9335d4998149fcb133673a
     m_Address: Assets/Prefab/Projectile/Bullet_Blue.prefab
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b03f93eba77166248a9af0e85d41b585
     m_Address: Weapon/DataSO/BasicGunData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b804a3dcad4af7442a040e8ce089b33b
+    m_Address: Assets/Prefab/Enemy/Enemy_Basic.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
@@ -214,6 +251,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d24d07f40bac9b4408d68e690d7ee31d
     m_Address: Weapon/ExecuteSO/BasicGunExecuteSO.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d5926bd5eaca8f8488fa68752c0605a0
+    m_Address: Assets/Prefab/Enemy/Enemy_HP.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
@@ -251,7 +294,8 @@ MonoBehaviour:
   - m_GUID: f003a98c35903f3409438966b5dffd55
     m_Address: Assets/Prefab/Projectile/Bullet_Red.prefab
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f4302a321a1a3b0459bcc4256759fb4b
     m_Address: Character/Character_Dog.prefab
