@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class StageManager : MonoBehaviour
+public class StageManager : Singleton<StageManager>
 {
     //어떤 스테이지를 선택하면 해당 스테이지의 정보대로 적을 소환한다. -> 일단 직렬화로 테스트 
     [SerializeField] StageDataSO testStageData;
@@ -24,15 +24,20 @@ public class StageManager : MonoBehaviour
     List<Enemy> aliveEnemyList = new List<Enemy>();
 
     //선택된 웨이브 몬스터 어드레서블로 다 받아오는거 완료했는지 체크하는 Task
-    Task initWaveAddressableData;
+    //private Task stageInitTask;
+    private TaskCompletionSource<bool> initTcs = new TaskCompletionSource<bool>();
+    public Task StageInitTask => initTcs.Task;
+    protected override void OnAwake()
+    {
 
+    }
     private void Start()
     {
         delay = new WaitForSeconds(spawnTime);
         curWaveIndex = 0;
         RegisterEnemySpawner();
     }
-    private async void RegisterEnemySpawner()
+    private async Task RegisterEnemySpawner()
     {
         HashSet<EnemyDataSO> enemyHash = new HashSet<EnemyDataSO>();
         foreach (var item in testStageData.WaveDataList)
@@ -46,15 +51,30 @@ public class StageManager : MonoBehaviour
             }
         }
         //모든 종류를 파악한다음에 EnemySpawner에 위임.
-        EnemySpawner.Instance.OnSpawnEnd += WaveStart;
-        await EnemySpawner.Instance.MakeEnemy(enemyHash.ToList());
+        EnemySpawner.Instance.OnSpawnEnd += StageInitComplete;
 
+        try
+        {
+            await EnemySpawner.Instance.MakeEnemy(enemyHash.ToList());
+            initTcs.SetResult(true);
+        }
+        catch(System.Exception e)
+        {
+            MyLog.LogError($"스테이지 에러 {e}");
+            initTcs.SetException(e);
+        }
     }
-    private void WaveStart()
+
+    private void StageInitComplete()
     {
         EnemySpawner.Instance.OnSpawnEnd -= WaveStart;
+    }
+    public void WaveStart()
+    {
+        //Invoke(nameof(StartWaveDelay_Test),3f);
 
-        Invoke(nameof(StartWaveDelay_Test),3f);
+        curWaveIndex = 0;
+        StartWaveDelay_Test();
         //StartWave(curWaveIndex);
     }
     private void StartWaveDelay_Test()
@@ -152,5 +172,6 @@ public class StageManager : MonoBehaviour
 
         return true;
     }
+
 
 }

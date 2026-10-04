@@ -36,12 +36,12 @@ public class CharacterManager : MonoBehaviour
     [SerializeField] CharacterSpawnPosition characterSpawnPosition;
 
     //외부에서 플레이어 매니저 초기화 작업 끝났는지 확인하는 Task
-    private Task initalizeCharacterTask;
-    public Task InitalizeCharacterTask => initalizeCharacterTask;
+    //private Task initalizeCharacterTask;
+    private readonly TaskCompletionSource<bool> initTcs = new TaskCompletionSource<bool>();
+    public Task InitalizeCharacterTask => initTcs.Task;
 
     //이벤트
     public event Action<Character> OnCharacterSpawnEnd; //플레이어 소환 종료
-    public event Action OnCharacterInitEnd; //초기 캐릭터 초기화 과정 완료.
 
     //SO
     private readonly Dictionary<string, AsyncOperationHandle> handles = new();
@@ -76,11 +76,20 @@ public class CharacterManager : MonoBehaviour
         //Test2 -> 런타임에서 총알을 미리 생성해둔다.
         //initalizeCharacterTask = SetCharactersInit(); // -> 이거 런타임 시작되면 인게임 씬에서 하도록 해야함
 
-    }
-    private void TestDelayTaskStart()
-    {
-        initalizeCharacterTask = LoadCharacterDataSO();
 
+    }
+    private async Task TestDelayTaskStart()
+    {
+        try
+        {
+            await LoadCharacterDataSO();
+            initTcs.TrySetResult(true); 
+        }
+        catch(Exception e)
+        {
+            MyLog.LogError($"캐릭터 초기화 실패:{e}");
+            initTcs.TrySetException(e);
+        }
     }
 
     public async Task<T> AddressableLoadFunc<T>(AssetReference assetRef) where T : UnityEngine.Object

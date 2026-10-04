@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class LoadingPanel : MonoBehaviour
 {
+    //[SerializeField] StageManager 
     public void ShowLoadingPanel()
     {
         this.gameObject.SetActive(true);
@@ -14,15 +15,13 @@ public class LoadingPanel : MonoBehaviour
 
     private async void Start()
     {
-        Invoke(nameof(TestFunc), 5);
-
-    }
-    private async void TestFunc()
-    {
         ShowLoadingPanel();
         await CharacterManager.Instance.InitalizeCharacterTask;
+        await StageManager.Instance.StageInitTask;
         UnShowLoadingPanel();
         AugmentManager.Instance.SetAndShowAugmentUI(1);
+        StageManager.Instance.WaveStart();
+
     }
 
 }
