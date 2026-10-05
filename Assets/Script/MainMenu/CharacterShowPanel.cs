@@ -4,36 +4,45 @@ using UnityEngine;
 public class CharacterShowPanel : MonoBehaviour, IMainMenuPanel
 {
     //패널을 열면 모든 캐릭터에 대해서 버튼으로 프리팹을 하나 생성해준다. 
-    [SerializeField] CharacterInfoButton characterButtonPrefab;
+    //[SerializeField] CharacterInfoButton characterButtonPrefab;
     [SerializeField] Transform makePosition; //스코롤뷰 Content 위치
     [SerializeField] CharacterInfoPanel characterInfoPanel;
 
     List<CharacterInfoButton> characterinfoButtonList = new List<CharacterInfoButton>();
 
-
     private void Start()
     {
         //테스트용 딜레이 시작
-        Invoke(nameof(DelayStart), 10f);
+        //Invoke(nameof(DelayStart), 10f);
     }
     private void OnDestroy()
     {
-        foreach(var item in characterinfoButtonList)
+        Init();
+    }
+    private void OnDisable()
+    {
+        Init();
+    }
+
+    private void Init()
+    {
+        foreach (var item in characterinfoButtonList)
         {
             item.OnCharcterBtnClick -= OnShowCharacterInfoPanel;
+            CharacterInfoButtonSpawner.Instance.ReturnPrefabToPool(item);
         }
         characterinfoButtonList.Clear();
     }
 
-    private void DelayStart()
+    private void MakeAndShowCharacterButton()
     {
         //정보를 가져오기. 
         IReadOnlyList<CharacterDataSO> characterDataSOList = CharacterManager.Instance.AllCharacterSOList;
 
         foreach (CharacterDataSO item in characterDataSOList)
         {
-            //TODO. 추후에 캐릭터 많아지면 이거도 오브젝트풀 해두기
-            CharacterInfoButton buttonPrefab = Instantiate(characterButtonPrefab, makePosition);
+            //CharacterInfoButton buttonPrefab = Instantiate(characterButtonPrefab, makePosition);
+            CharacterInfoButton buttonPrefab = CharacterInfoButtonSpawner.Instance.GetPrefabByPool(makePosition);
             buttonPrefab.SetCharacterData(item);
             buttonPrefab.OnCharcterBtnClick += OnShowCharacterInfoPanel;
             characterinfoButtonList.Add(buttonPrefab);
@@ -47,10 +56,10 @@ public class CharacterShowPanel : MonoBehaviour, IMainMenuPanel
     public void ShowPanel(bool isShow)
     {
         this.gameObject.SetActive(isShow);
-        if (!isShow)
-        {
-            return;
-        }
+        if (!isShow) { return; }
+
+        MakeAndShowCharacterButton();
+
     }
 
 }

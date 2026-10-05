@@ -11,16 +11,6 @@ public class CharacterSelectPanel : MonoBehaviour, IMainMenuPanel
     //선택한 캐릭터를 표시하는 UI매니저
     [SerializeField] CharacterSelectedUIManager characterSelectedUIManager;
 
-    private void Start()
-    {
-        Invoke(nameof(TestDelayFunc), 10f);
-    }
-
-    private void TestDelayFunc()
-    {
-        characterSelectScrollView.CharacterShow(this);
-    }
-
     public void SelectCharacterAndShowInfo(CharacterSelectButton selectButton, CharacterDataSO characterDataSO)
     {
         //캐릭터 정보 표시
@@ -38,9 +28,8 @@ public class CharacterSelectPanel : MonoBehaviour, IMainMenuPanel
     public void ShowPanel(bool isShow)
     {
         this.gameObject.SetActive(isShow);
-        if (!isShow)
-        {
-            return;
-        }
+        if (!isShow){ return; }
+
+        characterSelectScrollView.CharacterShow(this);
     }
 }

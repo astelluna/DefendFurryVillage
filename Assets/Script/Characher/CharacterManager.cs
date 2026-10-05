@@ -7,10 +7,10 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class CharacterManager : MonoBehaviour
+public class CharacterManager : Singleton<CharacterManager>
 {
     //현재 게임안에 어떤 플레이어가 존재하는지에 대한 정보를 모아둔다.
-    public static CharacterManager Instance { get; private set; }
+    //public static CharacterManager Instance { get; private set; }
 
     //모든 플레이어 데이터를 어드레서블로 가지고있고 첫 로드해서 allCharacterSOList에 넣어서 사용
     [SerializeField] List<AssetReferenceT<CharacterDataSO>> characterAddressableSOList = new List<AssetReferenceT<CharacterDataSO>>();
@@ -28,12 +28,14 @@ public class CharacterManager : MonoBehaviour
     List<string> selectedCharacterList = new List<string>();
 
     //런타임중에 소환될수있는 캐릭터, 현재 소환중인 캐릭터 리스트
-    //private List<CharacterDataSO> runtimeCharacterPrefabList = new List<CharacterDataSO>();
+    public bool HasSelectedData => haveCharacterSOList.Count > 0;
+    [Header("!테스트용!: 인게임씬에서 테스트할때만 수동으로 넣고. 이외에는 비워두기")]
+    [SerializeField] List<CharacterDataSO> testSelectedCharacterSOList = new List<CharacterDataSO>();
     private List<Character> unSpawnedCharacterList = new List<Character>();
     private List<Character> spawnedCharacterList = new List<Character>();
 
     //스폰위치 전용 스크립트 
-    [SerializeField] CharacterSpawnPosition characterSpawnPosition;
+    //[SerializeField] CharacterSpawnPosition characterSpawnPosition;
 
     //외부에서 플레이어 매니저 초기화 작업 끝났는지 확인하는 Task
     //private Task initalizeCharacterTask;
@@ -45,24 +47,12 @@ public class CharacterManager : MonoBehaviour
 
     //SO
     private readonly Dictionary<string, AsyncOperationHandle> handles = new();
-    private void Awake()
+
+
+    protected override void OnAwake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-
         
     }
-    private void OnDestroy()
-    {
-        if (Instance == this)
-            Instance = null;
-    }
-
     private void OnEnable()
     {
         //추후에 Awake로 바꿔도될듯
@@ -71,19 +61,38 @@ public class CharacterManager : MonoBehaviour
     }
     private void Start()
     {
-        Invoke(nameof(TestDelayTaskStart), 3f);
+        TestDelayTaskStart();
+        //Invoke(nameof(TestDelayTaskStart), 3f);
 
-        //Test2 -> 런타임에서 총알을 미리 생성해둔다.
-        //initalizeCharacterTask = SetCharactersInit(); // -> 이거 런타임 시작되면 인게임 씬에서 하도록 해야함
-
-
+        //인게임 테스트용.(인게임씬에서 실행하면 테스트용으로 실행한다)
+        ForIngameTestRoom();
     }
+
+    public async Task ForIngameTestRoom()
+    {
+        //인게임에서 테스트룸을 위해 사용
+        await InitalizeCharacterTask;
+        if (HasSelectedData) return;
+#if UNITY_EDITOR
+        if (testSelectedCharacterSOList.Count == 0)
+        {
+            MyLog.LogError("테스트 캐릭터가 비어있습니다. CharacterManager의 testCharacterSOList를 채워주세요.");
+            return;
+        }
+        MyLog.Log("[TestRoom] 로비를 거치지 않아 테스트 캐릭터로 시작합니다.");
+        await SetAndLoadSelectedCharacterData(testSelectedCharacterSOList);
+#else
+    MyLog.LogError("선택된 캐릭터 데이터가 없습니다.");
+#endif
+    }
+
     private async Task TestDelayTaskStart()
     {
         try
         {
-            await LoadCharacterDataSO();
-            initTcs.TrySetResult(true); 
+            await LoadCharacterDataSO_Init();
+            initTcs.TrySetResult(true);
+            MyLog.Log($"캐릭터 정보 설정 완료");
         }
         catch(Exception e)
         {
@@ -141,7 +150,7 @@ public class CharacterManager : MonoBehaviour
         }
     }
 
-    private async Task LoadCharacterDataSO()
+    private async Task LoadCharacterDataSO_Init()
     {
         //어드레서블로 되어있는 캐릭터 데이터들을 계속 불러와본다 
         foreach (var item in characterAddressableSOList)
@@ -156,24 +165,32 @@ public class CharacterManager : MonoBehaviour
             allCharacterSOList.Add(characterDataSO);
             allCharacterSODict.Add(characterDataSO.CharacterId, characterDataSO);
 
+
+        }
+    }
+    public async Task SetAndLoadSelectedCharacterData(List<CharacterDataSO> dataList)
+    {
+        //인게임 전에 이 코드를 실행.
+        foreach(CharacterDataSO characterSO in dataList)
+        {
             //캐릭터 프리팹을 불러와야함.
-            Character characterOrigin = await AddressableLoadFunc<Character>(characterDataSO.CharacterReferencePrefab);
+            Character characterOrigin = await AddressableLoadFunc<Character>(characterSO.CharacterReferencePrefab);
 
             //하나 프리팹을 만들고. 그것을 미리 생성해두자. 
             Character character = Instantiate(characterOrigin, this.transform);
             character.CharacterActive(false);
             unSpawnedCharacterList.Add(character);
             //캐릭터 초기화 및 풀 생성
-            character.SetCharacterSO(characterDataSO);
+            character.SetCharacterSO(characterSO);
             await character.Init();
             character.MakeWeaponProjectilePool();
             //리스트와 딕셔너리에 넣기
-            haveCharacterSOList.Add(characterDataSO);
-            haveCharacterSoDict.Add(characterDataSO.CharacterId, characterDataSO);
+            haveCharacterSOList.Add(characterSO);
+            haveCharacterSoDict.Add(characterSO.CharacterId, characterSO);
         }
     }
 
-    public async void SpawnCharacter(Character characterPrefab)
+    public async void SpawnCharacter(Character characterPrefab, CharacterSpawnPosition characterSpawnPosition)
     {
         Transform spawnTrf = characterSpawnPosition.GetTransform(spawnedCharacterList.Count);
         //Character characterPrefab = await AddressableLoadFunc(characterSO.CharacterRefecrencePrefab);
@@ -213,5 +230,6 @@ public class CharacterManager : MonoBehaviour
         if (spawnedCharacterList.Count == 0) return false;
         return true;
     }
-    
+
+
 }

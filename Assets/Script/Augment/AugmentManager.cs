@@ -8,6 +8,8 @@ public class AugmentManager : MonoBehaviour
 {
     public static AugmentManager Instance { get; private set; }
 
+    [SerializeField] CharacterSpawnPosition characterSpawnPosition;
+
     [SerializeField] AugmentPanel augmentPanel;
 
     List<WeaponAugment> selectedAugmentList = new List<WeaponAugment>();
@@ -201,7 +203,7 @@ public class AugmentManager : MonoBehaviour
             if (curCharacter == character)
             {
                 //플레이어 소환 요청
-                CharacterManager.Instance.SpawnCharacter(curCharacter);
+                CharacterManager.Instance.SpawnCharacter(curCharacter,characterSpawnPosition);
                 break;
             }
         }

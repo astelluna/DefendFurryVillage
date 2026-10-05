@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class LoadingPanel : MonoBehaviour
+public class LoadingPanelInGame : MonoBehaviour
 {
     //[SerializeField] StageManager 
     public void ShowLoadingPanel()
