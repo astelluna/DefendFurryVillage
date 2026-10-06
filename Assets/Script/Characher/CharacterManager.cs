@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -25,7 +24,7 @@ public class CharacterManager : Singleton<CharacterManager>
     Dictionary<string, CharacterDataSO> haveCharacterSoDict = new Dictionary<string, CharacterDataSO>();
 
     //선택한 캐릭터 아이디 목록
-    List<string> selectedCharacterList = new List<string>();
+    List<CharacterDataSO> selectedCharacterList = new List<CharacterDataSO>();
 
     //런타임중에 소환될수있는 캐릭터, 현재 소환중인 캐릭터 리스트
     public bool HasSelectedData => haveCharacterSOList.Count > 0;
@@ -38,9 +37,10 @@ public class CharacterManager : Singleton<CharacterManager>
     //[SerializeField] CharacterSpawnPosition characterSpawnPosition;
 
     //외부에서 플레이어 매니저 초기화 작업 끝났는지 확인하는 Task
-    //private Task initalizeCharacterTask;
     private readonly TaskCompletionSource<bool> initTcs = new TaskCompletionSource<bool>();
     public Task InitalizeCharacterTask => initTcs.Task;
+    private TaskCompletionSource<bool> ingameCharacterLoadTcs = new TaskCompletionSource<bool>();
+    public Task IngameCharacterLoadTask => ingameCharacterLoadTcs.Task;
 
     //이벤트
     public event Action<Character> OnCharacterSpawnEnd; //플레이어 소환 종료
@@ -49,14 +49,14 @@ public class CharacterManager : Singleton<CharacterManager>
     private readonly Dictionary<string, AsyncOperationHandle> handles = new();
 
 
+    public void SetSelectedCharacter(List<CharacterDataSO> characterDataSOList)
+    {
+        selectedCharacterList = characterDataSOList;
+    }
+
+
     protected override void OnAwake()
     {
-        
-    }
-    private void OnEnable()
-    {
-        //추후에 Awake로 바꿔도될듯
-        //Test1 -> 처음 화면에서 캐릭터 데이터 SO를 가져온다.
         
     }
     private void Start()
@@ -76,14 +76,23 @@ public class CharacterManager : Singleton<CharacterManager>
 #if UNITY_EDITOR
         if (testSelectedCharacterSOList.Count == 0)
         {
-            MyLog.LogError("테스트 캐릭터가 비어있습니다. CharacterManager의 testCharacterSOList를 채워주세요.");
+            MyLog.LogError("테스트 모드가 아닌지 확인해주세요. 테스트 캐릭터가 비어있습니다. CharacterManager의 testCharacterSOList를 채워주세요.");
             return;
         }
         MyLog.Log("[TestRoom] 로비를 거치지 않아 테스트 캐릭터로 시작합니다.");
-        await SetAndLoadSelectedCharacterData(testSelectedCharacterSOList);
+        await LoadSelectedCharacter_TestMode();
 #else
     MyLog.LogError("선택된 캐릭터 데이터가 없습니다.");
 #endif
+    }
+
+    private void ClearIngameState()
+    {
+        //TODO. 캐릭터들 만든거 스폰해제해야함. 어드레서블도
+        unSpawnedCharacterList.Clear();
+        spawnedCharacterList.Clear();
+        haveCharacterSOList.Clear();
+        haveCharacterSoDict.Clear();
     }
 
     private async Task TestDelayTaskStart()
@@ -168,11 +177,40 @@ public class CharacterManager : Singleton<CharacterManager>
 
         }
     }
-    public async Task SetAndLoadSelectedCharacterData(List<CharacterDataSO> dataList)
+
+    public async Task LoadSelectedCharacter()
+    {
+        ingameCharacterLoadTcs = new TaskCompletionSource<bool>();
+        TaskCompletionSource<bool> tcs = ingameCharacterLoadTcs; //이렇게 해야 다른곳에서 await한게 아닌 이번에 새로생성된거로 사용함 
+        try
+        {
+            await SetAndLoadSelectedCharacterData(selectedCharacterList);
+            tcs.SetResult(true);
+        }
+        catch(Exception e)
+        {
+            MyLog.LogError($"인게임 캐릭터 로드 실패: {e}");
+            tcs.SetException(e);
+            throw e;
+        }
+    }
+    private async Task LoadSelectedCharacter_TestMode()
+    {
+        MyLog.Log("!테스트 모드로 동작합니다!");
+        selectedCharacterList = testSelectedCharacterSOList;
+        await LoadSelectedCharacter();
+    }
+
+    private async Task SetAndLoadSelectedCharacterData(List<CharacterDataSO> dataList = null)
     {
         //인게임 전에 이 코드를 실행.
         foreach(CharacterDataSO characterSO in dataList)
         {
+            if(characterSO.CharacterReferencePrefab == null)
+            {
+                MyLog.LogError("캐릭터So에 프리팹이 Null 입니다");
+            }
+
             //캐릭터 프리팹을 불러와야함.
             Character characterOrigin = await AddressableLoadFunc<Character>(characterSO.CharacterReferencePrefab);
 
@@ -193,9 +231,6 @@ public class CharacterManager : Singleton<CharacterManager>
     public async void SpawnCharacter(Character characterPrefab, CharacterSpawnPosition characterSpawnPosition)
     {
         Transform spawnTrf = characterSpawnPosition.GetTransform(spawnedCharacterList.Count);
-        //Character characterPrefab = await AddressableLoadFunc(characterSO.CharacterRefecrencePrefab);
-
-        //Character characterObj =  Instantiate(characterPrefab, spawnTrf.position, spawnTrf.rotation, this.transform); //플레이어는 그냥 생성해주자
         foreach( var item in unSpawnedCharacterList)
         {
             if(item.CharacterDataSO.CharacterId == characterPrefab.CharacterDataSO.CharacterId)

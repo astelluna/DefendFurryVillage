@@ -16,7 +16,9 @@ public class LoadingPanelInGame : MonoBehaviour
     private async void Start()
     {
         ShowLoadingPanel();
+        await CharacterManager.Instance.LoadSelectedCharacter();
         await CharacterManager.Instance.InitalizeCharacterTask;
+        await CharacterManager.Instance.IngameCharacterLoadTask;
         await StageManager.Instance.StageInitTask;
         UnShowLoadingPanel();
         AugmentManager.Instance.SetAndShowAugmentUI(1);

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class CharacterSelectPanel : MonoBehaviour, IMainMenuPanel
 {
@@ -10,6 +12,38 @@ public class CharacterSelectPanel : MonoBehaviour, IMainMenuPanel
     [SerializeField] CharacterSelectScrollView characterSelectScrollView;
     //선택한 캐릭터를 표시하는 UI매니저
     [SerializeField] CharacterSelectedUIManager characterSelectedUIManager;
+    [SerializeField] Button selectCompleteButton;
+
+
+    private void Awake()
+    {
+        characterSelectedUIManager.OnChangeSelectedState += OnChangeGameStartButtonState;
+        selectCompleteButton.onClick.AddListener(OnSelectedCompleteButton);
+    }
+    private void OnDestroy()
+    {
+        characterSelectedUIManager.OnChangeSelectedState -= OnChangeGameStartButtonState;
+        selectCompleteButton.onClick.RemoveAllListeners();
+    }
+
+    private void OnChangeGameStartButtonState(bool isInteractable)
+    {
+        selectCompleteButton.interactable = isInteractable;
+    }
+
+    private void OnSelectedCompleteButton()
+    {
+        //선택된 캐릭터가 하나라도 없다면 안함
+        if(!characterSelectedUIManager.HaveSelectedCharacter)  
+        {
+            MyLog.LogError("애초에 버튼이 비활성화 되었어야하는데 뭔가 이상함.");
+            return; 
+        }
+        List<CharacterDataSO> selectedCharacterDataSO = characterSelectedUIManager.GetSelectedCharacter();
+        CharacterManager.Instance.SetSelectedCharacter(selectedCharacterDataSO);
+        SceneManager.LoadScene(SceneController.InGame);
+
+    }
 
     public void SelectCharacterAndShowInfo(CharacterSelectButton selectButton, CharacterDataSO characterDataSO)
     {

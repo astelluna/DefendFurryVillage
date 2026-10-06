@@ -23,6 +23,8 @@ public class MainPanelChanger : MonoBehaviour
 
     IMainMenuPanel[] mainMenuPanelArray;
 
+    IMainMenuPanel curPanel;
+
     private void Awake()
     {
         //메인화면에서 쓰는 패널들 모아둠 (한번에 하나의 패널만 껏다 켜기 위해서)
@@ -34,10 +36,10 @@ public class MainPanelChanger : MonoBehaviour
             characterSelectPanel
         };
         //버튼 이벤트들 추가
-        characterButton.onClick.AddListener(ShowCharacterShowPanel);
-        equipmentButton.onClick.AddListener(ShowEquipmentPanel);
-        mainMenuButton.onClick.AddListener(ShowMainMenuPanel);
-        characterSelectButton.onClick.AddListener(ShowCharacterSelectPanel);
+        characterButton.onClick.AddListener(()=> ChangePanel(characterShowPanel));
+        equipmentButton.onClick.AddListener(()=> ChangePanel(equipmentPanel));
+        mainMenuButton.onClick.AddListener(()=> ChangePanel(mainMenuPanel));
+        characterSelectButton.onClick.AddListener(()=> ChangePanel(characterSelectPanel));
     }
 
     private void OnDestroy()
@@ -60,21 +62,14 @@ public class MainPanelChanger : MonoBehaviour
         }
     }
 
-    private void ShowCharacterShowPanel()
+    private void ChangePanel(IMainMenuPanel selectedPanel)
     {
-        ShowMainMenuPanel(characterShowPanel);
-    }
-    private void ShowEquipmentPanel()
-    {
-        ShowMainMenuPanel(equipmentPanel);
-    }
-    private void ShowMainMenuPanel()
-    {
-        ShowMainMenuPanel(mainMenuPanel);
-    }
-    private void ShowCharacterSelectPanel()
-    {
-        ShowMainMenuPanel(characterSelectPanel);
+        if(curPanel == selectedPanel)
+        {
+            return;
+        }
+        curPanel = selectedPanel;
+        ShowMainMenuPanel(curPanel);
     }
 
 

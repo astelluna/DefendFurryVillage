@@ -17,7 +17,7 @@ MonoBehaviour:
   <CharacterBodySprite>k__BackingField: {fileID: 21300000, guid: 5fbc1606299a4a14499ac7acfee86780, type: 3}
   <CharacterPortraitSprite>k__BackingField: {fileID: 21300000, guid: 3889cc23d6227e04ca1f2f1fdefd2b88, type: 3}
   <CharacterReferencePrefab>k__BackingField:
-    m_AssetGUID: 
+    m_AssetGUID: 9e23dce93975c064bbe2547d0a657fc7
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 

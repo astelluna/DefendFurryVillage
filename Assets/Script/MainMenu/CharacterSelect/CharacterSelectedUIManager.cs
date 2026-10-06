@@ -6,7 +6,21 @@ public class CharacterSelectedUIManager : MonoBehaviour
 {
     [SerializeField] List<CharacterSelectedShowUI> selectedUIList = new List<CharacterSelectedShowUI>();
     Dictionary<CharacterDataSO, CharacterSelectedShowUI> selectedCharacterDict = new Dictionary<CharacterDataSO, CharacterSelectedShowUI>();
-    
+    private bool selectedState = false;
+    public bool HaveSelectedCharacter => selectedCharacterDict.Count > 0;
+
+    public event Action<bool> OnChangeSelectedState; //캐릭터가 선택/비선택 되었을때 외부에 게임시작 버튼을 활성/비활성화 할거임
+
+    public void CheckState()
+    {
+        bool state = HaveSelectedCharacter;
+        if (state != selectedState)
+        {
+            selectedState = state;
+            OnChangeSelectedState?.Invoke(selectedState);
+        }
+    }
+
     public bool FindEmptyIndex(out int num)
     {
         //UI중에서 빈 공간을 찾고 반환한다.
@@ -30,6 +44,7 @@ public class CharacterSelectedUIManager : MonoBehaviour
             selectedUI.CancelUI();
             selectedCharacterDict.Remove(data);
             isSelected = false;
+            CheckState();
             return true;
         }
         //빈자리가 없다면 return;
@@ -41,8 +56,11 @@ public class CharacterSelectedUIManager : MonoBehaviour
         selectedUIList[index].SetUI(data);
         selectedCharacterDict.Add(data, selectedUIList[index]);
         isSelected = true;
+        CheckState();
         return true;
     }
+
+    
 
     public List<CharacterDataSO> GetSelectedCharacter()
     {
