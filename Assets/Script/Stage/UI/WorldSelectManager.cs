@@ -2,41 +2,46 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WorldSelectManager : MonoBehaviour
+public class WorldSelectManager : MonoBehaviour, IMainMenuPanel
 {
     [SerializeField] WorldSelectButton[] worldSelectButtonArray;
     [SerializeField] StageSelectManager[] stageSelectManagerArray; //인덱스만큼 해당 패널이 열릴거임
-    [SerializeField] Button closeButton;
 
+    //캐릭터 선택 패널을 띄운다.
+    [SerializeField] CharacterSelectPanel characterSelectPanel;
     private void Awake()
     {
-        closeButton.onClick.AddListener(CloseButtonClick);
         //유효성 체크
         HashSet<int> worldIndexHash = new HashSet<int>();
-        foreach(var item in worldSelectButtonArray)
+        foreach(WorldSelectButton curWorldButton in worldSelectButtonArray)
         {
-            if(worldIndexHash.Contains(item.WorldIndex))
+            if(worldIndexHash.Contains(curWorldButton.WorldIndex))
             {
-                MyLog.LogError($" {item.name}의 {item.WorldIndex}가 중복되었습니다. 확인해주세요");
+                MyLog.LogError($" {curWorldButton.name}의 {curWorldButton.WorldIndex}가 중복되었습니다. 확인해주세요");
                 continue;
             }
-            worldIndexHash.Add(item.WorldIndex);
-            item.OnWorldSelectButton += ShowStagePanel;
+            worldIndexHash.Add(curWorldButton.WorldIndex);
+            curWorldButton.OnWorldSelectButton += ShowStagePanel;
+        }
+        //스테이지 이벤트 구독 
+        foreach(StageSelectManager curStageManager in stageSelectManagerArray)
+        {
+            curStageManager.StageSelectReqest += ShowCharacterSelectPanel;
         }
 
     }
     private void OnDestroy()
     {
-        closeButton.onClick.RemoveAllListeners();
-        foreach(var item in worldSelectButtonArray)
+        //이벤트 해제
+        foreach(WorldSelectButton curWorldButton in worldSelectButtonArray)
         {
-            item.OnWorldSelectButton -= ShowStagePanel;
+            curWorldButton.OnWorldSelectButton -= ShowStagePanel;
         }
-    }
+        foreach (StageSelectManager curStageManager in stageSelectManagerArray)
+        {
+            curStageManager.StageSelectReqest -= ShowCharacterSelectPanel;
+        }
 
-    private void CloseButtonClick()
-    {
-        this.gameObject.SetActive(false);
     }
 
     private void ShowStagePanel(int num)
@@ -50,5 +55,16 @@ public class WorldSelectManager : MonoBehaviour
         }
 
         stageSelectManagerArray[panelIndex].ShowPanel();
+    }
+    private void ShowCharacterSelectPanel(StageDataSO data)
+    {
+        //스테이지에서 선택한 정보를 통해 캐릭터 선택창을 띄운다.
+        characterSelectPanel.ShowPanelAndSetData(data);
+    }
+
+    public void ShowPanel(bool isShow)
+    {
+        this.gameObject.SetActive(isShow);
+        if (!isShow) { return; }
     }
 }

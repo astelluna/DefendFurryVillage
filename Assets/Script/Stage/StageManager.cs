@@ -7,7 +7,8 @@ using UnityEngine;
 public class StageManager : Singleton<StageManager>
 {
     //어떤 스테이지를 선택하면 해당 스테이지의 정보대로 적을 소환한다. -> 일단 직렬화로 테스트 
-    [SerializeField] StageDataSO testStageData;
+    [Header("!테스트!. 테스트가 필요하면 직접 넣기.")]
+    [SerializeField] StageDataSO stageDataSO;
 
     [SerializeField] float spawnTime = 0.1f;
 
@@ -37,10 +38,19 @@ public class StageManager : Singleton<StageManager>
         curWaveIndex = 0;
         RegisterEnemySpawner();
     }
+    private void OnDestroy()
+    {
+        CancelInvoke();
+        foreach (var item in aliveEnemyList)
+        {
+            if (item != null) { item.OnEnemyDead -= EnemyDead; }
+        }
+        aliveEnemyList.Clear();
+    }
     private async Task RegisterEnemySpawner()
     {
         HashSet<EnemyDataSO> enemyHash = new HashSet<EnemyDataSO>();
-        foreach (var item in testStageData.WaveDataList)
+        foreach (var item in stageDataSO.WaveDataList)
         {
             foreach (var enemy in item.EnemieList)
             {
@@ -77,29 +87,25 @@ public class StageManager : Singleton<StageManager>
         StartWaveDelay_Test();
         //StartWave(curWaveIndex);
     }
+    public void SetStageData(StageDataSO data)
+    {
+        stageDataSO = data;
+    }
     private void StartWaveDelay_Test()
     {
         StartWave(curWaveIndex);
     }
 
-    private void OnDestroy()
-    {
-        CancelInvoke();
-        foreach (var item in aliveEnemyList)
-        {
-            if (item != null) { item.OnEnemyDead -= EnemyDead; }
-        }
-        aliveEnemyList.Clear();
-    }
+
     private void StartWave(int index)
     {
         MyLog.Log($"{index}번째 웨이브 시작");
-        if (index < 0 || index >= testStageData.WaveDataList.Count)
+        if (index < 0 || index >= stageDataSO.WaveDataList.Count)
         {
             MyLog.LogError("웨이브 인덱스가 이상함");
             return;
         }
-        var curWaveData = testStageData.WaveDataList[index];
+        var curWaveData = stageDataSO.WaveDataList[index];
         StartCoroutine(spawnCor(curWaveData,index));
     }
 
@@ -155,7 +161,7 @@ public class StageManager : Singleton<StageManager>
     }
     private void RequestUpdateStagePanel()
     {
-        stagePanel.UpdateStageInfo(curWaveIndex + 1, testStageData.WaveDataList.Count, aliveEnemyList.Count);
+        stagePanel.UpdateStageInfo(curWaveIndex + 1, stageDataSO.WaveDataList.Count, aliveEnemyList.Count);
     }
 
     private void StartNextWaveDelyed()
@@ -168,7 +174,7 @@ public class StageManager : Singleton<StageManager>
     private bool CheckWaveClear()
     {
         if (remainSpawnCount != 0) return false;
-        if (curWaveIndex + 1 >= testStageData.WaveDataList.Count) return false;
+        if (curWaveIndex + 1 >= stageDataSO.WaveDataList.Count) return false;
 
         return true;
     }

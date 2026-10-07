@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,16 +9,29 @@ public class StageInfoPanel : MonoBehaviour
     [SerializeField] TextMeshProUGUI stageName;
     [SerializeField] TextMeshProUGUI stageDesc;
     [SerializeField] Button closeButton;
-    StageDataSO stageDataSO;
+    [SerializeField] Button stageEnterButton;
+    //StageDataSO stageDataSO;
     List<StageInfoEnemyUI> stageInfoEnemyUIList = new List<StageInfoEnemyUI>();
 
 
     [SerializeField] StageInfoEnemyUI stageInfoEnemyUIPrefab;
     [SerializeField] Transform spawnPos;
 
+    public event Action StageEnterRequest;
+
     private void Awake()
     {
         closeButton.onClick.AddListener(CloseButtonClick);
+        stageEnterButton.onClick.AddListener(OnStageEnterButtonClick);
+    }
+    private void OnDestroy()
+    {
+        closeButton.onClick.RemoveAllListeners();
+        stageEnterButton.onClick.RemoveAllListeners();
+    }
+    private void OnStageEnterButtonClick()
+    {
+        StageEnterRequest?.Invoke();
     }
     private void CloseButtonClick()
     {
@@ -27,14 +41,13 @@ public class StageInfoPanel : MonoBehaviour
     public void ShowPanel(StageDataSO data)
     {
         //스테이지 정보 넣기
-        stageDataSO = data;
-        stageName.text = stageDataSO.StageName;
-        stageDesc.text = stageDataSO.StageDesc;
+        stageName.text = data.StageName;
+        stageDesc.text = data.StageDesc;
 
         //몬스터 종류가 어떤게 있는지 찾기 
         HashSet<EnemyDataSO> enemyDataHash = new HashSet<EnemyDataSO>();
         List<EnemyDataSO> enemyList = new List<EnemyDataSO>();
-        foreach (WaveDataSO waveData in stageDataSO.WaveDataList)
+        foreach (WaveDataSO waveData in data.WaveDataList)
         {
             foreach (var enemyData in waveData.EnemieList)
             {

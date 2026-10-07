@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,9 +9,14 @@ public class StageSelectManager : MonoBehaviour
     [SerializeField] StageInfoPanel stageInfoPanel;
     [SerializeField] Button closeButton;
 
+    StageDataSO stageDataSO;
+
+    public event Action<StageDataSO> StageSelectReqest;
+
     private void Awake()
     {
         closeButton.onClick.AddListener(ClosePanel);
+        stageInfoPanel.StageEnterRequest += SelectedStage;
         //스테이지 버튼들에 체크. 중복된것들이 있는지 확인한다
         HashSet<StageDataSO> stageDataSOHash = new HashSet<StageDataSO>();
         foreach(var item in stageSelectButtonArray)
@@ -28,10 +34,18 @@ public class StageSelectManager : MonoBehaviour
             item.OnStageButtonClicked += ShowStageInfo;
         }
     }
+    private void SelectedStage()
+    {
+        //스테이지가 선택되었으니 이 정보를 통해 캐릭터 선택창으로 진입 필요
+        StageSelectReqest?.Invoke(stageDataSO);
+        
+    }
+
 
     private void OnDestroy()
     {
         closeButton.onClick.RemoveAllListeners();
+        stageInfoPanel.StageEnterRequest -= SelectedStage;
         foreach (var item in stageSelectButtonArray)
         {
             item.OnStageButtonClicked -= ShowStageInfo;
@@ -40,6 +54,7 @@ public class StageSelectManager : MonoBehaviour
     private void ShowStageInfo(StageDataSO data)
     {
         //해당 스테이지의 버튼을 누르면 해당 스테이지의 정보로 info를 표시하는 패널을 하나 더 띄운다. 
+        stageDataSO = data;
         stageInfoPanel.ShowPanel(data);
     }
     public void ShowPanel()
