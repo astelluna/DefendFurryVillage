@@ -7,14 +7,14 @@ using UnityEngine;
 public class StageManager : Singleton<StageManager>
 {
     //어떤 스테이지를 선택하면 해당 스테이지의 정보대로 적을 소환한다. -> 일단 직렬화로 테스트 
+
     [Header("!테스트!. 테스트가 필요하면 직접 넣기.")]
     [SerializeField] StageDataSO stageDataSO;
+    
 
     [SerializeField] float spawnTime = 0.1f;
 
-    //스테이지 정보 표시하는 UI
-    [SerializeField] StagePanel stagePanel;
-
+    
     WaitForSeconds delay;
     int curWaveIndex = 0;
     float nextWaveStartTime = 1f;
@@ -26,17 +26,20 @@ public class StageManager : Singleton<StageManager>
 
     //선택된 웨이브 몬스터 어드레서블로 다 받아오는거 완료했는지 체크하는 Task
     //private Task stageInitTask;
-    private TaskCompletionSource<bool> initTcs = new TaskCompletionSource<bool>();
-    public Task StageInitTask => initTcs.Task;
+
+    #region 인게임씬에서 외부에서 전달받아서 정보 SET 하는 필드들
+    StagePanel stagePanel; //스테이지 정보 표시하는 UI
+    StageEnemySpawnPosition stageEnemySpawnPosition; //소환 위치 담아둔 게임오브젝트
+    #endregion
+
     protected override void OnAwake()
     {
-
     }
     private void Start()
     {
         delay = new WaitForSeconds(spawnTime);
         curWaveIndex = 0;
-        RegisterEnemySpawner();
+        
     }
     private void OnDestroy()
     {
@@ -46,6 +49,12 @@ public class StageManager : Singleton<StageManager>
             if (item != null) { item.OnEnemyDead -= EnemyDead; }
         }
         aliveEnemyList.Clear();
+    }
+
+    public async Task InitForIngameScene()
+    {
+        //인게임 씬에 진입했을때 해야하는 행동 정의
+        await RegisterEnemySpawner();
     }
     private async Task RegisterEnemySpawner()
     {
@@ -66,18 +75,16 @@ public class StageManager : Singleton<StageManager>
         try
         {
             await EnemySpawner.Instance.MakeEnemy(enemyHash.ToList());
-            initTcs.SetResult(true);
         }
         catch(System.Exception e)
         {
             MyLog.LogError($"스테이지 에러 {e}");
-            initTcs.SetException(e);
         }
     }
 
     private void StageInitComplete()
     {
-        EnemySpawner.Instance.OnSpawnEnd -= WaveStart;
+        EnemySpawner.Instance.OnSpawnEnd -= StageInitComplete;
     }
     public void WaveStart()
     {
@@ -90,6 +97,12 @@ public class StageManager : Singleton<StageManager>
     public void SetStageData(StageDataSO data)
     {
         stageDataSO = data;
+    }
+    public void SetIngameData(StagePanel panel, StageEnemySpawnPosition  spawnPosition)
+    {
+        //인게임에서 필요한 스테이지 관련 정보를 넣음
+        stagePanel = panel;
+        stageEnemySpawnPosition = spawnPosition;
     }
     private void StartWaveDelay_Test()
     {
@@ -123,9 +136,9 @@ public class StageManager : Singleton<StageManager>
             //Enemy enemyData = waveData.EnemieList[cnt];
             EnemyDataSO enemyData = waveData.EnemieList[cnt];
 
-            Enemy enemyObj = EnemySpawner.Instance.GetPrefabByPool(transform, enemyData);
+            Enemy enemyObj = EnemySpawner.Instance.GetPrefabByPool(stageEnemySpawnPosition.transform, enemyData);
             //Enemy enemyObj =  Instantiate(enemyData, transform);
-            float value = Random.Range(0f, 8f);
+            float value = Random.Range(-3f, 3f);
             Vector3 pos = enemyObj.transform.position;
             pos.x = value;
             enemyObj.transform.position = pos;
