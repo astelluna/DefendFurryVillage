@@ -24,8 +24,7 @@ public class StageManager : Singleton<StageManager>
     int remainSpawnCount = 0;
     List<Enemy> aliveEnemyList = new List<Enemy>();
 
-    //선택된 웨이브 몬스터 어드레서블로 다 받아오는거 완료했는지 체크하는 Task
-    //private Task stageInitTask;
+    public event System.Action StageClearRequest;
 
     #region 인게임씬에서 외부에서 전달받아서 정보 SET 하는 필드들
     StagePanel stagePanel; //스테이지 정보 표시하는 UI
@@ -170,6 +169,12 @@ public class StageManager : Singleton<StageManager>
         {
             Invoke(nameof(StartNextWaveDelyed), nextWaveStartTime);
         }
+        //스테이지가 전부 끝났으면 종료 이벤트 발동(결과창 띄울거임)
+        if(CheckStageClear())
+        {
+            MyLog.Log("스테이지 종료 - 이벤트 발동");
+            StageClearRequest?.Invoke();
+        }
         
     }
     private void RequestUpdateStagePanel()
@@ -190,6 +195,14 @@ public class StageManager : Singleton<StageManager>
         if (curWaveIndex + 1 >= stageDataSO.WaveDataList.Count) return false;
 
         return true;
+    }
+    private bool CheckStageClear()
+    {
+        if(remainSpawnCount == 0 && curWaveIndex + 1 >= stageDataSO.WaveDataList.Count)
+        {
+            return true;
+        }
+        return false;
     }
 
 

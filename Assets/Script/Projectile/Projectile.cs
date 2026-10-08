@@ -32,6 +32,9 @@ public abstract class Projectile : MonoBehaviour
     ObjPool<Projectile> projectilePool;
     public event Action<Projectile> OnProjectileDestroy;
 
+    //총알 - 공격자 정보 
+    AttackerInfo projectileAttackerInfo = new AttackerInfo();
+
     public void SetObjectPool(ObjPool<Projectile> pool)
     {
         projectilePool = pool;
@@ -71,23 +74,18 @@ public abstract class Projectile : MonoBehaviour
         weaponRuntimeData = data;
         //null이면 빈거 넣음
         augmentSpecialDataSOList = (specialDataSOs == null) ? new List<AugmentSpecialDataSO>() : specialDataSOs;
+        //총알 공격자 정보 셋팅
+        projectileAttackerInfo.SetAttackerInfo(weaponRuntimeData.attackdamage, weaponRuntimeData.criticalPercent, weaponRuntimeData.criticalDamgeRate, weaponRuntimeData.armorPenetrate);
         //총알 크기를 weaponRunTimeData만큼 키우거나 그래야한다면 Init에서 하자
         Init();
     }
 
-    protected virtual DamageInfo MakeDamageInfo(Enemy enemy)
-    {
-        int enemyArmor = enemy.GetEnemyAromr();
-        DamageInfo damageInfo = new DamageInfo();
-        damageInfo.SetDamageInfo(weaponRuntimeData.attackdamage, weaponRuntimeData.criticalPercent, weaponRuntimeData.criticalDamgeRate, weaponRuntimeData.armorPenetrate, enemyArmor);
-        return damageInfo;
-    }
-
     protected void ProcessHit(Enemy enemy)
     {
+        //특수  공격을 적에게 적용 (화상, 넉백.. 등등)
         ApplyAugmentHit(enemy);
-        DamageInfo damageInfo = MakeDamageInfo(enemy);
-        int calcDamage = DamageManager.Instance.CalcDamage(damageInfo);
+        //데미지를 적에게 적용
+        int calcDamage = DamageManager.Instance.CalcDamage(projectileAttackerInfo, enemy.EnemyDefenserInfo);
         enemy.TakeDamage(calcDamage);
     }
 

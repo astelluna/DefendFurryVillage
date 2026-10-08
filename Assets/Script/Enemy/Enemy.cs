@@ -37,7 +37,7 @@ public struct EnemyRuntimeStat
 [RequireComponent(typeof(Rigidbody))]
 public class Enemy : MonoBehaviour
 {
-    
+
     //[SerializeField] float speed;
     [SerializeField] Rigidbody rb;
     //상태이상 처리
@@ -54,11 +54,11 @@ public class Enemy : MonoBehaviour
         {
             return _isMove;
         }
-        set 
+        set
         {
             _isMove = value;
             SetAnimationMove();
-        } 
+        }
     }
 
     float curAttackRate;
@@ -91,49 +91,32 @@ public class Enemy : MonoBehaviour
     bool isStun = false;
 
     //데미지 처리를 위한 것
-    DamageInfo damageInfo = new DamageInfo();
+    AttackerInfo damageInfo = new AttackerInfo();
     //성벽 Collider 
     Collider castleCollider;
 
     //어느 오브젝트풀에서 생성되었는가 
     ObjPool<Enemy> enemyPool;
 
-    Task setAddressableTask;
-    bool isDataLoaded = false;
-
-    private async void Awake()
-    {
-        //setAddressableTask = LoadAddressable();
-        //await setAddressableTask;
-
-
-        modelObject.transform.Rotate(new Vector3(0, 180, 0));
-
-        //await LoadAddressable();
+    //피격 정보 
+    private DefenserInfo enemyDefenserInfo;
+    public DefenserInfo EnemyDefenserInfo 
+    { 
+        get
+        {
+            if(enemyDefenserInfo == null)
+            {
+                enemyDefenserInfo = new DefenserInfo();
+                enemyDefenserInfo.SetDefenserInfo(EnemyDataSO.defense);
+            }
+            return enemyDefenserInfo;
+        }
     }
-    //private void LoadAddressableBasic()
-    //{
-    //    //기본 방식으로 어드레서블 불러오기. (여기선 동기 방식으로 했다)
-    //    enemyDataHandle = Addressables.LoadAssetAsync<EnemyDataSO>(enemyData);
-    //    EnemyDataSO = enemyDataHandle.WaitForCompletion();
-    //}
 
-    //private async Task LoadAddressable()
-    //{
-    //    //미리 Preload하고, 불러오기
-    //    EnemyDataSO = await AddressablePreloadManager.Instance.GetAsync<EnemyDataSO>(enemyData);
-    //    isDataLoaded = true;
-    //}
-
-
-    //private void UnLoadAddressable()
-    //{
-    //    if (enemyDataHandle.IsValid())
-    //    {
-    //        Addressables.Release(enemyDataHandle);
-    //    }
-    //}
-
+    private void Awake()
+    {
+        modelObject.transform.Rotate(new Vector3(0, 180, 0));
+    }
     public int GetEnemyAromr()
     {
         return runtimeStat.GetArmorInfo();
@@ -185,7 +168,7 @@ public class Enemy : MonoBehaviour
         }
 
         //데미지 처리를 위한 데미지 set;
-        damageInfo.SetDamageInfo(runtimeStat.attack, 0, 0, runtimeStat.penetration, 0);
+        damageInfo.SetAttackerInfo(runtimeStat.attack, 0, 0, runtimeStat.penetration);
     }
 
     private async void OnEnable()
@@ -223,8 +206,6 @@ public class Enemy : MonoBehaviour
     }
     private void Update()
     {
-        //어드레서블 데이터 안채워졌다면 return;
-        if (!isDataLoaded) return;
 
         if (EnemyDataSO.CanRangedAttack())
         {

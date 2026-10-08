@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.TextCore.Text;
 
 public class CharacterManager : Singleton<CharacterManager>
 {
@@ -34,7 +35,7 @@ public class CharacterManager : Singleton<CharacterManager>
     private List<Character> spawnedCharacterList = new List<Character>();
 
     //스폰위치 전용 스크립트 
-    //[SerializeField] CharacterSpawnPosition characterSpawnPosition;
+    CharacterSpawnPosition characterSpawnPosition;
 
     //외부에서 플레이어 매니저 초기화 작업 끝났는지 확인하는 Task
     private readonly TaskCompletionSource<bool> initTcs = new TaskCompletionSource<bool>();
@@ -177,6 +178,10 @@ public class CharacterManager : Singleton<CharacterManager>
 
         }
     }
+    public void SetCharacterSpawnPos(CharacterSpawnPosition spawnPos)
+    {
+        characterSpawnPosition = spawnPos;
+    }
 
     public async Task LoadSelectedCharacter()
     {
@@ -204,31 +209,32 @@ public class CharacterManager : Singleton<CharacterManager>
     private async Task SetAndLoadSelectedCharacterData(List<CharacterDataSO> dataList = null)
     {
         //인게임 전에 이 코드를 실행.
-        foreach(CharacterDataSO characterSO in dataList)
+        for(int i=0; i< dataList.Count; i++)
         {
-            if(characterSO.CharacterReferencePrefab == null)
+            if (dataList[i].CharacterReferencePrefab == null)
             {
                 MyLog.LogError("캐릭터So에 프리팹이 Null 입니다");
             }
 
             //캐릭터 프리팹을 불러와야함.
-            Character characterOrigin = await AddressableLoadFunc<Character>(characterSO.CharacterReferencePrefab);
+            Character characterOrigin = await AddressableLoadFunc<Character>(dataList[i].CharacterReferencePrefab);
 
             //하나 프리팹을 만들고. 그것을 미리 생성해두자. 
-            Character character = Instantiate(characterOrigin, this.transform);
+            Transform spawnTrfParent = characterSpawnPosition.GetTransform(i);
+            Character character = Instantiate(characterOrigin, spawnTrfParent);
             character.CharacterActive(false);
             unSpawnedCharacterList.Add(character);
             //캐릭터 초기화 및 풀 생성
-            character.SetCharacterSO(characterSO);
+            character.SetCharacterSO(dataList[i]);
             await character.Init();
             character.MakeWeaponProjectilePool();
             //리스트와 딕셔너리에 넣기
-            haveCharacterSOList.Add(characterSO);
-            haveCharacterSoDict.Add(characterSO.CharacterId, characterSO);
+            haveCharacterSOList.Add(dataList[i]);
+            haveCharacterSoDict.Add(dataList[i].CharacterId, dataList[i]);
         }
     }
 
-    public async void SpawnCharacter(Character characterPrefab, CharacterSpawnPosition characterSpawnPosition)
+    public async void SpawnCharacter(Character characterPrefab)
     {
         Transform spawnTrf = characterSpawnPosition.GetTransform(spawnedCharacterList.Count);
         foreach( var item in unSpawnedCharacterList)
