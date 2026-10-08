@@ -203,6 +203,10 @@ public class CharacterManager : Singleton<CharacterManager>
             //캐릭터 프리팹을 불러와야함.
             Release(selectedCharacterList[i].CharacterReferencePrefab);
         }
+        //만들었던 객체들 없애기
+        foreach (var character in unSpawnedCharacterList) { if(character != null) Destroy(character.gameObject); }
+        foreach (var character in spawnedCharacterList) { if (character != null) Destroy(character.gameObject); }
+
         //필드들 초기화
         selectedCharacterList.Clear();
         unSpawnedCharacterList.Clear();
