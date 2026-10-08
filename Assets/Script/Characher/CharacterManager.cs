@@ -1,17 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.TextCore.Text;
+
+
+public class CharacterAddressableHandle
+{
+    public AsyncOperationHandle handle;
+    public int RefCount;
+}
+
+
 
 public class CharacterManager : Singleton<CharacterManager>
 {
-    //현재 게임안에 어떤 플레이어가 존재하는지에 대한 정보를 모아둔다.
-    //public static CharacterManager Instance { get; private set; }
-
     //모든 플레이어 데이터를 어드레서블로 가지고있고 첫 로드해서 allCharacterSOList에 넣어서 사용
     [SerializeField] List<AssetReferenceT<CharacterDataSO>> characterAddressableSOList = new List<AssetReferenceT<CharacterDataSO>>();
     //전체 캐릭터 목록
@@ -22,7 +26,7 @@ public class CharacterManager : Singleton<CharacterManager>
     //플레이어가 가지고있는 캐릭터 목록으로 저장된 딕셔너리
     List<CharacterDataSO> haveCharacterSOList = new List<CharacterDataSO>();
     public IReadOnlyList<CharacterDataSO> HaveCharacterSOList => haveCharacterSOList;
-    Dictionary<string, CharacterDataSO> haveCharacterSoDict = new Dictionary<string, CharacterDataSO>();
+    Dictionary<string, CharacterDataSO> haveCharacterSoDict = new Dictionary<string, CharacterDataSO>(); // TODO. 추후 계정에서 확인해서 캐릭터 가지고있는지 아닌지 체크해서 넣어둘거임
 
     //선택한 캐릭터 아이디 목록
     List<CharacterDataSO> selectedCharacterList = new List<CharacterDataSO>();
@@ -46,19 +50,18 @@ public class CharacterManager : Singleton<CharacterManager>
     //이벤트
     public event Action<Character> OnCharacterSpawnEnd; //플레이어 소환 종료
 
-    //SO
-    private readonly Dictionary<string, AsyncOperationHandle> handles = new();
+    //어드레서블 핸들
+    private readonly Dictionary<string, CharacterAddressableHandle> characterAddressableHandleDict = new Dictionary<string, CharacterAddressableHandle>();
 
+    //TODO. 그냥 인게임에서 사용하는 필드, 메서드들을 따로 클래스 파서 관리하는것도 좋을듯. 초기화해야할때 new 하기?
 
     public void SetSelectedCharacter(List<CharacterDataSO> characterDataSOList)
     {
         selectedCharacterList = characterDataSOList;
     }
 
-
     protected override void OnAwake()
     {
-        
     }
     private void Start()
     {
@@ -87,15 +90,6 @@ public class CharacterManager : Singleton<CharacterManager>
 #endif
     }
 
-    private void ClearIngameState()
-    {
-        //TODO. 캐릭터들 만든거 스폰해제해야함. 어드레서블도
-        unSpawnedCharacterList.Clear();
-        spawnedCharacterList.Clear();
-        haveCharacterSOList.Clear();
-        haveCharacterSoDict.Clear();
-    }
-
     private async Task TestDelayTaskStart()
     {
         try
@@ -111,52 +105,54 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    public async Task<T> AddressableLoadFunc<T>(AssetReference assetRef) where T : UnityEngine.Object
+    public async Task<T> AddressableLoadFunc<T>(AssetReference assetRef) where T : Component
     {
         string key = assetRef.RuntimeKey.ToString();
 
-        if (typeof(Component).IsAssignableFrom(typeof(T)))
+        if (!characterAddressableHandleDict.TryGetValue(key, out var entry))
         {
-            var handle = Addressables.LoadAssetAsync<GameObject>(assetRef);
-            await handle.Task;
-
-            if (handle.Status != AsyncOperationStatus.Succeeded)
+            entry = new CharacterAddressableHandle
             {
-                MyLog.LogError($"프리팹 로드 실패: {key}");
-                Addressables.Release(handle);
-                return null;
-            }
-
-            var comp = handle.Result.GetComponent<T>();
-            if (comp == null)
-            {
-                MyLog.LogError($"프리팹에 {typeof(T).Name} 컴포넌트가 없습니다: {handle.Result.name}");
-                Addressables.Release(handle);
-                return null;
-            }
-
-            handles[key] = handle; // 나중에 Release 하기 위해 저장
-            return comp;
+                handle = Addressables.LoadAssetAsync<GameObject>(assetRef),
+                RefCount = 0
+            };
+            characterAddressableHandleDict[key] = entry;
         }
+        entry.RefCount++;
 
-        var h = Addressables.LoadAssetAsync<T>(assetRef);
-        await h.Task;
-        if (h.Status != AsyncOperationStatus.Succeeded)
+        await entry.handle.Task;
+
+        if (entry.handle.Status != AsyncOperationStatus.Succeeded)
         {
-            Addressables.Release(h);
+            MyLog.LogError($"프리팹 로드 실패: {key}");
+            Release(assetRef);
             return null;
         }
 
-        handles[key] = h;
-        return h.Result;
+        var go = entry.handle.Result as GameObject;
+        var comp = go != null ? go.GetComponent<T>() : null;
+        if (comp == null)
+        {
+            MyLog.LogError($"프리팹에 {typeof(T).Name} 컴포넌트가 없습니다: {go?.name}");
+            Release(assetRef);
+            return null;
+        }
+
+        return comp;
     }
     public void Release(AssetReference assetReference)
     {
         string key = assetReference.RuntimeKey.ToString();
-        if(handles.TryGetValue(key, out var handle ))
+
+
+        if (characterAddressableHandleDict.TryGetValue(key,out var addressableHandle))
         {
-            Addressables.Release(handle);
-            handles.Remove(key);
+            addressableHandle.RefCount--;
+            if(addressableHandle.RefCount <= 0)
+            {
+                Addressables.Release(addressableHandle.handle);
+                characterAddressableHandleDict.Remove(key);
+            }
         }
     }
 
@@ -183,7 +179,7 @@ public class CharacterManager : Singleton<CharacterManager>
         characterSpawnPosition = spawnPos;
     }
 
-    public async Task LoadSelectedCharacter()
+    public async Task LoadInitFor_InGame()
     {
         ingameCharacterLoadTcs = new TaskCompletionSource<bool>();
         TaskCompletionSource<bool> tcs = ingameCharacterLoadTcs; //이렇게 해야 다른곳에서 await한게 아닌 이번에 새로생성된거로 사용함 
@@ -199,11 +195,25 @@ public class CharacterManager : Singleton<CharacterManager>
             throw e;
         }
     }
+    public void ReleaseFor_InGame()
+    {
+        //인게임씬에서 어드레서블 로드한 항목에 대해서 릴리즈 진행
+        for (int i = 0; i < selectedCharacterList.Count; i++)
+        {
+            //캐릭터 프리팹을 불러와야함.
+            Release(selectedCharacterList[i].CharacterReferencePrefab);
+        }
+        //필드들 초기화
+        selectedCharacterList.Clear();
+        unSpawnedCharacterList.Clear();
+        spawnedCharacterList.Clear();
+        characterSpawnPosition = null;
+    }
     private async Task LoadSelectedCharacter_TestMode()
     {
         MyLog.Log("!테스트 모드로 동작합니다!");
-        selectedCharacterList = testSelectedCharacterSOList;
-        await LoadSelectedCharacter();
+        selectedCharacterList = new List<CharacterDataSO>(testSelectedCharacterSOList);
+        await LoadInitFor_InGame();
     }
 
     private async Task SetAndLoadSelectedCharacterData(List<CharacterDataSO> dataList = null)
@@ -228,9 +238,6 @@ public class CharacterManager : Singleton<CharacterManager>
             character.SetCharacterSO(dataList[i]);
             await character.Init();
             character.MakeWeaponProjectilePool();
-            //리스트와 딕셔너리에 넣기
-            haveCharacterSOList.Add(dataList[i]);
-            haveCharacterSoDict.Add(dataList[i].CharacterId, dataList[i]);
         }
     }
 

@@ -27,7 +27,7 @@ public class LoadingPanelInGame : MonoBehaviour
         try
         {
             Task stageInit = StageManager.Instance.InitForIngameScene();
-            await CharacterManager.Instance.LoadSelectedCharacter();
+            await CharacterManager.Instance.LoadInitFor_InGame();
             await CharacterManager.Instance.InitalizeCharacterTask;
             await CharacterManager.Instance.IngameCharacterLoadTask;
             await stageInit;
@@ -43,6 +43,12 @@ public class LoadingPanelInGame : MonoBehaviour
         AugmentManager.Instance.SetAndShowAugmentUI(1);
         StageManager.Instance.WaveStart();
 
+    }
+
+    private void OnDestroy()
+    {
+        //인게임씬이 닫힐때 초기화되어야할것들 여기에 넣기 
+        CharacterManager.Instance.ReleaseFor_InGame();
     }
 
 }
