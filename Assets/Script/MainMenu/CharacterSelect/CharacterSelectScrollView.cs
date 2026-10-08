@@ -24,7 +24,10 @@ public class CharacterSelectScrollView : MonoBehaviour
         foreach (CharacterSelectButton item in characterSelectButtonList)
         {
             item.OnCharacterSelectButtonClicked -= OnCharacterSelect;
-            CaracterSelectButtonSpawner.Instance.ReturnPrefabToPool(item);
+            if(CaracterSelectButtonSpawner.Instance != null)
+            {
+                CaracterSelectButtonSpawner.Instance.ReturnPrefabToPool(item);
+            }
         }
         characterSelectButtonList.Clear();
     }

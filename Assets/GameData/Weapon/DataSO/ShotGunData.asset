@@ -18,3 +18,16 @@ MonoBehaviour:
   <baseDamage>k__BackingField: 10
   <WeaponDescription>k__BackingField: "\uC804\uBC29 3\uBC29\uD5A5\uC5D0 \uC0F7\uAC74\uC744
     \uC3E9\uB2C8\uB2E4"
+  <weaponExecuteSO>k__BackingField: {fileID: 11400000, guid: 6ed34ffc7e13d674cac7570af6153405, type: 2}
+  basicAugmentDataSOList: []
+  existUpgradeAugmentDataList:
+  - {fileID: 11400000, guid: 04ca601f25511cb4f9a4f7791a786beb, type: 2}
+  - {fileID: 11400000, guid: e18c68d152f365a4d80a440279995931, type: 2}
+  - {fileID: 11400000, guid: 6a37eddf7e8e02844aa5ddcfa1e2d9df, type: 2}
+  - {fileID: 11400000, guid: 1df4d1f490c9cfd46b6dc4527f80aeba, type: 2}
+  <ProjectileReferencePrefab>k__BackingField:
+    m_AssetGUID: f003a98c35903f3409438966b5dffd55
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
