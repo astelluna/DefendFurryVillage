@@ -41,7 +41,8 @@ public class EnemySpawner : MonoBehaviour
         //한번 비동기로 전체를 불러온다
         for(int i=0; i< enemyDataList.Count; i++)
         {
-            taskArray[i] = CharacterManager.Instance.AddressableLoadFunc<Enemy>(enemyDataList[i].EnemyPrefab);
+            //taskArray[i] = CharacterManager.Instance.AddressableLoadFunc<Enemy>(enemyDataList[i].EnemyPrefab);
+            taskArray[i] = AddressableManager.Instance.GetAssetAsync_Asset<Enemy>(enemyDataList[i].EnemyPrefab);
         }
         Enemy[] enemyArray =  await Task.WhenAll(taskArray); //비동기 대기 이후 
         //해당 enemy를 n개 미리 생성해둔다.

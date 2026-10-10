@@ -34,9 +34,10 @@ public class AddressableManager : Singleton<AddressableManager>
 
     private Task preloadTask = Task.CompletedTask;
 
-    protected override void OnAwake()
+    protected override async void OnAwake()
     {
         preloadTask = PreloadAsync("Preload");
+        await preloadTask;
     }
 
     private void OnDestroy() => ReleaseAll();

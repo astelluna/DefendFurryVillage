@@ -5,15 +5,6 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-
-public class CharacterAddressableHandle
-{
-    public AsyncOperationHandle handle;
-    public int RefCount;
-}
-
-
-
 public class CharacterManager : Singleton<CharacterManager>
 {
     //모든 플레이어 데이터를 어드레서블로 가지고있고 첫 로드해서 allCharacterSOList에 넣어서 사용
@@ -46,7 +37,7 @@ public class CharacterManager : Singleton<CharacterManager>
     public Task InitalizeCharacterTask => initTcs.Task;
     private TaskCompletionSource<bool> ingameCharacterLoadTcs = new TaskCompletionSource<bool>();
     public Task IngameCharacterLoadTask => ingameCharacterLoadTcs.Task;
-
+    
     //이벤트
     public event Action<Character> OnCharacterSpawnEnd; //플레이어 소환 종료
 
@@ -105,57 +96,6 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    public async Task<T> AddressableLoadFunc<T>(AssetReference assetRef) where T : Component
-    {
-        string key = assetRef.RuntimeKey.ToString();
-
-        if (!characterAddressableHandleDict.TryGetValue(key, out var entry))
-        {
-            entry = new CharacterAddressableHandle
-            {
-                handle = Addressables.LoadAssetAsync<GameObject>(assetRef),
-                RefCount = 0
-            };
-            characterAddressableHandleDict[key] = entry;
-        }
-        entry.RefCount++;
-
-        await entry.handle.Task;
-
-        if (entry.handle.Status != AsyncOperationStatus.Succeeded)
-        {
-            MyLog.LogError($"프리팹 로드 실패: {key}");
-            Release(assetRef);
-            return null;
-        }
-
-        var go = entry.handle.Result as GameObject;
-        var comp = go != null ? go.GetComponent<T>() : null;
-        if (comp == null)
-        {
-            MyLog.LogError($"프리팹에 {typeof(T).Name} 컴포넌트가 없습니다: {go?.name}");
-            Release(assetRef);
-            return null;
-        }
-
-        return comp;
-    }
-    public void Release(AssetReference assetReference)
-    {
-        string key = assetReference.RuntimeKey.ToString();
-
-
-        if (characterAddressableHandleDict.TryGetValue(key,out var addressableHandle))
-        {
-            addressableHandle.RefCount--;
-            if(addressableHandle.RefCount <= 0)
-            {
-                Addressables.Release(addressableHandle.handle);
-                characterAddressableHandleDict.Remove(key);
-            }
-        }
-    }
-
     private async Task LoadCharacterDataSO_Init()
     {
         //어드레서블로 되어있는 캐릭터 데이터들을 계속 불러와본다 
@@ -201,7 +141,8 @@ public class CharacterManager : Singleton<CharacterManager>
         for (int i = 0; i < selectedCharacterList.Count; i++)
         {
             //캐릭터 프리팹을 불러와야함.
-            Release(selectedCharacterList[i].CharacterReferencePrefab);
+            //Release(selectedCharacterList[i].CharacterReferencePrefab);
+            AddressableManager.Instance.Release(selectedCharacterList[i].CharacterReferencePrefab);
         }
         //만들었던 객체들 없애기
         foreach (var character in unSpawnedCharacterList) { if(character != null) Destroy(character.gameObject); }
@@ -231,7 +172,8 @@ public class CharacterManager : Singleton<CharacterManager>
             }
 
             //캐릭터 프리팹을 불러와야함.
-            Character characterOrigin = await AddressableLoadFunc<Character>(dataList[i].CharacterReferencePrefab);
+            Character characterOrigin = await AddressableManager.Instance.GetAssetAsync_Asset<Character>(dataList[i].CharacterReferencePrefab);
+            //Character characterOrigin = await AddressableLoadFunc<Character>(dataList[i].CharacterReferencePrefab);
 
             //하나 프리팹을 만들고. 그것을 미리 생성해두자. 
             Transform spawnTrfParent = characterSpawnPosition.GetTransform(i);

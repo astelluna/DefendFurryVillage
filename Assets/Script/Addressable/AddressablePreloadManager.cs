@@ -4,8 +4,20 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
+
+
+public class CharacterAddressableHandle
+{
+    public AsyncOperationHandle handle;
+    public int RefCount;
+}
+
+
 public class AddressablePreloadManager : Singleton<AddressablePreloadManager>
 {    
+    //TODO. 변경 진행 -> Preload로 게임 시작하기전에 전부 한번씩 로드. 그 이후 개별 로딩이 필요하면 Preload에 존재하는지 확인하고, 없으면 load 하도록 하기.
+
+
     //GUID(RuntimeKey) : 에셋의 고유 ID 
     //PrimaryKey : 에셋을 찾을떄 사용하는 대표키
 

@@ -8,6 +8,7 @@ public class LoadingPanelMainScene : MonoBehaviour
     {
         this.gameObject.SetActive(true);
         await CharacterManager.Instance.InitalizeCharacterTask;
+        await AddressableManager.Instance.WaitPreloadAsync();
         this.gameObject.SetActive(false);
     }
 }

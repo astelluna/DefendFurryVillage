@@ -50,8 +50,11 @@ public class Character : MonoBehaviour
     private async Task Preload_Data()
     {
         //무기 데이터의 총알 프리팹 불러오기 
-        var basicTask = CharacterManager.Instance.AddressableLoadFunc<Projectile>(CharacterDataSO.BasicWeaponDataSO.ProjectileReferencePrefab);
-        var specialTask = CharacterManager.Instance.AddressableLoadFunc<Projectile>(CharacterDataSO.SpecialWeaponDataSO.ProjectileReferencePrefab);
+        var basicTask = AddressableManager.Instance.GetAssetAsync_Asset<Projectile>(CharacterDataSO.BasicWeaponDataSO.ProjectileReferencePrefab);
+        var specialTask = AddressableManager.Instance.GetAssetAsync_Asset<Projectile>(CharacterDataSO.SpecialWeaponDataSO.ProjectileReferencePrefab);
+        //var basicTask = CharacterManager.Instance.AddressableLoadFunc<Projectile>(CharacterDataSO.BasicWeaponDataSO.ProjectileReferencePrefab);
+        //var specialTask = CharacterManager.Instance.AddressableLoadFunc<Projectile>(CharacterDataSO.SpecialWeaponDataSO.ProjectileReferencePrefab);
+
         await Task.WhenAll(basicTask, specialTask);
         Projectile basicWeaponProjectile = basicTask.Result;
         Projectile specialWeaponProjectile = specialTask.Result;
