@@ -7,16 +7,15 @@ public class EquipmentUI : MonoBehaviour
 {
     //인벤토리에 표시되는 장비
     //[SerializeField] 
-    Button button; //자기자신
+    [SerializeField] Button button; //자기자신
     [SerializeField] TextMeshProUGUI equipmentCountText;
 
-    EquipmentLevelData levelData;
+    EquipmentInstance levelData;
 
-    public event Action<EquipmentLevelData> OnClickUI;
+    public event Action<EquipmentInstance> OnClickUI;
 
     private void Awake()
     {
-        button = GetComponent<Button>();
         button.onClick.AddListener(OnButtonClicked);
     }
 
@@ -25,10 +24,11 @@ public class EquipmentUI : MonoBehaviour
         button.onClick.RemoveAllListeners();
     }
 
-    public void SetData(EquipmentLevelData data)
+    public void SetData(EquipmentInstance data)
     {
+        int count = ItemManager.Instance.GetEquipmentCount(data.EquipmentDataSO.EquipmentId, data.Level);
         levelData = data;
-        equipmentCountText.text = levelData.Count.ToString();
+        equipmentCountText.text = count.ToString();
         button.image.sprite = data.EquipmentDataSO.EquipmentImage;
     }
 

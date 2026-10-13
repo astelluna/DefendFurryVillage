@@ -15,14 +15,15 @@ public class CharacterInfoPanel : MonoBehaviour
     //캐릭터 스텟 및 스킬 표시.
     [SerializeField] StatIconAll statIconAll;
     [SerializeField] SkillIconAll skillIconAll;
-    //[SerializeField] StatIcon attackStatIcon;
-    //[SerializeField] StatIcon criticalPercentStatIcon;
-    //[SerializeField] StatIcon criticalRatioStatIcon;
-    //[SerializeField] StatIcon armorPenetrateStatIcon;
+
+    //캐릭터 장비 설정 버튼
+    [SerializeField] Button equipmentButton;
+    [SerializeField] EquipmentMountPanel equipmentMountPanel;
 
     private void Awake()
     {
         closeButton.onClick.AddListener(OnClose);
+        equipmentButton.onClick.AddListener(OnEquipClick);
     }
     private void OnDestroy()
     {
@@ -31,6 +32,10 @@ public class CharacterInfoPanel : MonoBehaviour
     private void OnClose()
     {
         this.gameObject.SetActive(false);
+    }
+    private void OnEquipClick()
+    {
+        equipmentMountPanel.SetDataAndShowPanel(characterDataSO);
     }
 
     public void SetAndShowPanel(CharacterDataSO data)

@@ -155,14 +155,14 @@ public class Weapon : MonoBehaviour
         }
 
         //runtimeData = new WeaponRuntimeData();
-        runtimeData.attackdamage = characterData.attack + WeaponDataSO.baseDamage + (int)(WeaponDataSO.baseDamage * damagePercent);
+        runtimeData.attackdamage = characterData.CharacterBaseStat.attack + WeaponDataSO.baseDamage + (int)(WeaponDataSO.baseDamage * damagePercent);
         runtimeData.attackRate = WeaponDataSO.baseAttackRate + (WeaponDataSO.baseAttackRate * ratePercent);
         runtimeData.bulletScale = 1f + (1f * bulletSizePercent);
         runtimeData.plusAttackCount = attackCount;
         runtimeData.maxPierce = 1 + pierceCount;
-        runtimeData.criticalPercent = characterData.criticalPercent;
-        runtimeData.criticalDamgeRate = characterData.criticalDamageRate;
-        runtimeData.armorPenetrate = characterData.armorPenetration;
+        runtimeData.criticalPercent = characterData.CharacterBaseStat.criticalPercent;
+        runtimeData.criticalDamgeRate = characterData.CharacterBaseStat.criticalDamageRate;
+        runtimeData.armorPenetrate = characterData.CharacterBaseStat.armorPenetration;
 
         //후처리
         if (runtimeData.attackdamage < 1) runtimeData.attackdamage = 1;

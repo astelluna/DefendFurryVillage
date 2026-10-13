@@ -11,9 +11,9 @@ public class StatIconAll : MonoBehaviour
 
     public void SetIcon(CharacterDataSO characterDataSO)
     {
-        attackStatIcon.SetText(characterDataSO.attack.ToString());
-        criticalPercentStatIcon.SetText(characterDataSO.criticalPercent.ToString());
-        criticalRatioStatIcon.SetText(characterDataSO.criticalDamageRate.ToString());
-        armorPenetrateStatIcon.SetText(characterDataSO.armorPenetration.ToString());
+        attackStatIcon.SetText(characterDataSO.CharacterBaseStat.attack.ToString());
+        criticalPercentStatIcon.SetText(characterDataSO.CharacterBaseStat.criticalPercent.ToString());
+        criticalRatioStatIcon.SetText(characterDataSO.CharacterBaseStat.criticalDamageRate.ToString());
+        armorPenetrateStatIcon.SetText(characterDataSO.CharacterBaseStat.armorPenetration.ToString());
     }
 }

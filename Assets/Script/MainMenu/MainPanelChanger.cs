@@ -17,7 +17,7 @@ public class MainPanelChanger : MonoBehaviour
 
     //게임의 메인 메뉴를 표시하는 패널. 종류: 캐릭터,장비,상점,인게임 
     [SerializeField] CharacterShowPanel characterShowPanel;
-    [SerializeField] EquipmentPanel equipmentPanel;
+    //[SerializeField] EquipmentPanel equipmentPanel;
     [SerializeField] MainMenuPanel mainMenuPanel;
 
 
@@ -34,13 +34,13 @@ public class MainPanelChanger : MonoBehaviour
         mainMenuPanelArray = new IMainMenuPanel[]
         {
             characterShowPanel,
-            equipmentPanel,
+            //equipmentPanel,
             mainMenuPanel,
             worldSelectManager
         };
         //버튼 이벤트들 추가
         characterButton.onClick.AddListener(()=> ChangePanel(characterShowPanel));
-        equipmentButton.onClick.AddListener(()=> ChangePanel(equipmentPanel));
+        //equipmentButton.onClick.AddListener(()=> ChangePanel(equipmentPanel));
         mainMenuButton.onClick.AddListener(()=> ChangePanel(mainMenuPanel));
         battleButton.onClick.AddListener(()=> ChangePanel(worldSelectManager));
     }

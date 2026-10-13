@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24c9fdaad3ddf5747afea6ba20496588, type: 3}
   m_Name: EquipmentDataSO_Necklace
   m_EditorClassIdentifier: Assembly-CSharp::EquipmentDataSO
+  <EquipmentId>k__BackingField: 3000
+  <EquipmentType>k__BackingField: 2
   <EquipmentName>k__BackingField: "\uB0A1\uC740\uBAA9\uAC78\uC774"
   <EquipmentImage>k__BackingField: {fileID: 0}
-  <Attack>k__BackingField: 0
-  <CriticalRate>k__BackingField: 1
-  <CriticalRatio>k__BackingField: 1
-  <ArmorPenetrate>k__BackingField: 0
+  <stat>k__BackingField:
+    <attack>k__BackingField: 0
+    <criticalPercent>k__BackingField: 1
+    <criticalDamageRate>k__BackingField: 1
+    <armorPenetration>k__BackingField: 0
   <UpgradeAttackValue>k__BackingField: 1
   <UpgradeCriticalRate>k__BackingField: 1
   <UpgradeCriticalRatio>k__BackingField: 1

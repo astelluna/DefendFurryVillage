@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a50a1f7ed45ab6644b83cfd8e443aa99
+guid: 7f6fe63b77269fe4fbcfee208a01ecc7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4225324094102981590
-    second: CriticalRatio_icon_0
+      213: 8248469055864783426
+    second: CriticalRate_icon_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CriticalRatio_icon_0
+      name: CriticalRate_icon_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a24b7168f12ac55c0800000000000000
-      internalID: -4225324094102981590
+      spriteID: 2424f9f67e2787270800000000000000
+      internalID: 8248469055864783426
       vertices: []
       indices: 
       edges: []

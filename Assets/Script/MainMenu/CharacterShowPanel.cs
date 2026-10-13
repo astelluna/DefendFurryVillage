@@ -10,11 +10,6 @@ public class CharacterShowPanel : MonoBehaviour, IMainMenuPanel
 
     List<CharacterInfoButton> characterinfoButtonList = new List<CharacterInfoButton>();
 
-    private void Start()
-    {
-        //테스트용 딜레이 시작
-        //Invoke(nameof(DelayStart), 10f);
-    }
     private void OnDestroy()
     {
         Init();
