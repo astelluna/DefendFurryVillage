@@ -15,7 +15,7 @@ MonoBehaviour:
   <EquipmentId>k__BackingField: 2000
   <EquipmentType>k__BackingField: 1
   <EquipmentName>k__BackingField: "\uB0A1\uC740\uBC29\uC5B4\uAD6C"
-  <EquipmentImage>k__BackingField: {fileID: 0}
+  <EquipmentImage>k__BackingField: {fileID: 21300000, guid: 5fbc1606299a4a14499ac7acfee86780, type: 3}
   <stat>k__BackingField:
     <attack>k__BackingField: 1
     <criticalPercent>k__BackingField: 0

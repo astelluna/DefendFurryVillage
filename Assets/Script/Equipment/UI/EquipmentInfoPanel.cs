@@ -15,7 +15,7 @@ public class EquipmentInfoPanel : MonoBehaviour
     EquipmentInstance equipmentLevelData;
     private void Awake()
     {
-        closeButton.onClick.AddListener(OnClose);
+        closeButton.onClick.AddListener(OnCloseButtonClick);
         mountButton.onClick.AddListener(OnMountButtonClick);
     }
     private void OnDestroy()
@@ -24,7 +24,7 @@ public class EquipmentInfoPanel : MonoBehaviour
         mountButton.onClick.RemoveAllListeners();
     }
 
-    private void OnClose()
+    private void OnCloseButtonClick()
     {
         this.gameObject.SetActive(false);
     }
@@ -39,6 +39,7 @@ public class EquipmentInfoPanel : MonoBehaviour
         }
 
         MountEquipmentRequest?.Invoke(equipmentLevelData);
+        this.gameObject.SetActive(false);
     }
 
     //public void SetAndShowPanel(string name, string desc, string level)

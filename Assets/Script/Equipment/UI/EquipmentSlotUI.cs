@@ -44,5 +44,14 @@ public class EquipmentSlotUI : MonoBehaviour
         equipmentLevelText.text = "";
     }
 
+    public bool HaveEquipmentData()
+    {
+        if(equipmentInstanceData != null)
+        {
+            return true;
+        }
+        return false;
+    }
+
 
 }

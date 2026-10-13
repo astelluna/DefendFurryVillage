@@ -126,11 +126,13 @@ public class ItemManager : Singleton<ItemManager>
         if (GetEquipment(id,level))
         {
             target.SetEquipment(type, data);
+            MyLog.Log("장착 성공");
             return true;
         }
         else
         {
             //장착 실패
+            MyLog.Log("장착 실패");
             return false;
         }
     }

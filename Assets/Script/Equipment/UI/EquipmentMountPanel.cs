@@ -59,40 +59,42 @@ public class EquipmentMountPanel : MonoBehaviour
     {
         EquipmentSlotUI ui = equipmentSlotDict[data.EquipmentDataSO.EquipmentType];
         //이미 슬롯에 장착했던 아이템이 있었는지 확인하기
-        if(ui.equipmentInstanceData != null)
+        if(ui.HaveEquipmentData())
         {
             //데이터 처리 (인벤토리에 기존 아이템을 +1 하자.)
-            //ItemManager.Instance.AddEquipment(ui.equipmentLevelData);
             ItemManager.Instance.AddEquipmentCount(data.EquipmentDataSO.EquipmentId, data.Level, 1);
         }
         ui.ClearData();
 
         //장비 장착
         CharacterEquipment characterEquipment = ItemManager.Instance.GetCharacterEquipmentInfo(curCharacterData.CharacterId);
-        ItemManager.Instance.TryEquip(characterEquipment, data);
+        //장착 (데이터 설정)
+        if (ItemManager.Instance.TryEquip(characterEquipment, data))
+        {
+            ui.SetData(data); //장착(UI에 표시)
+        }
+        
     }
 
     private void UnEquipmentMethod(EquipmentSlotUI equipmentSlotUI)
     {
+        if (!equipmentSlotUI.HaveEquipmentData()) { return; }
+
         var slotData = equipmentSlotUI;
         equipmentUnEquipPanel.ShowPanel(() => UnEquipmentFunc(slotData));
     }
     private void UnEquipmentFunc(EquipmentSlotUI equipmentSlotUI)
     {
         //아이템 해제 처리
-        //1. 화면 처리. 화면에 보이는 데이터 처리할거임
-        equipmentSlotUI.ClearData();
 
-        //데이터 넣기 (count만 넣으면 됨)
+        //아이템 매니저에 해제하는 아이템 알려주기
         string id = equipmentSlotUI.equipmentInstanceData.EquipmentDataSO.EquipmentId;
         int level = equipmentSlotUI.equipmentInstanceData.Level;
         ItemManager.Instance.AddEquipmentCount(id, level, 1);
 
-        UpdateEquipmentInventory();
-
-
-        //EquipmentUI equipmentUiBuf =  EquipmentButtonSpawner.Instance.GetPrefabByPool(makeTransform);
-        //equipmentUiBuf.SetData(equipmentSlotUI.equipmentLevelData);
+        //데이터 처리 끝나고 데이터 초기화 및 화면에 보이는 데이터 처리할거임
+        equipmentSlotUI.ClearData();
+        UpdateEquipmentInventory(); //갱신
         //TODO. 2. 클라우드 데이터 처리. 클라우드에서 캐릭터 장착 아이템 null 처리하고, 인벤토리에 그 아이템 넣을거임
 
 

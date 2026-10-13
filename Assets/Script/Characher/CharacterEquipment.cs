@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterEquipment : MonoBehaviour
+public class CharacterEquipment
 {
     //캐릭터마다 장착중인 이이템을 저장하는 클래스]
     Dictionary<eEquipmentType, EquipmentInstance> characterEquipmentDict = new Dictionary<eEquipmentType, EquipmentInstance>();
