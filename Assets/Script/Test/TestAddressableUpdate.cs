@@ -8,14 +8,20 @@ public class TestAddressableUpdate : MonoBehaviour
     [SerializeField] Button testButton;
     Action<bool> completeAction;
 
+    //패널
+    [SerializeField] LoginPanel loginPanel;
+
     private void Awake()
     {
         testButton.onClick.AddListener(OnButtonClick);
         completeAction += Complete;
+        loginPanel.LoginCompleteRequest += LoginComplete;
     }
     private void OnDestroy()
     {
+        testButton.onClick.RemoveAllListeners();
         completeAction -= Complete;
+        loginPanel.LoginCompleteRequest -= LoginComplete;
     }
 
     private void OnButtonClick()
@@ -28,8 +34,16 @@ public class TestAddressableUpdate : MonoBehaviour
 
         if(isSuccess)
         {
-            SceneManager.LoadScene(SceneController.Main);
+            //로그인 창이 뜨게 하자.
+            loginPanel.ShowPanel();
+
+
+            //SceneManager.LoadScene(SceneController.Main); -> 보류;
         }
 
+    }
+    private void LoginComplete()
+    {
+        SceneManager.LoadScene(SceneController.Main);
     }
 }

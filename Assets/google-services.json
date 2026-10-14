@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "841260331174",
+    "project_id": "defendfurryvillage",
+    "storage_bucket": "defendfurryvillage.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:841260331174:android:07674e728196921fe80467",
+        "android_client_info": {
+          "package_name": "com.kyj.DefendFurryVillage"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3dO1a_0Yci7uTnIEfsYLAG5A9RDB4u_w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

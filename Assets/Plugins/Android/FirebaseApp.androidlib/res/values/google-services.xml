@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id">
+  <string name="gcm_defaultSenderId" translatable="false">841260331174</string>
+  <string name="google_storage_bucket" translatable="false">defendfurryvillage.firebasestorage.app</string>
+  <string name="project_id" translatable="false">defendfurryvillage</string>
+  <string name="google_api_key" translatable="false">AIzaSyD3dO1a_0Yci7uTnIEfsYLAG5A9RDB4u_w</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyD3dO1a_0Yci7uTnIEfsYLAG5A9RDB4u_w</string>
+  <string name="google_app_id" translatable="false">1:841260331174:android:07674e728196921fe80467</string>
+</resources>
