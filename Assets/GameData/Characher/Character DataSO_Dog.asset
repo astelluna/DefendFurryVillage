@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d57c636b95b496c43991771e936a238d, type: 3}
   m_Name: Character DataSO_Dog
   m_EditorClassIdentifier: Assembly-CSharp::CharacterDataSO
-  <CharacterId>k__BackingField: Dog
+  <CharacterId>k__BackingField: 1001
   <CharacterName>k__BackingField: "\uAC1C"
   <CharacterBodySprite>k__BackingField: {fileID: 21300000, guid: 5fbc1606299a4a14499ac7acfee86780, type: 3}
   <CharacterPortraitSprite>k__BackingField: {fileID: 21300000, guid: 3889cc23d6227e04ca1f2f1fdefd2b88, type: 3}
@@ -24,7 +24,8 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   <BasicWeaponDataSO>k__BackingField: {fileID: 11400000, guid: b03f93eba77166248a9af0e85d41b585, type: 2}
   <SpecialWeaponDataSO>k__BackingField: {fileID: 11400000, guid: c1a97758e9c5a9f43b5676f3df960814, type: 2}
-  <attack>k__BackingField: 10
-  <criticalPercent>k__BackingField: 5
-  <criticalDamageRate>k__BackingField: 2
-  <armorPenetration>k__BackingField: 6
+  <CharacterBaseStat>k__BackingField:
+    <attack>k__BackingField: 10
+    <criticalPercent>k__BackingField: 0
+    <criticalDamageRate>k__BackingField: 2
+    <armorPenetration>k__BackingField: 0

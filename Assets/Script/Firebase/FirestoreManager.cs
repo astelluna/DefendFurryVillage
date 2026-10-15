@@ -18,7 +18,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
     private async void Start()
     {
         await FirebaseAuthManager.Instance.AuthTcs.Task;
-        initTask =  InitFirestore();
+        initTask = InitFirestore();
         await initTask;
         //await SaveItemAsync("Player1","Item1",1,50);
         //await LoadItemAsync("Player1", "Item1");
@@ -26,27 +26,12 @@ public class FirestoreManager : Singleton<FirestoreManager>
     private async Task InitFirestore()
     {
         //파이어스토어 초기화
-        await FirebaseApp.CheckAndFixDependenciesAsync()
-            .ContinueWithOnMainThread(task =>
-            {
-                if (task.IsFaulted || task.IsCanceled)
-                {
-                    Debug.LogError("Firebase 초기화 실패");
-                    return;
-                }
+        DependencyStatus status = await FirebaseApp.CheckAndFixDependenciesAsync();
+        if (status != DependencyStatus.Available)
+            throw new Exception($"Firebase 사용 불가: {status}");
 
-                if (task.Result != DependencyStatus.Available)
-                {
-                    Debug.LogError(
-                        $"Firebase 사용 불가: {task.Result}");
-                    return;
-                }
-
-                db = FirebaseFirestore.DefaultInstance;
-                isReady = true;
-
-                Debug.Log("Firestore 초기화 완료");
-            });
+        db = FirebaseFirestore.DefaultInstance;
+        isReady = true;
     }
     private async Task WaitForInitAsync()
     {
@@ -142,11 +127,11 @@ public class FirestoreManager : Singleton<FirestoreManager>
         CharacterManager.Instance.AddHaveCharacterInstance(characterInstance);
     }
 
-    public async void AddCharacter(string userId, string characterId)
+    private async Task<bool> AddNewCharacter(string userId, string characterId)
     {
         int initLevel = 1;
         int initExp = 0;
-        List<Task> addCharacterTask = new List<Task>();
+        //List<Task> addCharacterTask = new List<Task>();
 
         string userText = "users";
         string characterText = "characters";
@@ -158,21 +143,57 @@ public class FirestoreManager : Singleton<FirestoreManager>
             {levelText,initLevel },
             {expText,initExp }
         };
-        addCharacterTask.Add(characterRef.SetAsync(characterDataDict));
-        //await characterRef.SetAsync(characterDataDict);
+        try
+        {
+            await characterRef.SetAsync(characterDataDict);
+        }
+        catch(Exception e)
+        {
+            MyLog.LogError($"캐릭터 DB 저장 실패 ({characterId}): {e.Message}");
+            return false;
+        }
+        try
+        {
+            //캐릭터 인게임에도  정보 필요
+            CharacterLevelDataDB characterLevelDataDB = new CharacterLevelDataDB(characterId, initLevel, initExp);
+            await MakeCharacterInstance(characterId, characterLevelDataDB);
+        }
+        catch(Exception e)
+        {
+            //실패하면 DB에서 지워버림
+            MyLog.LogError($"캐릭터 인스턴스 생성 실패 ({characterId}): {e.Message}");
+            await RollbackCharacterAdd(characterRef);
+            return false;
+        }
 
-        //캐릭터 인게임에도  정보 필요
-        CharacterLevelDataDB characterLevelDataDB = new CharacterLevelDataDB(characterId, initLevel, initExp);
-        //await MakeCharacterInstance(characterId, characterLevelDataDB);
-        addCharacterTask.Add(MakeCharacterInstance(characterId, characterLevelDataDB));
-
-        await Task.WhenAll(addCharacterTask);
-
+        return true;
+    }
+    private async Task RollbackCharacterAdd(DocumentReference characterRef)
+    {
+        try { await characterRef.DeleteAsync(); }
+        catch (Exception e) { MyLog.LogError($"롤백 실패, 수동 확인 필요: {e.Message}"); }
     }
 
-    public void CreateNewAccount(string userId)
+    public async Task CheckAndCreateNewAccount(string userId)
     {
-        //새로운 계정을 생성할때 계정 정보를 넣어준다.
-        AddCharacter(userId, "1001");
+        await initTask;
+
+        //새로운 계정인지 체크
+        DocumentReference docRef = db.Collection("users").Document(userId);
+        DocumentSnapshot docSnapShot = await docRef.GetSnapshotAsync();
+        if (docSnapShot.Exists) return;
+
+        //새로운 계정을 생성할때 할 행동들 진행
+        //기본 캐릭터 넣어주기
+        if (!await AddNewCharacter(userId, "1001"))
+        {
+            //실패했으면 문서 안만들어줌 -> 다음에 다시 시도함
+            return;
+        }
+        // 2) 성공했을 때만 계정 문서 생성
+        await docRef.SetAsync(new Dictionary<string, object>
+        {
+            { "createdAt", FieldValue.ServerTimestamp }
+        });
     }
 }
