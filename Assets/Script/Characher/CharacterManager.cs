@@ -11,19 +11,24 @@ public class CharacterManager : Singleton<CharacterManager>
     [SerializeField] List<AssetReferenceT<CharacterDataSO>> characterAddressableSOList = new List<AssetReferenceT<CharacterDataSO>>();
     //전체 캐릭터 목록
     List<CharacterDataSO> allCharacterSOList = new List<CharacterDataSO>();
-    public IReadOnlyList<CharacterDataSO> AllCharacterSOList => allCharacterSOList; //전체 캐릭터를 편하게 리스트로 받아올때 사용
     Dictionary<string, CharacterDataSO> allCharacterSODict = new Dictionary<string, CharacterDataSO>(); //검색용 딕셔너리
+    public IReadOnlyList<CharacterDataSO> AllCharacterSOList => allCharacterSOList; //전체 캐릭터를 편하게 리스트로 받아올때 사용
+    public IReadOnlyDictionary<string, CharacterDataSO> AllCharacterSODict => allCharacterSODict;
 
     //플레이어가 가지고있는 캐릭터 목록으로 저장된 딕셔너리
-    List<CharacterDataSO> haveCharacterSOList = new List<CharacterDataSO>();
-    public IReadOnlyList<CharacterDataSO> HaveCharacterSOList => haveCharacterSOList;
-    Dictionary<string, CharacterDataSO> haveCharacterSoDict = new Dictionary<string, CharacterDataSO>(); // TODO. 추후 계정에서 확인해서 캐릭터 가지고있는지 아닌지 체크해서 넣어둘거임
+    //List<CharacterDataSO> haveCharacterSOList = new List<CharacterDataSO>();
+    //public IReadOnlyList<CharacterDataSO> HaveCharacterSOList => haveCharacterSOList;
+    //Dictionary<string, CharacterDataSO> haveCharacterSoDict = new Dictionary<string, CharacterDataSO>(); // TODO. 추후 계정에서 확인해서 캐릭터 가지고있는지 아닌지 체크해서 넣어둘거임
+
+    //캐릭터를 가지고있는지 딕셔너리 (DB에서 읽어서 Set됨)
+    Dictionary<string, CharacterInstance> haveCharacterDict = new Dictionary<string, CharacterInstance>();
+    
 
     //선택한 캐릭터 아이디 목록
     List<CharacterDataSO> selectedCharacterList = new List<CharacterDataSO>();
 
     //런타임중에 소환될수있는 캐릭터, 현재 소환중인 캐릭터 리스트
-    public bool HasSelectedData => haveCharacterSOList.Count > 0;
+    public bool HasSelectedData => haveCharacterDict.Count > 0;
     [Header("!테스트용!: 인게임씬에서 테스트할때만 수동으로 넣고. 이외에는 비워두기")]
     [SerializeField] List<CharacterDataSO> testSelectedCharacterSOList = new List<CharacterDataSO>();
     private List<Character> unSpawnedCharacterList = new List<Character>();
@@ -43,6 +48,16 @@ public class CharacterManager : Singleton<CharacterManager>
 
     //어드레서블 핸들
     private readonly Dictionary<string, CharacterAddressableHandle> characterAddressableHandleDict = new Dictionary<string, CharacterAddressableHandle>();
+
+    public void AddHaveCharacterInstance(CharacterInstance characterInstance)
+    {
+        if(haveCharacterDict.ContainsKey(characterInstance.characterData.CharacterId))
+        {
+            MyLog.LogError($"이미 캐릭터가 존재하는데 또 추가하려했습니다. 뭔가에러");
+            return;
+        }
+        haveCharacterDict.Add(characterInstance.characterData.CharacterId, characterInstance);
+    }
 
     //TODO. 그냥 인게임에서 사용하는 필드, 메서드들을 따로 클래스 파서 관리하는것도 좋을듯. 초기화해야할때 new 하기?
 
@@ -166,9 +181,17 @@ public class CharacterManager : Singleton<CharacterManager>
         //인게임 전에 이 코드를 실행.
         for(int i=0; i< dataList.Count; i++)
         {
+            //가지고있는 캐릭터인지 체크
+            if (!haveCharacterDict.ContainsKey(dataList[i].CharacterId))
+            {
+                MyLog.LogError($"가지고있는 캐릭터가 아닌데 선택되어서 인게임에 진입했습니다. 에러발생");
+                continue;
+            }
+            //SO에 프리팹이 있는지 확인
             if (dataList[i].CharacterReferencePrefab == null)
             {
                 MyLog.LogError("캐릭터So에 프리팹이 Null 입니다");
+                continue;
             }
 
             //캐릭터 프리팹을 불러와야함.
