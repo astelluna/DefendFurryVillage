@@ -104,11 +104,8 @@ public class FirestoreManager : Singleton<FirestoreManager>
         
         foreach (DocumentSnapshot document in result.Documents)
         {
-            string characterId = document.Id;
-            int level = document.GetValue<int>(levelText);
-            int exp = document.GetValue<int>(expText);
-            CharacterLevelDataDB levelDataDB = new CharacterLevelDataDB(characterId,level,exp);
-            waitTaskList.Add(MakeCharacterInstance(characterId,levelDataDB));
+            CharacterLevelDataDB levelDataDB = document.ConvertTo<CharacterLevelDataDB>();
+            waitTaskList.Add(MakeCharacterInstance(levelDataDB.id, levelDataDB));
         }
         await Task.WhenAll(waitTaskList);
 
@@ -138,6 +135,8 @@ public class FirestoreManager : Singleton<FirestoreManager>
         DocumentReference characterRef = db.Collection(userText).Document(userId).Collection(characterText).Document(characterId);
         string levelText = "level";
         string expText = "exp";
+        
+        CharacterLevelDataDB characterLevelDataDB = new CharacterLevelDataDB(characterId, initLevel, initExp);
         Dictionary<string, object> characterDataDict = new Dictionary<string, object>()
         {
             {levelText,initLevel },
@@ -145,7 +144,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
         };
         try
         {
-            await characterRef.SetAsync(characterDataDict);
+            await characterRef.SetAsync(characterLevelDataDB);
         }
         catch(Exception e)
         {
@@ -155,7 +154,6 @@ public class FirestoreManager : Singleton<FirestoreManager>
         try
         {
             //캐릭터 인게임에도  정보 필요
-            CharacterLevelDataDB characterLevelDataDB = new CharacterLevelDataDB(characterId, initLevel, initExp);
             await MakeCharacterInstance(characterId, characterLevelDataDB);
         }
         catch(Exception e)

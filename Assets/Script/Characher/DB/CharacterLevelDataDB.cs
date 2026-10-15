@@ -1,15 +1,24 @@
 using Firebase.Firestore;
-using UnityEngine;
 [FirestoreData]
 public class CharacterLevelDataDB
 {
     //DB에서 불러온 캐릭터 레벨 데이터
     [FirestoreProperty] public string id { get; set; }
-    [FirestoreProperty]public int level { get; set; }
-    [FirestoreProperty]public int exp { get; set; }
-    [FirestoreProperty]public CharacterEquipmentDataDB WeaponEquipment { get; set; }
-    [FirestoreProperty]public CharacterEquipmentDataDB ArmorEquipment { get; set; }
+    [FirestoreProperty] public int level { get; set; }
+    [FirestoreProperty] public int exp { get; set; }
+    [FirestoreProperty] public CharacterEquipmentDataDB WeaponEquipment { get; set; }
+    [FirestoreProperty] public CharacterEquipmentDataDB ArmorEquipment { get; set; }
     [FirestoreProperty] public CharacterEquipmentDataDB AccessoriesEquipment { get; set; }
+
+
+    public CharacterLevelDataDB()
+    {
+        //기본 생성자가 Load 자동변환을 위해 반드시 필요함
+        WeaponEquipment = new CharacterEquipmentDataDB();
+        ArmorEquipment = new CharacterEquipmentDataDB();
+        AccessoriesEquipment = new CharacterEquipmentDataDB();
+    }
+
     public CharacterLevelDataDB(string characterId, int characterLevel, int characterExp)
     {
         id = characterId;
