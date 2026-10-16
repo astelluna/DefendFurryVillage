@@ -62,14 +62,14 @@ public class EquipmentMountPanel : MonoBehaviour
         if(ui.HaveEquipmentData())
         {
             //데이터 처리 (인벤토리에 기존 아이템을 +1 하자.)
-            ItemManager.Instance.AddEquipmentCount(data.EquipmentDataSO.EquipmentId, data.Level, 1);
+            EquipmentManager.Instance.AddEquipmentCount(data.EquipmentDataSO.EquipmentId, data.Level, 1);
         }
         ui.ClearData();
 
         //장비 장착
-        CharacterEquipment characterEquipment = ItemManager.Instance.GetCharacterEquipmentInfo(curCharacterData.CharacterId);
+        CharacterEquipment characterEquipment = EquipmentManager.Instance.GetCharacterEquipmentInfo(curCharacterData.CharacterId);
         //장착 (데이터 설정)
-        if (ItemManager.Instance.TryEquip(characterEquipment, data))
+        if (EquipmentManager.Instance.TryEquip(characterEquipment, data))
         {
             ui.SetData(data); //장착(UI에 표시)
         }
@@ -90,7 +90,7 @@ public class EquipmentMountPanel : MonoBehaviour
         //아이템 매니저에 해제하는 아이템 알려주기
         string id = equipmentSlotUI.equipmentInstanceData.EquipmentDataSO.EquipmentId;
         int level = equipmentSlotUI.equipmentInstanceData.Level;
-        ItemManager.Instance.AddEquipmentCount(id, level, 1);
+        EquipmentManager.Instance.AddEquipmentCount(id, level, 1);
 
         //데이터 처리 끝나고 데이터 초기화 및 화면에 보이는 데이터 처리할거임
         equipmentSlotUI.ClearData();
@@ -146,14 +146,14 @@ public class EquipmentMountPanel : MonoBehaviour
         ClearEquipmentUI();
 
         //생성을 할거임. 현재 아이템매니저에 있는 장비 갯수만큼 아래 인벤토리에 표시를 할것
-        IReadOnlyDictionary<(string id, int level), int> equipmentDict = ItemManager.Instance.EquipmentCountDict;
-        foreach (KeyValuePair<(string id, int level), int> item in equipmentDict)
+        IReadOnlyDictionary<EquipmentKey, int> equipmentDict = EquipmentManager.Instance.EquipmentCountDict;
+        foreach (KeyValuePair<EquipmentKey, int> item in equipmentDict)
         {
-            string id = item.Key.id; //아이템별 id
+            string id = item.Key.equipmentId; //아이템별 id
             int level = item.Key.level;
             int count = item.Value;
             if (count <= 0) { continue; } //0이하이면 안함
-            EquipmentInstance equipmentInstance = ItemManager.Instance.GetEquipmentInstance(id, level);
+            EquipmentInstance equipmentInstance = EquipmentManager.Instance.GetEquipmentInstance(id, level);
             EquipmentUI equipmentBuf = EquipmentButtonSpawner.Instance.GetPrefabByPool(makeTransform);
             equipmentUIList.Add(equipmentBuf);
             equipmentBuf.SetData(equipmentInstance);

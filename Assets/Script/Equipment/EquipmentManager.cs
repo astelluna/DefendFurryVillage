@@ -9,35 +9,94 @@ public class TestEqipmentSerializeClass
     public EquipmentDataSO dataSO;
 }
 
-public class ItemManager : Singleton<ItemManager>
+public readonly struct EquipmentKey : IEquatable<EquipmentKey>
 {
-    //TODO. 일단 직렬화. 나중에는? 나중에도 직렬화?
-    [SerializeField] List<TestEqipmentSerializeClass> testEqipmentSerializeClasseList = new List<TestEqipmentSerializeClass>(); //전체 아이템에 대한 정보를 직렬화해둔다.
-    [SerializeField] Dictionary<string, EquipmentDataSO> equipmentItemDict = new(); //아이템별 어떤 SO를 쓰는지에 대한 정보
+    //딕셔너리에서 키값으로 쓸수있도록 상속받음
+
+    //장비 아이템에 대한 인스턴스 기록
+
+    public readonly string equipmentId;
+    public readonly int level;
+
+    public EquipmentKey(string id, int lvl)
+    {
+        equipmentId = id;
+        level = lvl;
+    }
+
+
+    public bool Equals(EquipmentKey other)
+    {
+        if (equipmentId == other.equipmentId && level == other.level) return true;
+        return false;
+    }
+    public override bool Equals(object obj)
+    {
+        return obj is EquipmentKey other && Equals(other);
+    }
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(equipmentId, level);
+    }
+}
+
+public class EquipmentManager : Singleton<EquipmentManager>
+{
+    //전체 장비에 대한 정보를 직렬화 해둠
+    [SerializeField] List<EquipmentDataSO> allEquipmentDataList = new List<EquipmentDataSO>(); 
+    Dictionary<string, EquipmentDataSO> allEquipmentItemDict = new(); 
 
     //TODO. DB에서 가져와서 정보를 Set/Get 해주는거 필요
-    //장비 갯수 관리 
-    Dictionary<(string id, int level), int> equipmentCountDict = new Dictionary<(string id, int level), int>();
-    //장비 특징 관리 
-    Dictionary<(string id, int level), EquipmentInstance> equipmentInstanceDict = new Dictionary<(string id, int level), EquipmentInstance>();
+    //장비 특징과 갯수 관리 (딕셔너리 2개를 같이 가져가야함)
+    Dictionary<EquipmentKey, int> equipmentCountDict = new Dictionary<EquipmentKey, int>();
+    Dictionary<EquipmentKey, EquipmentInstance> equipmentInstanceDict = new Dictionary<EquipmentKey, EquipmentInstance>();
     //캐릭터 관리
     Dictionary<string, CharacterEquipment> characterEquipmentDict = new Dictionary<string, CharacterEquipment>(); //캐릭터별 가지고있는 장비 정보
 
     //읽기 전용 딕셔너리
-    public IReadOnlyDictionary<(string id, int level), int> EquipmentCountDict => equipmentCountDict;
+    public IReadOnlyDictionary<EquipmentKey, int> EquipmentCountDict => equipmentCountDict;
+
+    public void InitHaveEquipmentItem(List<ItemDbInfo> itemDbList)
+    {
+        //가지고있는 아이템 리스트 초기화
+        equipmentCountDict.Clear();
+        equipmentInstanceDict.Clear();
+        foreach(var item in itemDbList)
+        {
+            EquipmentKey key = new EquipmentKey(item.ItemId, item.Level);
+            if(equipmentCountDict.ContainsKey(key))
+            {
+                MyLog.LogError($"{item.ItemId}_{item.Level}의 항목이 중복되었습니다. 뭔가에러");
+                continue;
+            }
+
+            equipmentCountDict.Add(key, item.Count);
+            EquipmentInstance equipmentInstance = GetEquipmentInstance(item.ItemId, item.Level);
+            if(equipmentInstanceDict.ContainsKey(key))
+            {
+                MyLog.LogError($"{item.ItemId}_{item.Level}의 항목이 중복되었습니다. 뭔가에러");
+                continue;
+            }
+            equipmentInstanceDict.Add(key, equipmentInstance);
+        }
+    }
+
 
     public int GetEquipmentCount(string id, int level)
     {
-        return equipmentCountDict.GetValueOrDefault((id, level));
+        EquipmentKey instance = new EquipmentKey(id, level);
+        return equipmentCountDict.GetValueOrDefault(instance);
     }
     public void AddEquipmentCount(string id, int level, int amount)
     {
-        equipmentCountDict[(id, level)] = GetEquipmentCount(id, level) + amount;
+        EquipmentKey instance = new EquipmentKey(id, level);
+        equipmentCountDict[instance] = GetEquipmentCount(id, level) + amount;
     }
     public bool GetEquipment(string id, int level)
     {
         if (GetEquipmentCount(id, level) <= 0) return false;
-        equipmentCountDict[(id, level)]--;
+        EquipmentKey instance = new EquipmentKey(id, level);
+        equipmentCountDict[instance]--;
         return true;
     }
     public CharacterEquipment GetCharacterEquipmentInfo(string characterId)
@@ -52,13 +111,15 @@ public class ItemManager : Singleton<ItemManager>
 
     public EquipmentInstance GetEquipmentInstance(string id, int level)
     {
-        if(!equipmentInstanceDict.TryGetValue((id,level),out EquipmentInstance equipmentInstance))
+        //EquipmentInstance를 가져온다, 없으면 생성
+        EquipmentKey instance = new EquipmentKey(id, level);
+        if (!equipmentInstanceDict.TryGetValue(instance, out EquipmentInstance equipmentInstance))
         {
             //새로 만들어준다.
             EquipmentDataSO equipmentData =  GetEquipmentData(id);
             if (equipmentData == null) { return null; }
             equipmentInstance = new EquipmentInstance(equipmentData, level);
-            equipmentInstanceDict[(id, level)] = equipmentInstance;
+            equipmentInstanceDict[instance] = equipmentInstance;
         }
         return equipmentInstance;
     }
@@ -71,9 +132,9 @@ public class ItemManager : Singleton<ItemManager>
     {
         //TODO. 추후에는 DB에서 받아서 만들어야함
         //테스트용 데이터 넣기 
-        foreach(var item in testEqipmentSerializeClasseList)
+        foreach(var item in allEquipmentDataList)
         {
-            equipmentItemDict.Add(item.id, item.dataSO);
+            allEquipmentItemDict.Add(item.EquipmentId,item);
         }
 
         //TODO. 일단 수동으로 호출해보자. 
@@ -81,15 +142,15 @@ public class ItemManager : Singleton<ItemManager>
         test1.Add(0, 3); //0레벨 3개, 
         test1.Add(1, 4); //1레벨 4개,
         test1.Add(2, 5); //2레벨 5개,
-        InitEquipmentHaveData("1000", test1); //아이템 1000이라는 id의 0,1,2레벨 템을 넣어줌
+        AddEquipmentHaveData("1000", test1); //아이템 1000이라는 id의 0,1,2레벨 템을 넣어줌
     }
     public EquipmentDataSO GetEquipmentData(string id)
     {
-        if (!equipmentItemDict.ContainsKey(id)) return null;
+        if (!allEquipmentItemDict.ContainsKey(id)) return null;
 
-        return equipmentItemDict[id];
+        return allEquipmentItemDict[id];
     }
-    public void InitEquipmentHaveData(string id, Dictionary<int,int> itemData)
+    public void AddEquipmentHaveData(string id, Dictionary<int,int> itemData)
     {
         //생성자로 알아서 EquipmentData가 정보 설정하도록 해줌
         foreach(var item in itemData)

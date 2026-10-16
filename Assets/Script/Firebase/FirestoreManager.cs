@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
+
+public enum eItemtype
+{
+    equipment, item
+}
+
 public class FirestoreManager : Singleton<FirestoreManager>
 {
     private FirebaseFirestore db;
@@ -45,9 +51,65 @@ public class FirestoreManager : Singleton<FirestoreManager>
         // 초기화 작업 자체가 실패했다면 예외가 여기서 전달됨
         await initTask;
     }
+ 
+    private bool ParseItemKey(string itemKey, out string itemId, out int level)
+    {
+        //itemKey의 string 형식을 변환하여 입력시켜준다.
+        string[] splitKey = itemKey.Split("_");
+        itemId = "";
+        level = 0;
+        if (splitKey[0] =="")
+        {
+            MyLog.LogError("아이템ID값이 이상함. 공백입니다");
+            return false;
+        }
+        itemId = splitKey[0];
+        if(splitKey.Length >= 2)
+        {
+            //장비의 경우 레벨이 존재한다.
+            level = int.Parse(splitKey[1]);
+        }
+        return true;
+    }
+
+    private string MakeItemKey_ForInventory(string itemId, int level)
+    {
+        return itemId + "_" + level.ToString();
+    }
+    private bool MakeItemTypeToKey_ForInventory(eItemtype itemtype, out string itemKey)
+    {
+        string itemType_equipment = "equipment";
+        string itemType_item = "item";
+        string key = "";
+        switch (itemtype)
+        {
+            case eItemtype.equipment:
+                key = itemType_equipment;
+                break;
+            case eItemtype.item:
+                key = itemType_item;
+                break;
+        }
+        if(key == "")
+        {
+            itemKey = "";
+            MyLog.LogError("장비 타입키가 이상함");
+            return false;
+        }
+        else
+        {
+            itemKey = key;
+            return true;
+        }
+
+    }
+    public async void SaveItem_Test(string uid)
+    {
+        await SaveItemAsync(uid, eItemtype.equipment, "1001", 3, 5);
+    }
 
     //저장 및 불러오기
-    public async Task SaveItemAsync(string uid, string itemmId, int level, int count)
+    public async Task SaveItemAsync(string uid, eItemtype itemtype, string itemId, int level, int count)
     {
         //초기화 끝났는지 대기
         await WaitForInitAsync();
@@ -55,45 +117,77 @@ public class FirestoreManager : Singleton<FirestoreManager>
         //DB의 Ref 주소 생성
         string userText = "users";
         string inventoryText = "inventory";
-        //DocumentReference itemRef = db.Collection("users").Document(uid).Collection("inventory").Document(itemmId);
-        DocumentReference itemRef = db.Collection(userText).Document(uid).Collection(inventoryText).Document(itemmId);
-
-        string levelText = "level";
+        string itemType_equipment = "equipment";
+        string itemType_item = "item";
+        string itemCollect = "items";
         string countText = "count";
-
-        Dictionary<string, object> itemData = new Dictionary<string, object>
+        string itemTypeKey = "";
+        if(!MakeItemTypeToKey_ForInventory(itemtype, out itemTypeKey))
         {
-            {levelText, level },
-            { countText, count}
-        };
-        await itemRef.SetAsync(itemData);
+            return; 
+        }
+        string itemKey = MakeItemKey_ForInventory(itemId, level);
+        //Ref 찾기 및 저장
+        DocumentReference itemRef = db.Collection(userText).Document(uid).Collection(inventoryText).Document(itemTypeKey).Collection(itemCollect).Document(itemKey);
+        if (count <= 0)
+        {
+            MyLog.Log("갯수0개로 인해서 인벤토리에서 삭제합니다");
+            await itemRef.DeleteAsync();
+            return;
+        }
+        //딕셔너리로 저장해서 나중에 꺼내올때 구분이 가능하게 해준다
+        await itemRef.SetAsync(new Dictionary<string, object>
+        {
+            { countText, count }
+        });
     }
-    public async Task LoadItemAsync(string uid, string itemId)
+    public async Task<List<ItemDbInfo>> LoadItemAsync_All(string uid, eItemtype itemtype)
     {
+        await WaitForInitAsync();
+        //특정 타입의 아이템 전체를 불러올거임. 
+        List<ItemDbInfo> result = new List<ItemDbInfo>();
+
+
         //DB의 Ref 주소 생성
         string userText = "users";
         string inventoryText = "inventory";
-        DocumentReference itemRef = db.Collection(userText).Document(uid).Collection(inventoryText).Document(itemId);
-
-        DocumentSnapshot snapshot = await itemRef.GetSnapshotAsync();
-        if(!snapshot.Exists)
-        {
-            MyLog.Log("해당 장비 데이터가 없습니다");
-            return;
-        }
-        string levelText = "level";
+        string itemCollect = "items";
+        string itemTypeKey = "";
         string countText = "count";
-        int level = snapshot.GetValue<int>(levelText);
-        int count = snapshot.GetValue<int>(countText);
-        MyLog.Log($"장비 ID: {itemId}");
-        MyLog.Log($"레벨: {level}");
-        MyLog.Log($"개수: {count}");
+        if (!MakeItemTypeToKey_ForInventory(itemtype, out itemTypeKey))
+        {
+            return null;
+        }
+        CollectionReference itemsRef = db.Collection(userText).Document(uid).Collection(inventoryText).Document(itemTypeKey).Collection(itemCollect);
+
+        // 해당 컬렉션의 모든 문서 읽기
+        QuerySnapshot snapshot = await itemsRef.GetSnapshotAsync();
+
+        foreach(DocumentSnapshot doc in snapshot.Documents)
+        {
+            if (!doc.Exists) { continue; }
+            int count = Convert.ToInt32(doc.GetValue<long>(countText));
+
+            if(!ParseItemKey(doc.Id,out string itemId,out int level))
+            {
+                //실패하면 넘어감
+                continue;
+            }
+            result.Add(new ItemDbInfo()
+            {
+                ItemId = itemId,
+                Level = level,
+                Count = count
+            });
+
+        }
+        return result;
     }
 
     //보유 캐릭터 불러오기
-    public async Task LoadAndSetHaveCharacterInfo(string userId)
+    public async Task LoadAndSetHaveCharacter_Init(string userId)
     {
-        //해당 유저가 가지고있는 전체 캐릭터 정보를 불러오고, 정보를 셋팅해준다.
+        //초기 1회 해당 유저가 가지고있는 전체 캐릭터 정보를 불러오고, 정보를 셋팅해준다.
         string userText = "users";
         string characterText = "characters";
         CollectionReference characterRef = db.Collection(userText).Document(userId).Collection(characterText);
@@ -104,6 +198,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
         
         foreach (DocumentSnapshot document in result.Documents)
         {
+            //DB에서 캐릭터 레벨 정보를 불러온뒤, 캐릭터 정보를 CharacterManager에 Set 해준다.
             CharacterLevelDataDB levelDataDB = document.ConvertTo<CharacterLevelDataDB>();
             waitTaskList.Add(MakeCharacterInstance(levelDataDB.id, levelDataDB));
         }
@@ -119,6 +214,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
             MyLog.LogError($"{characterId}가 전체 캐릭터Id에 존재하지 않습니다");
             return;
         }
+        //캐릭터매니저에 정보 설정
         CharacterDataSO characterSO = allCharacterDict[characterId];
         CharacterInstance characterInstance = new CharacterInstance(characterSO, levelDataDB);
         CharacterManager.Instance.AddHaveCharacterInstance(characterInstance);

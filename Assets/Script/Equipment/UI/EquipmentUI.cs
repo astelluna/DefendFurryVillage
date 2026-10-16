@@ -26,7 +26,7 @@ public class EquipmentUI : MonoBehaviour
 
     public void SetData(EquipmentInstance data)
     {
-        int count = ItemManager.Instance.GetEquipmentCount(data.EquipmentDataSO.EquipmentId, data.Level);
+        int count = EquipmentManager.Instance.GetEquipmentCount(data.EquipmentDataSO.EquipmentId, data.Level);
         levelData = data;
         equipmentCountText.text = count.ToString();
         button.image.sprite = data.EquipmentDataSO.EquipmentImage;

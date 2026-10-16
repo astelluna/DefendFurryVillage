@@ -30,7 +30,7 @@ public class EquipmentInfoPanel : MonoBehaviour
     }
     private void OnMountButtonClick()
     {
-        int count = ItemManager.Instance.GetEquipmentCount(equipmentLevelData.EquipmentDataSO.EquipmentId, equipmentLevelData.Level);
+        int count = EquipmentManager.Instance.GetEquipmentCount(equipmentLevelData.EquipmentDataSO.EquipmentId, equipmentLevelData.Level);
 
         if(count <= 0)
         {
