@@ -8,6 +8,7 @@ public class EquipmentInfoPanel : MonoBehaviour
     [SerializeField] TextMeshProUGUI itemNameText;
     [SerializeField] TextMeshProUGUI itemDescText;
     [SerializeField] TextMeshProUGUI levelText;
+    [SerializeField] TextMeshProUGUI countText;
     [SerializeField] Button mountButton;
     [SerializeField] Button closeButton;
 
@@ -22,6 +23,11 @@ public class EquipmentInfoPanel : MonoBehaviour
     {
         closeButton.onClick.RemoveAllListeners();
         mountButton.onClick.RemoveAllListeners();
+    }
+
+    public void ClosePanel()
+    {
+        OnCloseButtonClick();
     }
 
     private void OnCloseButtonClick()
@@ -45,9 +51,12 @@ public class EquipmentInfoPanel : MonoBehaviour
     //public void SetAndShowPanel(string name, string desc, string level)
     public void SetAndShowPanel(EquipmentInstance data)
     {
+        int count = EquipmentManager.Instance.GetEquipmentCount(data.EquipmentDataSO.EquipmentId, data.Level);
+
         equipmentLevelData = data;
         itemNameText.text = data.EquipmentDataSO.EquipmentName;
         itemDescText.text = data.GetEquipmentDescription();
+        countText.text = count.ToString();
         levelText.text = $"업그레이드 단계: {data.Level.ToString()}";
         this.gameObject.SetActive(true);
     }

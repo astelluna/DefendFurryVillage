@@ -3,6 +3,7 @@ using UnityEngine.Rendering;
 
 public enum eEquipmentType
 {
+    //이름 절대 바꾸지말것. DB에서 이 이름으로 저장중이다
     Weapon, Armor, Accessories
 }
 

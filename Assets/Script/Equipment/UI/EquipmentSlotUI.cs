@@ -13,6 +13,8 @@ public class EquipmentSlotUI : MonoBehaviour
 
     //public event Action<EquipmentLevelData> EquipmentLevelDataRequest;
     public event Action<EquipmentSlotUI> EquipmentSlotUIRequest;
+    //현재 어떤 캐릭터의 UI인지 알기위해서
+    private CharacterDataSO curCharacterData;
 
     private void Awake()
     {
@@ -30,18 +32,27 @@ public class EquipmentSlotUI : MonoBehaviour
         EquipmentSlotUIRequest?.Invoke(this);
     }
 
-    public void SetData(EquipmentInstance data)
+    public void SetData(EquipmentInstance data, CharacterDataSO dataSO)
     {
+        curCharacterData = dataSO;
         equipmentInstanceData = data;
-        slotButton.image.sprite = equipmentInstanceData.EquipmentDataSO.EquipmentImage;
-        equipmentLevelText.text = "+" + equipmentInstanceData.Level;
+        //UpdateUI();
 
     }
     public void ClearData()
     {
+        curCharacterData = null;
         equipmentInstanceData = null;
         slotButton.image.sprite = baseSprite;
         equipmentLevelText.text = "";
+    }
+
+    public void UpdateUI(EquipmentInstance equipmentData,CharacterDataSO characterData)
+    {
+        equipmentInstanceData = equipmentData;
+        curCharacterData = characterData;
+        slotButton.image.sprite = equipmentInstanceData.EquipmentDataSO.EquipmentImage;
+        equipmentLevelText.text = "+" + equipmentInstanceData.Level;
     }
 
     public bool HaveEquipmentData()

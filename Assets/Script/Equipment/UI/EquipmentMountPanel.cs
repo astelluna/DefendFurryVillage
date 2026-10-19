@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +10,7 @@ public class EquipmentMountPanel : MonoBehaviour
 {
     [Header("장비 슬롯")]
     [SerializeField] EquipmentSlotUI[] equipmentSlotArray;
-    Dictionary<eEquipmentType, EquipmentSlotUI> equipmentSlotDict = new Dictionary<eEquipmentType, EquipmentSlotUI>();
+    Dictionary<eEquipmentType, EquipmentSlotUI> equipmentSlotDict;
 
     [Header("가지고있는 아이템이 생성될 위치, 아이템 정보 표시")]
     [SerializeField] Transform makeTransform; //스코롤뷰 위치 지정(프리팹이 생성될 위치)
@@ -38,42 +39,24 @@ public class EquipmentMountPanel : MonoBehaviour
     //현재 선택중인 플레이어
     CharacterDataSO curCharacterData;
 
-    private void Awake()
-    {
-        closeButton.onClick.AddListener(OnCloseButtonClick);
-        equipmentInfoPanel.MountEquipmentRequest += MountEquipment;
+    bool isInitalized = false;
 
-        //장비 슬롯 설정
-        foreach (EquipmentSlotUI item in equipmentSlotArray)
-        {
-            if(equipmentSlotDict.ContainsKey(item.EquipmentType))
-            {
-                MyLog.LogError("장비 슬롯이 중복이 되어있습니다. 확인해주세요");
-                continue;
-            }
-            equipmentSlotDict[item.EquipmentType] = item;
-            item.EquipmentSlotUIRequest += UnEquipmentMethod;
-        }
-    }
-    private void MountEquipment(EquipmentInstance data)
+    private async void MountEquipment(EquipmentInstance data)
     {
-        EquipmentSlotUI ui = equipmentSlotDict[data.EquipmentDataSO.EquipmentType];
-        //이미 슬롯에 장착했던 아이템이 있었는지 확인하기
-        if(ui.HaveEquipmentData())
+        //어떤 행동을 해달라고 위임을 해버리자. 장비 장착 행동이니까 EquipmentManager에
+        bool isSuccess = await EquipmentManager.Instance.TryEquipAsync(curCharacterData, data);
+        if(!isSuccess)
         {
-            //데이터 처리 (인벤토리에 기존 아이템을 +1 하자.)
-            EquipmentManager.Instance.AddEquipmentCount(data.EquipmentDataSO.EquipmentId, data.Level, 1);
+            MyLog.LogError("장비 장착 실패. ");
+            return;
         }
-        ui.ClearData();
+        //정보 설정
+        EquipmentSlotUI equipmentSlotUI =  equipmentSlotDict[data.EquipmentDataSO.EquipmentType];
+        equipmentSlotUI.SetData(data, curCharacterData);
 
-        //장비 장착
-        CharacterEquipment characterEquipment = EquipmentManager.Instance.GetCharacterEquipmentInfo(curCharacterData.CharacterId);
-        //장착 (데이터 설정)
-        if (EquipmentManager.Instance.TryEquip(characterEquipment, data))
-        {
-            ui.SetData(data); //장착(UI에 표시)
-        }
-        
+        //갱신
+        UpdateEquipmentInventory();
+        UpdateEquipmentUI();
     }
 
     private void UnEquipmentMethod(EquipmentSlotUI equipmentSlotUI)
@@ -83,23 +66,42 @@ public class EquipmentMountPanel : MonoBehaviour
         var slotData = equipmentSlotUI;
         equipmentUnEquipPanel.ShowPanel(() => UnEquipmentFunc(slotData));
     }
-    private void UnEquipmentFunc(EquipmentSlotUI equipmentSlotUI)
+    private async Task UnEquipmentFunc(EquipmentSlotUI equipmentSlotUI)
     {
-        //아이템 해제 처리
+        //1. db데이터 설정 및 런타임 데이터 갱신을 매니저에 위임
+        bool isSuccessDataSet = await EquipmentManager.Instance.TryUnEquipAsync(curCharacterData, equipmentSlotUI.equipmentInstanceData);
 
-        //아이템 매니저에 해제하는 아이템 알려주기
-        string id = equipmentSlotUI.equipmentInstanceData.EquipmentDataSO.EquipmentId;
-        int level = equipmentSlotUI.equipmentInstanceData.Level;
-        EquipmentManager.Instance.AddEquipmentCount(id, level, 1);
+        if (!isSuccessDataSet) { return; }
 
-        //데이터 처리 끝나고 데이터 초기화 및 화면에 보이는 데이터 처리할거임
-        equipmentSlotUI.ClearData();
-        UpdateEquipmentInventory(); //갱신
-        //TODO. 2. 클라우드 데이터 처리. 클라우드에서 캐릭터 장착 아이템 null 처리하고, 인벤토리에 그 아이템 넣을거임
 
+        //2. UI갱신
+        //데이터 처리 끝나고 데이터 초기화 및 화면에 보이는 데이터 갱신
+        //equipmentSlotUI.ClearData();
+        UpdateEquipmentInventory(); 
+        UpdateEquipmentUI();
 
     }
+    private void Init()
+    {
+        //초기 1회 켜질때 해야할 행동
+        if (isInitalized) { return; }
+        isInitalized = true;
+        closeButton.onClick.AddListener(OnCloseButtonClick);
+        equipmentInfoPanel.MountEquipmentRequest += MountEquipment;
 
+        equipmentSlotDict = new Dictionary<eEquipmentType, EquipmentSlotUI>();
+        //장비 슬롯 설정
+        foreach (EquipmentSlotUI item in equipmentSlotArray)
+        {
+            if (equipmentSlotDict.ContainsKey(item.EquipmentType))
+            {
+                MyLog.LogError("장비 슬롯이 중복이 되어있습니다. 확인해주세요");
+                continue;
+            }
+            equipmentSlotDict[item.EquipmentType] = item;
+            item.EquipmentSlotUIRequest += UnEquipmentMethod;
+        }
+    }
     //캐릭터 장비 표시하는 스코롤 뷰
     private void OnDestroy()
     {
@@ -116,10 +118,14 @@ public class EquipmentMountPanel : MonoBehaviour
     }
     private void OnCloseButtonClick()
     {
+        equipmentInfoPanel.ClosePanel();
+        equipmentUnEquipPanel.ClosePanel();
         this.gameObject.SetActive(false);
     }
+    
     public void SetDataAndShowPanel(CharacterDataSO data)
     {
+        Init();
         curCharacterData = data;
         //캐릭터 정보 표시
         characterImage.sprite = curCharacterData.CharacterBodySprite;
@@ -128,6 +134,25 @@ public class EquipmentMountPanel : MonoBehaviour
 
         //스코롤뷰에 가지고있는 장비 표시
         UpdateEquipmentInventory();
+        UpdateEquipmentUI();
+        //현재 캐릭터가 가지고있는 장비를 버튼에 표시해야함.
+        /*
+        CharacterEquipment characterEquipment =  CharacterManager.Instance.GetCharacterEquipment(curCharacterData.CharacterId);
+
+        //버튼에 플레이어가 현재 장비중인 장비를 표시
+        foreach(KeyValuePair<eEquipmentType, EquipmentSlotUI> pair in equipmentSlotDict)
+        {
+            EquipmentInstance equipmentInstance = characterEquipment.GetEquipment(pair.Key);
+            EquipmentSlotUI slotUI = equipmentSlotDict[pair.Key];
+            if (equipmentInstance == null)
+            {
+                //장비가 없는것이므로 흰색으로 둔다
+                slotUI.ClearData();
+                continue;
+            }
+            slotUI.SetData(equipmentInstance, curCharacterData);
+        }
+        */
 
         this.gameObject.SetActive(true);
     }
@@ -139,6 +164,28 @@ public class EquipmentMountPanel : MonoBehaviour
             EquipmentButtonSpawner.Instance.ReturnPrefabToPool(item);
         }
         equipmentUIList.Clear();
+    }
+
+    private void UpdateEquipmentUI()
+    {
+        //개선필요: UI안의 데이터가 아니라 런타임 데이터를 읽어서 표시해야한다.
+        //
+        CharacterEquipment characterEquipment = CharacterManager.Instance.GetCharacterEquipment(curCharacterData.CharacterId);
+        //런타임 데이터를 읽어서 
+
+        foreach (eEquipmentType type in Enum.GetValues(typeof(eEquipmentType)))
+        {
+            EquipmentSlotUI equipmentSlotUI = equipmentSlotDict[type];
+            EquipmentInstance equipmentInstance= characterEquipment.GetEquipment(type);
+            if (equipmentInstance == null) 
+            {
+                //정보가 없으면 UI 초기화
+                equipmentSlotUI.ClearData();
+                continue; 
+            }
+            //정보 있으면 해당정보로 설정
+            equipmentSlotUI.UpdateUI(equipmentInstance, curCharacterData);
+        }
     }
     private void UpdateEquipmentInventory()
     {
@@ -154,6 +201,7 @@ public class EquipmentMountPanel : MonoBehaviour
             int count = item.Value;
             if (count <= 0) { continue; } //0이하이면 안함
             EquipmentInstance equipmentInstance = EquipmentManager.Instance.GetEquipmentInstance(id, level);
+            //풀에서 꺼내서 장비를 하나씩 인벤토리에 추가해준다.
             EquipmentUI equipmentBuf = EquipmentButtonSpawner.Instance.GetPrefabByPool(makeTransform);
             equipmentUIList.Add(equipmentBuf);
             equipmentBuf.SetData(equipmentInstance);

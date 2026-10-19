@@ -7,7 +7,7 @@ using UnityEngine;
 public class FirebaseAuthManager : Singleton<FirebaseAuthManager>
 {
     public FirebaseAuth auth; //인증 진행을 위한 객체
-    public static FirebaseUser user; //인증되고나서, 인증된 유저 정보를 가지고있는다
+    public FirebaseUser User => auth?.CurrentUser; //인증되고나서, 인증된 유저 정보를 가지고있는다
     //public static DatabaseReference dbRef; //DB에 대한 정보를 여러 씬이서 다양하게 쓰려고
     public TaskCompletionSource<bool> AuthTcs = new TaskCompletionSource<bool>();
     protected override void OnAwake()
@@ -22,7 +22,6 @@ public class FirebaseAuthManager : Singleton<FirebaseAuthManager>
                 }
 
                 auth = FirebaseAuth.DefaultInstance;
-
                 //테스트할때 이거 켜놓기
                 //SignOut_Test();
 

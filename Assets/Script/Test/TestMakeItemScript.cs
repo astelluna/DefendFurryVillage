@@ -6,7 +6,7 @@ public class TestMakeItemScript : MonoBehaviour
     void Start()
     {
         //테스트
-        FirestoreManager.Instance.SaveItem_Test(FirebaseAuthManager.Instance.auth.CurrentUser.UserId);
+        FirestoreManager.Instance.SaveItem_Test();
     }
 
     // Update is called once per frame

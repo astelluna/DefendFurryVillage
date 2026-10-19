@@ -50,13 +50,13 @@ public class TestAddressableUpdate : MonoBehaviour
         string uid = FirebaseAuthManager.Instance.auth.CurrentUser.UserId;
         //아래부터 DB에서 최초로 정보 1회씩 불러와서 런타임에 설정.
         //1. 가지고있는 캐릭터와 그 캐릭터의 장비 정보를 불러서 Charactermanager에 정보 설정
-        await FirestoreManager.Instance.LoadAndSetHaveCharacter_Init(uid);
+        await FirestoreManager.Instance.LoadAndSetHaveCharacter_Init();
 
         //2. 인벤토리 - 장비 아이템 저장
-        List<ItemDbInfo> equipmentItemDbList = await FirestoreManager.Instance.LoadItemAsync_All(uid,eItemtype.equipment);
+        List<ItemDbInfo> equipmentItemDbList = await FirestoreManager.Instance.LoadItemAsync_All(eItemtype.equipment);
         EquipmentManager.Instance.InitHaveEquipmentItem(equipmentItemDbList);
         //아이템(소모품, 기타) 아이템 저장
-        List<ItemDbInfo> itemDbList = await FirestoreManager.Instance.LoadItemAsync_All(uid, eItemtype.item);
+        List<ItemDbInfo> itemDbList = await FirestoreManager.Instance.LoadItemAsync_All(eItemtype.item);
         ItemManager.Instance.InitManager(itemDbList);
         //모두 끝나면 다음 씬으로 이동
 

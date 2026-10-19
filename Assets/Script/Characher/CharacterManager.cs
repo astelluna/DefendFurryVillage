@@ -22,7 +22,8 @@ public class CharacterManager : Singleton<CharacterManager>
 
     //캐릭터를 가지고있는지 딕셔너리 (DB에서 읽어서 Set됨)
     Dictionary<string, CharacterInstance> haveCharacterDict = new Dictionary<string, CharacterInstance>();
-    
+    public IReadOnlyDictionary<string, CharacterInstance> HaveCharacterDict => haveCharacterDict;
+
 
     //선택한 캐릭터 아이디 목록
     List<CharacterDataSO> selectedCharacterList = new List<CharacterDataSO>();
@@ -248,5 +249,16 @@ public class CharacterManager : Singleton<CharacterManager>
         return true;
     }
 
-
+    #region 캐릭터 장비 관련 
+    public CharacterEquipment GetCharacterEquipment(string characterId)
+    {
+        //캐릭터별 어떤 장비를 장착중인지 런타임 클래스를 가져온다
+        if(!haveCharacterDict.ContainsKey(characterId))
+        {
+            return null;
+        }
+        CharacterInstance characterInstance = haveCharacterDict[characterId];
+        return characterInstance.characterEquipment;
+    }
+    #endregion
 }

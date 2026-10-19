@@ -32,7 +32,10 @@ public class EquipmentUnEquipPanel : MonoBehaviour
         onConfirm = null;
         this.gameObject.SetActive(false);
     }
-
+    public void ClosePanel()
+    {
+        OnCloseButtonClick();
+    }
     public void ShowPanel(Action action)
     {
         onConfirm = action;

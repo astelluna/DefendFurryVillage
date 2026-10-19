@@ -4,6 +4,7 @@ using Firebase.Firestore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Transactions;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
@@ -18,6 +19,18 @@ public class FirestoreManager : Singleton<FirestoreManager>
     private FirebaseFirestore db;
     private bool isReady;
     Task initTask;
+
+    //전역 string 객체들
+    const string itemType_equipment = "equipment";
+    const string itemType_item = "item";
+    const string userText = "users";
+    const string inventoryText = "inventory";
+    const string itemCollect = "items";
+    const string countText = "count";
+    const string characterText = "characters";
+    const string levelText = "level";
+    const string expText = "exp";
+
     protected override void OnAwake()
     {
     }
@@ -26,8 +39,6 @@ public class FirestoreManager : Singleton<FirestoreManager>
         await FirebaseAuthManager.Instance.AuthTcs.Task;
         initTask = InitFirestore();
         await initTask;
-        //await SaveItemAsync("Player1","Item1",1,50);
-        //await LoadItemAsync("Player1", "Item1");
     }
     private async Task InitFirestore()
     {
@@ -72,14 +83,13 @@ public class FirestoreManager : Singleton<FirestoreManager>
         return true;
     }
 
-    private string MakeItemKey_ForInventory(string itemId, int level)
+    private string MakeItemKey(string itemId, int level)
     {
+        //저장을 할때 장비의 경우 레벨도 같이 저장해야해서 추가. 소모품은 레벨이 없는데 동일한방식으로 만들건지 생각해봐야함.
         return itemId + "_" + level.ToString();
     }
     private bool MakeItemTypeToKey_ForInventory(eItemtype itemtype, out string itemKey)
     {
-        string itemType_equipment = "equipment";
-        string itemType_item = "item";
         string key = "";
         switch (itemtype)
         {
@@ -103,62 +113,56 @@ public class FirestoreManager : Singleton<FirestoreManager>
         }
 
     }
-    public async void SaveItem_Test(string uid)
+    public async void SaveItem_Test()
     {
-        await SaveItemAsync(uid, eItemtype.equipment, "1001", 3, 5);
+        await SaveItemAsync(eItemtype.equipment, "1001", 3, 5);
     }
 
     //저장 및 불러오기
-    public async Task SaveItemAsync(string uid, eItemtype itemtype, string itemId, int level, int count)
+    public async Task<bool> SaveItemAsync(eItemtype itemtype, string itemId, int level, int count)
     {
         //초기화 끝났는지 대기
         await WaitForInitAsync();
 
+        string userId = FirebaseAuthManager.Instance.User.UserId;
+
         //DB의 Ref 주소 생성
-        string userText = "users";
-        string inventoryText = "inventory";
-        string itemType_equipment = "equipment";
-        string itemType_item = "item";
-        string itemCollect = "items";
-        string countText = "count";
         string itemTypeKey = "";
         if(!MakeItemTypeToKey_ForInventory(itemtype, out itemTypeKey))
         {
-            return; 
+            return false; 
         }
-        string itemKey = MakeItemKey_ForInventory(itemId, level);
+        string itemKey = MakeItemKey(itemId, level);
         //Ref 찾기 및 저장
-        DocumentReference itemRef = db.Collection(userText).Document(uid).Collection(inventoryText).Document(itemTypeKey).Collection(itemCollect).Document(itemKey);
+        DocumentReference itemRef = db.Collection(userText).Document(userId).Collection(inventoryText).Document(itemTypeKey).Collection(itemCollect).Document(itemKey);
         if (count <= 0)
         {
             MyLog.Log("갯수0개로 인해서 인벤토리에서 삭제합니다");
             await itemRef.DeleteAsync();
-            return;
+            return true;
         }
         //딕셔너리로 저장해서 나중에 꺼내올때 구분이 가능하게 해준다
         await itemRef.SetAsync(new Dictionary<string, object>
         {
             { countText, count }
         });
+        return true;
     }
-    public async Task<List<ItemDbInfo>> LoadItemAsync_All(string uid, eItemtype itemtype)
+    public async Task<List<ItemDbInfo>> LoadItemAsync_All(eItemtype itemtype)
     {
         await WaitForInitAsync();
         //특정 타입의 아이템 전체를 불러올거임. 
+        string userId = FirebaseAuthManager.Instance.User.UserId;
         List<ItemDbInfo> result = new List<ItemDbInfo>();
 
 
         //DB의 Ref 주소 생성
-        string userText = "users";
-        string inventoryText = "inventory";
-        string itemCollect = "items";
         string itemTypeKey = "";
-        string countText = "count";
         if (!MakeItemTypeToKey_ForInventory(itemtype, out itemTypeKey))
         {
             return null;
         }
-        CollectionReference itemsRef = db.Collection(userText).Document(uid).Collection(inventoryText).Document(itemTypeKey).Collection(itemCollect);
+        CollectionReference itemsRef = db.Collection(userText).Document(userId).Collection(inventoryText).Document(itemTypeKey).Collection(itemCollect);
 
         // 해당 컬렉션의 모든 문서 읽기
         QuerySnapshot snapshot = await itemsRef.GetSnapshotAsync();
@@ -185,27 +189,24 @@ public class FirestoreManager : Singleton<FirestoreManager>
     }
 
     //보유 캐릭터 불러오기
-    public async Task LoadAndSetHaveCharacter_Init(string userId)
+    public async Task LoadAndSetHaveCharacter_Init()
     {
+        string userId = FirebaseAuthManager.Instance.User.UserId;
         //초기 1회 해당 유저가 가지고있는 전체 캐릭터 정보를 불러오고, 정보를 셋팅해준다.
-        string userText = "users";
-        string characterText = "characters";
         CollectionReference characterRef = db.Collection(userText).Document(userId).Collection(characterText);
         QuerySnapshot result = await characterRef.GetSnapshotAsync();
-        string levelText = "level";
-        string expText = "exp";
         List<Task> waitTaskList = new List<Task>();
         
         foreach (DocumentSnapshot document in result.Documents)
         {
             //DB에서 캐릭터 레벨 정보를 불러온뒤, 캐릭터 정보를 CharacterManager에 Set 해준다.
-            CharacterLevelDataDB levelDataDB = document.ConvertTo<CharacterLevelDataDB>();
+            CharacterDataDb levelDataDB = document.ConvertTo<CharacterDataDb>();
             waitTaskList.Add(MakeCharacterInstance(levelDataDB.id, levelDataDB));
         }
         await Task.WhenAll(waitTaskList);
 
     }
-    private async Task MakeCharacterInstance(string characterId, CharacterLevelDataDB levelDataDB)
+    private async Task MakeCharacterInstance(string characterId, CharacterDataDb levelDataDB)
     {
         await CharacterManager.Instance.InitalizeCharacterTask;
         IReadOnlyDictionary<string, CharacterDataSO> allCharacterDict = CharacterManager.Instance.AllCharacterSODict;
@@ -220,19 +221,15 @@ public class FirestoreManager : Singleton<FirestoreManager>
         CharacterManager.Instance.AddHaveCharacterInstance(characterInstance);
     }
 
-    private async Task<bool> AddNewCharacter(string userId, string characterId)
+    private async Task<bool> AddNewCharacter(string characterId)
     {
+        string userId = FirebaseAuthManager.Instance.User.UserId;
         int initLevel = 1;
         int initExp = 0;
-        //List<Task> addCharacterTask = new List<Task>();
 
-        string userText = "users";
-        string characterText = "characters";
         DocumentReference characterRef = db.Collection(userText).Document(userId).Collection(characterText).Document(characterId);
-        string levelText = "level";
-        string expText = "exp";
         
-        CharacterLevelDataDB characterLevelDataDB = new CharacterLevelDataDB(characterId, initLevel, initExp);
+        CharacterDataDb characterLevelDataDB = new CharacterDataDb(characterId, initLevel, initExp);
         Dictionary<string, object> characterDataDict = new Dictionary<string, object>()
         {
             {levelText,initLevel },
@@ -268,8 +265,9 @@ public class FirestoreManager : Singleton<FirestoreManager>
         catch (Exception e) { MyLog.LogError($"롤백 실패, 수동 확인 필요: {e.Message}"); }
     }
 
-    public async Task CheckAndCreateNewAccount(string userId)
+    public async Task CheckAndCreateNewAccount()
     {
+        string userId = FirebaseAuthManager.Instance.User.UserId;
         await initTask;
 
         //새로운 계정인지 체크
@@ -279,7 +277,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
 
         //새로운 계정을 생성할때 할 행동들 진행
         //기본 캐릭터 넣어주기
-        if (!await AddNewCharacter(userId, "1001"))
+        if (!await AddNewCharacter("1001"))
         {
             //실패했으면 문서 안만들어줌 -> 다음에 다시 시도함
             return;
@@ -290,4 +288,213 @@ public class FirestoreManager : Singleton<FirestoreManager>
             { "createdAt", FieldValue.ServerTimestamp }
         });
     }
+
+    #region 캐릭터가 장착하고있는 아이템의 정보를 바꿔야 할때 
+    public async Task<bool> SaveCharacterEquipment(CharacterDataSO dataSO, EquipmentInstance equipInstance, eEquipmentType equipmentType)
+    {
+        string userId = FirebaseAuthManager.Instance.User.UserId;
+        //ref부터 찾자.
+        DocumentReference characterRef = db.Collection(userText).Document(userId).Collection(characterText).Document(dataSO.CharacterId);
+        //예외처리
+        if(!CharacterManager.Instance.HaveCharacterDict.TryGetValue(dataSO.CharacterId, out CharacterInstance characterInstance))
+        {
+            MyLog.LogError("캐릭터 id가 없어서 찾기 실패");
+            return false;
+        }
+        //정보 설정
+        if(!characterInstance.characterLevelDataDb.SetCharacterEquipmentDB(equipmentType, equipInstance))
+        {
+            MyLog.LogError("캐릭터 DB에 정보설정 실패");
+            return false;
+        }
+        await characterRef.SetAsync(characterInstance);
+        return true;
+    }
+
+    public async Task<CharacterDataDb> UnEquipmentChracter(CharacterDataSO characterDataSO, EquipmentInstance equipmentInstance)
+    {
+        //캐릭터 장비 장착 해제 메서드.
+        await WaitForInitAsync();
+
+        string uid = FirebaseAuthManager.Instance.User.UserId;
+        //필요한게 뭘까? 일단 주소가 필요함. 1. 캐릭터 주소, 2. 인벤토리 주소
+        //1. 인벤토리 주소
+        string equipmentKey = MakeItemKey(equipmentInstance.EquipmentDataSO.EquipmentId, equipmentInstance.Level);
+        DocumentReference equipmentReference = db
+            .Collection(userText).Document(uid)
+            .Collection(inventoryText).Document(itemType_equipment)
+            .Collection(itemCollect).Document(equipmentKey);
+        //2. 캐릭터 주소
+        DocumentReference characterRef = db
+            .Collection(userText).Document(uid)
+            .Collection(characterText).Document(characterDataSO.CharacterId);
+
+        //트랜젝션 진행
+        try
+        {
+            //return await db.RunTransactionAsync<CharacterDataDb>(async transaction =>
+            return await db.RunTransactionAsync<CharacterDataDb>(async transaction =>
+            {
+                //스냅샷으로 기존 장비를 읽고, 정보를 가져온다. 
+                DocumentSnapshot inventorySnapshot = await transaction.GetSnapshotAsync(equipmentReference);
+                //하지말자. if (!inventorySnapshot.Exists) { return false; } //아이템이 인벤토리에 없을수도있으므로 이거 체크하면 안됨.
+                DocumentSnapshot characterSnapshot = await transaction.GetSnapshotAsync(characterRef);
+                if (!characterSnapshot.Exists) { return null; }
+                //캐릭터는 DB
+                CharacterDataDb characterDataDb = characterSnapshot.ConvertTo<CharacterDataDb>();
+                if (characterDataDb == null) { return null; }
+                //기존 장비를 장착 해제하는 과정 진행 -> 검증부터 하고, 이후 해제한다.
+                //1. 장비 가져와서 비교
+                eEquipmentType equipmentType = equipmentInstance.EquipmentDataSO.EquipmentType;
+                CharacterEquipmentDataDB equippedData =  characterDataDb.GetCharacterEquipmentDataDB(equipmentType);
+                if (equippedData == null) { return null; }
+
+                if(equippedData.equipmentId != equipmentInstance.EquipmentDataSO.EquipmentId ||
+                equippedData.equipmentLevel != equipmentInstance.Level)
+                {
+                    return null;
+                }
+                //2. 검증통과했으면 장착 해제
+                CharacterEquipmentDataDB characterEquipmentDataDB = characterDataDb.UnEquipmentCharacterDB(equipmentInstance.EquipmentDataSO.EquipmentType);
+                if (characterEquipmentDataDB == null) { return null; }
+
+                
+                //쓰기 작업
+                //이 장비를 인벤토리에 추가. 장비 해제했으므로 +1 해준다.
+                int equipmentCount = inventorySnapshot.Exists ? Convert.ToInt32(inventorySnapshot.GetValue<long>(countText)) : 0;
+                int remainCount = equipmentCount + 1;
+                transaction.Set(equipmentReference, new Dictionary<string, object>
+                {
+                    {countText,remainCount }
+                });
+                transaction.Set(characterRef, characterDataDb);
+
+                return characterDataDb;
+            });
+        }
+        catch (Exception e)
+        {
+            MyLog.LogError($"장착해제 실패" + e);
+            return null;
+        }
+    }
+
+    public async Task<CharacterDataDb> TryEquipTransactionAsync(CharacterDataSO characterSO, EquipmentInstance newEquipment, EquipmentInstance oldEquipment, eEquipmentType type)
+    {
+        await WaitForInitAsync();
+
+        string uid = FirebaseAuthManager.Instance.User.UserId;
+
+        // 새 장비의 인벤토리 문서
+        string newKey = MakeItemKey(
+            newEquipment.EquipmentDataSO.EquipmentId,
+            newEquipment.Level);
+
+        DocumentReference newItemRef = db
+            .Collection(userText).Document(uid)
+            .Collection(inventoryText).Document(itemType_equipment)
+            .Collection(itemCollect).Document(newKey);
+
+        // 기존 장비의 인벤토리 문서
+        DocumentReference oldItemRef = null;
+
+        if (oldEquipment != null)
+        {
+            string oldKey = MakeItemKey(
+                oldEquipment.EquipmentDataSO.EquipmentId,
+                oldEquipment.Level);
+
+            oldItemRef = db
+                .Collection(userText).Document(uid)
+                .Collection(inventoryText).Document(itemType_equipment)
+                .Collection(itemCollect).Document(oldKey);
+        }
+        //해당 캐릭터 장착을 위해
+        DocumentReference characterRef = db
+            .Collection(userText).Document(uid)
+            .Collection(characterText)
+            .Document(characterSO.CharacterId);
+
+        try
+        {
+            //트렌젝션으로 안의 모든것이 완료될때만 진행하도록 함
+            return await db.RunTransactionAsync<CharacterDataDb>(async transaction =>
+            {
+                // 1. 필요한 문서를 모두 읽는다.
+                DocumentSnapshot newSnap =
+                    await transaction.GetSnapshotAsync(newItemRef);
+
+                DocumentSnapshot oldSnap = null;
+
+                if (oldItemRef != null)
+                {
+                    oldSnap = await transaction.GetSnapshotAsync(oldItemRef);
+                }
+
+                DocumentSnapshot characterSnap =
+                    await transaction.GetSnapshotAsync(characterRef);
+
+                // 2. 데이터 검증
+                if (!characterSnap.Exists)
+                    return null;
+
+                int newCount = newSnap.Exists
+                    ? Convert.ToInt32(newSnap.GetValue<long>(countText))
+                    : 0;
+
+                if (newCount <= 0)
+                    return null;
+
+                int oldCount = oldSnap != null && oldSnap.Exists
+                    ? Convert.ToInt32(oldSnap.GetValue<long>(countText))
+                    : 0;
+
+                // 3. 캐릭터 DB 데이터 준비
+                CharacterDataDb characterDB =
+                    characterSnap.ConvertTo<CharacterDataDb>();
+
+                if (characterDB == null ||
+                    !characterDB.SetCharacterEquipmentDB(type, newEquipment))
+                {
+                    return null;
+                }
+
+                // 4. 여기부터 쓰기 작업
+                int remainCount = newCount - 1;
+
+                if (remainCount <= 0)
+                {
+                    transaction.Delete(newItemRef); //더이상 장비없다면 삭제
+                }
+                else
+                {
+                    transaction.Set(newItemRef,
+                        new Dictionary<string, object>
+                        {
+                        { countText, remainCount }
+                        });
+                }
+
+                if (oldItemRef != null)
+                {
+                    transaction.Set(oldItemRef,
+                        new Dictionary<string, object>
+                        {
+                        { countText, oldCount + 1 }
+                        });
+                }
+
+                transaction.Set(characterRef, characterDB);
+
+                return characterDB;
+            });
+        }
+        catch (Exception e)
+        {
+            MyLog.LogError($"장비 장착 트랜잭션 실패: {e.Message}");
+            return null;
+        }
+    }
+
+    #endregion
 }
