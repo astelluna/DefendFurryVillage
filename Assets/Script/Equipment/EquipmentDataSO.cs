@@ -20,7 +20,7 @@ public class EquipmentDataSO : ScriptableObject
     [field: SerializeField] public CharacterStat stat { get; private set; }
     [Header("아이템 업그레이드 시 오르는 스텟")]
     [field: SerializeField] public int UpgradeAttackValue { get; private set; } = 1;
-    [field: SerializeField] public float UpgradeCriticalRate { get; private set; } = 1f;
+    [field: SerializeField] public int UpgradeCriticalRate { get; private set; } = 1;
     [field: SerializeField] public float UpgradeCriticalRatio { get; private set; } = 1f;
     [field: SerializeField] public float UpgradeArmorPenetrate { get; private set; } = 1f;
 }

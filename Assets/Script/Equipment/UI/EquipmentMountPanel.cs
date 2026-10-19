@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Timeline.Actions.MenuPriority;
 
 public class EquipmentMountPanel : MonoBehaviour
 {
@@ -50,9 +49,6 @@ public class EquipmentMountPanel : MonoBehaviour
             MyLog.LogError("장비 장착 실패. ");
             return;
         }
-        //정보 설정
-        EquipmentSlotUI equipmentSlotUI =  equipmentSlotDict[data.EquipmentDataSO.EquipmentType];
-        equipmentSlotUI.SetData(data, curCharacterData);
 
         //갱신
         UpdateEquipmentInventory();
@@ -102,9 +98,10 @@ public class EquipmentMountPanel : MonoBehaviour
             item.EquipmentSlotUIRequest += UnEquipmentMethod;
         }
     }
-    //캐릭터 장비 표시하는 스코롤 뷰
-    private void OnDestroy()
+    private void UnInit()
     {
+        if(!isInitalized) { return; }
+        isInitalized = false;
         closeButton.onClick.RemoveAllListeners();
         equipmentInfoPanel.MountEquipmentRequest -= MountEquipment;
 
@@ -113,7 +110,11 @@ public class EquipmentMountPanel : MonoBehaviour
             item.EquipmentSlotUIRequest -= UnEquipmentMethod;
         }
         ClearEquipmentUI();
-
+    }
+    //캐릭터 장비 표시하는 스코롤 뷰
+    private void OnDestroy()
+    {
+        UnInit();
 
     }
     private void OnCloseButtonClick()
@@ -130,38 +131,26 @@ public class EquipmentMountPanel : MonoBehaviour
         //캐릭터 정보 표시
         characterImage.sprite = curCharacterData.CharacterBodySprite;
         characterName.text = curCharacterData.CharacterName;
-        statIconAll.SetIcon(curCharacterData);
+        
 
-        //스코롤뷰에 가지고있는 장비 표시
+        //변경사항 : 기본 능력치가 아니라, 장비까지 포함한 캐릭터의 능력치가 필요함. 
+        CharacterInstance characterInstance = CharacterManager.Instance.HaveCharacterDict[data.CharacterId];
+        CharacterStat characterTotalStat = characterInstance.GetCharacterTotalStat();
+        statIconAll.SetIcon(characterTotalStat);
+
+        //현재 장비와 인벤토르 장비 표시
         UpdateEquipmentInventory();
         UpdateEquipmentUI();
-        //현재 캐릭터가 가지고있는 장비를 버튼에 표시해야함.
-        /*
-        CharacterEquipment characterEquipment =  CharacterManager.Instance.GetCharacterEquipment(curCharacterData.CharacterId);
-
-        //버튼에 플레이어가 현재 장비중인 장비를 표시
-        foreach(KeyValuePair<eEquipmentType, EquipmentSlotUI> pair in equipmentSlotDict)
-        {
-            EquipmentInstance equipmentInstance = characterEquipment.GetEquipment(pair.Key);
-            EquipmentSlotUI slotUI = equipmentSlotDict[pair.Key];
-            if (equipmentInstance == null)
-            {
-                //장비가 없는것이므로 흰색으로 둔다
-                slotUI.ClearData();
-                continue;
-            }
-            slotUI.SetData(equipmentInstance, curCharacterData);
-        }
-        */
 
         this.gameObject.SetActive(true);
     }
     private void ClearEquipmentUI()
     {
+        bool canReturn = EquipmentButtonSpawner.Instance != null;
         foreach (var item in equipmentUIList)
         {
             item.OnClickUI -= ShowEquipmentInfo;
-            EquipmentButtonSpawner.Instance.ReturnPrefabToPool(item);
+            if (canReturn) EquipmentButtonSpawner.Instance.ReturnPrefabToPool(item);
         }
         equipmentUIList.Clear();
     }
@@ -173,18 +162,17 @@ public class EquipmentMountPanel : MonoBehaviour
         CharacterEquipment characterEquipment = CharacterManager.Instance.GetCharacterEquipment(curCharacterData.CharacterId);
         //런타임 데이터를 읽어서 
 
-        foreach (eEquipmentType type in Enum.GetValues(typeof(eEquipmentType)))
+        foreach(KeyValuePair<eEquipmentType, EquipmentSlotUI> pair in equipmentSlotDict)
         {
-            EquipmentSlotUI equipmentSlotUI = equipmentSlotDict[type];
-            EquipmentInstance equipmentInstance= characterEquipment.GetEquipment(type);
-            if (equipmentInstance == null) 
+            EquipmentInstance equipmentInstance = characterEquipment.GetEquipment(pair.Key);
+            if (equipmentInstance == null)
             {
                 //정보가 없으면 UI 초기화
-                equipmentSlotUI.ClearData();
-                continue; 
+                pair.Value.ClearData();
+                continue;
             }
             //정보 있으면 해당정보로 설정
-            equipmentSlotUI.UpdateUI(equipmentInstance, curCharacterData);
+            pair.Value.UpdateUI(equipmentInstance, curCharacterData);
         }
     }
     private void UpdateEquipmentInventory()

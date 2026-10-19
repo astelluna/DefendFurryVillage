@@ -46,7 +46,10 @@ public class CharacterInfoPanel : MonoBehaviour
         characterNameText.text = characterDataSO.CharacterName;
         //스킬 및 스탯 정보 셋팅
         skillIconAll.SetIcon(characterDataSO);
-        statIconAll.SetIcon(characterDataSO);
+        CharacterInstance characterInstance = CharacterManager.Instance.HaveCharacterDict[data.CharacterId];
+        CharacterStat characterTotalStat = characterInstance.GetCharacterTotalStat();
+        statIconAll.SetIcon(characterTotalStat);
+        //statIconAll.SetIcon(characterDataSO);
 
         this.gameObject.SetActive(true);
     }

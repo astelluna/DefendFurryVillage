@@ -9,6 +9,20 @@ public class CharacterInstance
     public CharacterDataSO characterData { get; private set; }
     public CharacterDataDb characterLevelDataDb { get; private set; }
     public CharacterEquipment characterEquipment { get; private set; }
+
+    private CharacterStat totalCharacterStat = new CharacterStat();
+
+    //특정한 메서드 하나 부여해서, 언제든지 해당 클래스를 호출할수있게 해버리자 
+    public CharacterStat GetCharacterTotalStat()
+    {
+        CharacterStat characterBaseStat = characterData.CharacterBaseStat;
+        CharacterStat equipmentStat = characterEquipment.GetEquipmentStat();
+        totalCharacterStat.SetFromSum(characterBaseStat, equipmentStat);
+        //totalCharacterStat = characterBaseStat.CreateNewAddStat(equipmentStat);
+        return totalCharacterStat;
+    }
+
+
     public CharacterInstance(CharacterDataSO soData, CharacterDataDb levelData)
     {
         if (soData == null) throw new ArgumentNullException(nameof(soData));

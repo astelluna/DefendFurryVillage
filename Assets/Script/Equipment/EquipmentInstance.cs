@@ -33,6 +33,12 @@ public class EquipmentInstance
         }
         return false;
     }
+    public RuntimeEquipmentData GetRuntimeEquipmentData()
+    {
+        //한번 갱신후, 반환해주자. 
+        UpdateRuntimeData();
+        return runtimeEqipmentData;
+    }
 
     public EquipmentInstance(EquipmentDataSO data, int lvl)
     {

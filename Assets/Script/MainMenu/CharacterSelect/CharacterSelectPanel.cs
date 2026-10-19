@@ -59,7 +59,10 @@ public class CharacterSelectPanel : MonoBehaviour
     public void SelectCharacterAndShowInfo(CharacterSelectButton selectButton, CharacterDataSO characterDataSO)
     {
         //캐릭터 정보 표시
-        statIconAll.SetIcon(characterDataSO);
+        //statIconAll.SetIcon(characterDataSO);
+        CharacterInstance characterInstance = CharacterManager.Instance.HaveCharacterDict[characterDataSO.CharacterId];
+        CharacterStat characterTotalStat = characterInstance.GetCharacterTotalStat();
+        statIconAll.SetIcon(characterTotalStat);
         skillIconAll.SetIcon(characterDataSO);
 
         //선택한 리스트에 하나씩 추가를 해준다.

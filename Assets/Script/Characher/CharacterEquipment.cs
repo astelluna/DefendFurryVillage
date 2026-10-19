@@ -25,6 +25,33 @@ public class CharacterEquipment
         }
 
     }
+    public CharacterStat GetEquipmentStat()
+    {
+        //현재 장착중인 모든 장비의 스텟을 더해서 클래스 형태로 반환해준다.
+        CharacterStat characterStat = new CharacterStat();
+        if (characterEquipmentDict.Count == 0) 
+        {
+            characterStat.SetZero();
+            return characterStat; 
+        }
+        int atk = 0;
+        int critPercent = 0;
+        float critRate = 0f;
+        float armorpenet = 0f;
+
+        foreach(var pair in characterEquipmentDict)
+        {
+            RuntimeEquipmentData runtimeEquipmentData =  pair.Value.GetRuntimeEquipmentData();
+            atk += runtimeEquipmentData.attack;
+            critPercent += runtimeEquipmentData.criticalpercent;
+            critRate += runtimeEquipmentData.criticalRatio;
+            armorpenet += runtimeEquipmentData.armorPenetrate;
+
+        }
+        //최종 스텟으로 스텟을 만들어서 반환해준다.
+        characterStat.SetData(atk, critPercent, critRate, armorpenet);
+        return characterStat;
+    }
 
 
     public EquipmentInstance GetEquipment(eEquipmentType type)

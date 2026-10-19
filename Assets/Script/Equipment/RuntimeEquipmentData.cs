@@ -5,7 +5,7 @@ public class RuntimeEquipmentData
     EquipmentDataSO equipmentDataSO;
 
     public int attack { get; private set; }
-    public float criticalpercent { get; private set; }
+    public int criticalpercent { get; private set; }
     public float criticalRatio { get; private set; }
     public float armorPenetrate { get; private set; }
 

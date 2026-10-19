@@ -20,7 +20,7 @@ public class CharacterManager : Singleton<CharacterManager>
     //public IReadOnlyList<CharacterDataSO> HaveCharacterSOList => haveCharacterSOList;
     //Dictionary<string, CharacterDataSO> haveCharacterSoDict = new Dictionary<string, CharacterDataSO>(); // TODO. 추후 계정에서 확인해서 캐릭터 가지고있는지 아닌지 체크해서 넣어둘거임
 
-    //캐릭터를 가지고있는지 딕셔너리 (DB에서 읽어서 Set됨)
+    //어떤 캐릭터를 가지고있고, 해당 캐릭터의 정보를 담아두는 딕셔너리 (DB에서 읽어서 Set됨)
     Dictionary<string, CharacterInstance> haveCharacterDict = new Dictionary<string, CharacterInstance>();
     public IReadOnlyDictionary<string, CharacterInstance> HaveCharacterDict => haveCharacterDict;
 
