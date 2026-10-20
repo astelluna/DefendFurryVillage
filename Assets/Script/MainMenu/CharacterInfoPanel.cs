@@ -62,7 +62,7 @@ public class CharacterInfoPanel : MonoBehaviour
         skillIconAll.SetIcon(characterDataSO);
         
         //만약 캐릭터를 가지고있지않다면? 장비 설정 버튼 비활성화
-        if (CharacterManager.Instance.HaveCharacterDict.ContainsKey(characterDataSO.CharacterId))
+        if(CharacterManager.Instance.HaveCharacter(characterDataSO.CharacterId))
         {
             //캐릭터를 가지고있음
             UpdateCharacterStat();

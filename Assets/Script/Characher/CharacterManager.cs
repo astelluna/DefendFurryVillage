@@ -252,6 +252,15 @@ public class CharacterManager : Singleton<CharacterManager>
         if (spawnedCharacterList.Count == 0) return false;
         return true;
     }
+    public bool HaveCharacter(string id)
+    {
+        //캐릭터를 보유중인지 확인(구매한 캐릭터인지)
+        if(haveCharacterDict.ContainsKey(id))
+        {
+            return true;
+        }
+        return false;
+    }
 
     public CharacterStat GetTotalCharacterStat(CharacterDataSO data)
     {

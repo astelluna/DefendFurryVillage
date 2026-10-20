@@ -5,7 +5,9 @@ public class CharacterShowPanel : MonoBehaviour, IMainMenuPanel
 {
     //패널을 열면 모든 캐릭터에 대해서 버튼으로 프리팹을 하나 생성해준다. 
     //[SerializeField] CharacterInfoButton characterButtonPrefab;
-    [SerializeField] Transform makePosition; //스코롤뷰 Content 위치
+    [SerializeField] Transform haveCharacterMakePosition; //보유 캐릭터 생성 위치 - 스코롤뷰 Content 위치
+    [SerializeField] Transform unHaveCharacterMakePosition; //미보유 캐릭터 생성 위치
+
     [SerializeField] CharacterInfoPanel characterInfoPanel;
 
     List<CharacterInfoButton> characterinfoButtonList = new List<CharacterInfoButton>();
@@ -36,7 +38,16 @@ public class CharacterShowPanel : MonoBehaviour, IMainMenuPanel
 
         foreach (CharacterDataSO item in characterDataSOList)
         {
-            //CharacterInfoButton buttonPrefab = Instantiate(characterButtonPrefab, makePosition);
+            //보유중인 캐릭터, 아닌지에 따라 UI가 생성되는 위치가 달라짐
+            Transform makePosition = null;
+            if(CharacterManager.Instance.HaveCharacter(item.CharacterId))
+            {
+                makePosition = haveCharacterMakePosition;
+            }
+            else
+            {
+                makePosition = unHaveCharacterMakePosition;
+            }
             CharacterInfoButton buttonPrefab = CharacterInfoButtonSpawner.Instance.GetPrefabByPool(makePosition);
             buttonPrefab.SetCharacterData(item);
             buttonPrefab.OnCharcterBtnClick += OnShowCharacterInfoPanel;
