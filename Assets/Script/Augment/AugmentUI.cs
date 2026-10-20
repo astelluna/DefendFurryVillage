@@ -44,9 +44,9 @@ public class AugmentUI : MonoBehaviour
     public void SetData(Character character)
     {
         characterPrefab = character;
-        characterImage.sprite = characterPrefab.CharacterDataSO.CharacterPortraitSprite;
-        iconImage.sprite = characterPrefab.CharacterDataSO.SpecialWeaponDataSO.WeaponIcon;
-        descriptionText.text = characterPrefab.CharacterDataSO.SpecialWeaponDataSO.WeaponDescription;
+        characterImage.sprite = characterPrefab.CharacterInstanceData.characterData.CharacterPortraitSprite;
+        iconImage.sprite = characterPrefab.CharacterInstanceData.characterData.SpecialWeaponDataSO.WeaponIcon;
+        descriptionText.text = characterPrefab.CharacterInstanceData.characterData.SpecialWeaponDataSO.WeaponDescription;
 
     }
     public void Init()

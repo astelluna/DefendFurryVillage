@@ -130,7 +130,7 @@ public class AugmentManager : MonoBehaviour
                 Character character = haveAugmentCharacterList[characterNo];
 
                 WeaponAugment data = character.GetAugment(); //정보를 하나 가져와보자.
-                augmentPanel.AddData(data, character.CharacterDataSO.CharacterPortraitSprite, i); //여기서 알아서 i번째 UI에 UI를 넣도록 함.
+                augmentPanel.AddData(data, character.CharacterInstanceData.characterData.CharacterPortraitSprite, i); //여기서 알아서 i번째 UI에 UI를 넣도록 함.
 
                 //이벤트 등록
                 selectedAugmentList.Add(data);

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class CharacterSelectScrollView : MonoBehaviour
 {
@@ -34,7 +35,6 @@ public class CharacterSelectScrollView : MonoBehaviour
 
     public void CharacterShow(CharacterSelectPanel selectPanel)
     {
-        //TODO. 오브젝트풀로 버튼들 바꾼다음에 매번 열때마다 정보 바꿔야함
         characterSelectPanel = selectPanel;
 
         //캐릭터를 가져오는데, 해금되지 않은 캐릭터는 불러오지 말아야함. (아예 불러오지말자)
@@ -42,20 +42,22 @@ public class CharacterSelectScrollView : MonoBehaviour
 
         //TEST -> 나중에 HaveCharacter로 바꾸기
         //IReadOnlyList<CharacterDataSO> characterDataSOList = CharacterManager.Instance.HaveCharacterSOList;
-        IReadOnlyList<CharacterDataSO> characterDataSOList = CharacterManager.Instance.AllCharacterSOList;
-
-        foreach (CharacterDataSO item in characterDataSOList)
+        
+        IReadOnlyDictionary<string, CharacterInstance> haveCharacterDict = CharacterManager.Instance.HaveCharacterDict;
+        foreach(KeyValuePair<string, CharacterInstance> pair in haveCharacterDict)
         {
-            //TODO. 추후에 캐릭터 많아지면 이거도 오브젝트풀 해두기
+            string characterId = pair.Key;
             CharacterSelectButton buttonPrefab = CaracterSelectButtonSpawner.Instance.GetPrefabByPool(makePosition);
-            buttonPrefab.SetCharacterSelectButton(item);
+            buttonPrefab.SetCharacterSelectButton(pair.Value);
             buttonPrefab.OnCharacterSelectButtonClicked += OnCharacterSelect;
             characterSelectButtonList.Add(buttonPrefab);
         }
     }
-    private void OnCharacterSelect(CharacterSelectButton selectButton , CharacterDataSO characterDataSO)
+
+    private void OnCharacterSelect(CharacterSelectButton selectButton, CharacterInstance characterInstance)
     {
-        characterSelectPanel.SelectCharacterAndShowInfo(selectButton, characterDataSO);
+        
+        characterSelectPanel.SelectCharacterAndShowInfo(selectButton, characterInstance);
     }
 
 }

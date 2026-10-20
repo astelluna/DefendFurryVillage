@@ -48,25 +48,26 @@ public class CharacterSelectPanel : MonoBehaviour
             return; 
         }
         //다음 인게임씬으로 이동하기전에 싱글톤 매니저들에 정보를 설정해준다 
-        List<CharacterDataSO> selectedCharacterDataSO = characterSelectedUIManager.GetSelectedCharacter();
-        CharacterManager.Instance.SetSelectedCharacter(selectedCharacterDataSO);
+        List<CharacterInstance> selectedInstanceList = characterSelectedUIManager.GetSelectedCharacter();
+        CharacterManager.Instance.SetSelectedCharacter(selectedInstanceList);
         StageManager.Instance.SetStageData(stageDataSO);
         //씬 이동
         SceneManager.LoadScene(SceneController.InGame);
 
+
     }
 
-    public void SelectCharacterAndShowInfo(CharacterSelectButton selectButton, CharacterDataSO characterDataSO)
+    public void SelectCharacterAndShowInfo(CharacterSelectButton selectButton, CharacterInstance characterInstance)
     {
         //캐릭터 정보 표시
         //statIconAll.SetIcon(characterDataSO);
-        CharacterInstance characterInstance = CharacterManager.Instance.HaveCharacterDict[characterDataSO.CharacterId];
+        //CharacterInstance characterInstance = CharacterManager.Instance.HaveCharacterDict[characterDataSO.CharacterId];
         CharacterStat characterTotalStat = characterInstance.GetCharacterTotalStat();
         statIconAll.SetIcon(characterTotalStat);
-        skillIconAll.SetIcon(characterDataSO);
+        skillIconAll.SetIcon(characterInstance.characterData);
 
         //선택한 리스트에 하나씩 추가를 해준다.
-        if(characterSelectedUIManager.SetData(characterDataSO, out bool selected))
+        if(characterSelectedUIManager.SetData(characterInstance, out bool selected))
         {
             //변했으면 패널에 변경점이 있음
             selectButton.UpdateCheckImage(selected);

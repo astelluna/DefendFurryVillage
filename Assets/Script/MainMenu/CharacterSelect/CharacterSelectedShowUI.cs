@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class CharacterSelectedShowUI : MonoBehaviour
 {
     [SerializeField] Button button;
-    public CharacterDataSO CharacterSO { get; private set; }
+    public CharacterInstance CharacterInstanceData { get; private set; }
 
     private void Awake()
     {
@@ -14,10 +14,10 @@ public class CharacterSelectedShowUI : MonoBehaviour
         button.onClick.AddListener(OnSelectedButtonClick);
     }
 
-    public void SetUI(CharacterDataSO data)
+    public void SetUI(CharacterInstance data)
     {
-        CharacterSO = data;
-        button.image.sprite = CharacterSO.CharacterPortraitSprite;
+        CharacterInstanceData = data;
+        button.image.sprite = CharacterInstanceData.characterData.CharacterPortraitSprite;
         this.gameObject.SetActive(true);
     }
 
@@ -28,7 +28,7 @@ public class CharacterSelectedShowUI : MonoBehaviour
     }
     public void CancelUI()
     {
-        CharacterSO = null;
+        CharacterInstanceData = null;
         this.gameObject.SetActive(false);
     }
 

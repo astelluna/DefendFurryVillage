@@ -26,7 +26,8 @@ public class CharacterManager : Singleton<CharacterManager>
 
 
     //선택한 캐릭터 아이디 목록
-    List<CharacterDataSO> selectedCharacterList = new List<CharacterDataSO>();
+    //List<CharacterDataSO> selectedCharacterList = new List<CharacterDataSO>();
+    List<CharacterInstance> selectedCharacterInstanceList = new List<CharacterInstance>();
 
     //런타임중에 소환될수있는 캐릭터, 현재 소환중인 캐릭터 리스트
     public bool HasSelectedData => haveCharacterDict.Count > 0;
@@ -62,9 +63,9 @@ public class CharacterManager : Singleton<CharacterManager>
 
     //TODO. 그냥 인게임에서 사용하는 필드, 메서드들을 따로 클래스 파서 관리하는것도 좋을듯. 초기화해야할때 new 하기?
 
-    public void SetSelectedCharacter(List<CharacterDataSO> characterDataSOList)
+    public void SetSelectedCharacter(List<CharacterInstance> characterInstanceList)
     {
-        selectedCharacterList = characterDataSOList;
+        selectedCharacterInstanceList = characterInstanceList;
     }
 
     protected override void OnAwake()
@@ -141,7 +142,7 @@ public class CharacterManager : Singleton<CharacterManager>
         TaskCompletionSource<bool> tcs = ingameCharacterLoadTcs; //이렇게 해야 다른곳에서 await한게 아닌 이번에 새로생성된거로 사용함 
         try
         {
-            await SetAndLoadSelectedCharacterData(selectedCharacterList);
+            await SetAndLoadSelectedCharacterData(selectedCharacterInstanceList);
             tcs.SetResult(true);
         }
         catch(Exception e)
@@ -154,49 +155,51 @@ public class CharacterManager : Singleton<CharacterManager>
     public void ReleaseFor_InGame()
     {
         //인게임씬에서 어드레서블 로드한 항목에 대해서 릴리즈 진행
-        for (int i = 0; i < selectedCharacterList.Count; i++)
+        for (int i = 0; i < selectedCharacterInstanceList.Count; i++)
         {
             //캐릭터 프리팹을 불러와야함.
             //Release(selectedCharacterList[i].CharacterReferencePrefab);
-            AddressableManager.Instance.Release(selectedCharacterList[i].CharacterReferencePrefab);
+            AddressableManager.Instance.Release(selectedCharacterInstanceList[i].characterData.CharacterReferencePrefab);
         }
         //만들었던 객체들 없애기
         foreach (var character in unSpawnedCharacterList) { if(character != null) Destroy(character.gameObject); }
         foreach (var character in spawnedCharacterList) { if (character != null) Destroy(character.gameObject); }
 
         //필드들 초기화
-        selectedCharacterList.Clear();
+        selectedCharacterInstanceList.Clear();
         unSpawnedCharacterList.Clear();
         spawnedCharacterList.Clear();
         characterSpawnPosition = null;
     }
     private async Task LoadSelectedCharacter_TestMode()
     {
+        //TODO. 테스트모드 정말 추후에 하기. 현재 캐릭터 코드 수정중임.
         MyLog.Log("!테스트 모드로 동작합니다!");
-        selectedCharacterList = new List<CharacterDataSO>(testSelectedCharacterSOList);
+        //selectedCharacterInstanceList = new List<CharacterDataSO>(testSelectedCharacterSOList);
+        selectedCharacterInstanceList = new List<CharacterInstance>();
         await LoadInitFor_InGame();
     }
 
-    private async Task SetAndLoadSelectedCharacterData(List<CharacterDataSO> dataList = null)
+    private async Task SetAndLoadSelectedCharacterData(List<CharacterInstance> dataList = null)
     {
         //인게임 전에 이 코드를 실행.
         for(int i=0; i< dataList.Count; i++)
         {
             //가지고있는 캐릭터인지 체크
-            if (!haveCharacterDict.ContainsKey(dataList[i].CharacterId))
+            if (!haveCharacterDict.ContainsKey(dataList[i].characterData.CharacterId))
             {
                 MyLog.LogError($"가지고있는 캐릭터가 아닌데 선택되어서 인게임에 진입했습니다. 에러발생");
                 continue;
             }
             //SO에 프리팹이 있는지 확인
-            if (dataList[i].CharacterReferencePrefab == null)
+            if (dataList[i].characterData.CharacterReferencePrefab == null)
             {
                 MyLog.LogError("캐릭터So에 프리팹이 Null 입니다");
                 continue;
             }
 
             //캐릭터 프리팹을 불러와야함.
-            Character characterOrigin = await AddressableManager.Instance.GetAssetAsync_Asset<Character>(dataList[i].CharacterReferencePrefab);
+            Character characterOrigin = await AddressableManager.Instance.GetAssetAsync_Asset<Character>(dataList[i].characterData.CharacterReferencePrefab);
             //Character characterOrigin = await AddressableLoadFunc<Character>(dataList[i].CharacterReferencePrefab);
 
             //하나 프리팹을 만들고. 그것을 미리 생성해두자. 
@@ -205,7 +208,7 @@ public class CharacterManager : Singleton<CharacterManager>
             character.CharacterActive(false);
             unSpawnedCharacterList.Add(character);
             //캐릭터 초기화 및 풀 생성
-            character.SetCharacterSO(dataList[i]);
+            character.SetCharacterData(dataList[i]);
             await character.Init();
             character.MakeWeaponProjectilePool();
         }
@@ -216,7 +219,7 @@ public class CharacterManager : Singleton<CharacterManager>
         Transform spawnTrf = characterSpawnPosition.GetTransform(spawnedCharacterList.Count);
         foreach( var item in unSpawnedCharacterList)
         {
-            if(item.CharacterDataSO.CharacterId == characterPrefab.CharacterDataSO.CharacterId)
+            if(item.CharacterInstanceData.characterData.CharacterId == characterPrefab.CharacterInstanceData.characterData.CharacterId)
             {
                 Character characterObj = item;
                 characterObj.transform.position = spawnTrf.position;
