@@ -135,10 +135,6 @@ public class EquipmentMountPanel : MonoBehaviour
         characterImage.sprite = curCharacterData.CharacterBodySprite;
         characterName.text = curCharacterData.CharacterName;
 
-
-        //변경사항 : 기본 능력치가 아니라, 장비까지 포함한 캐릭터의 능력치가 필요함. 
-
-
         //현재 장비와 인벤토르 장비 표시
         UpdateCharacterStat();
         UpdateEquipmentInventory();

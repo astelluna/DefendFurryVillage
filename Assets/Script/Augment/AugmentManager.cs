@@ -68,7 +68,7 @@ public class AugmentManager : MonoBehaviour
     private bool NeedCharacterSpawn(List<Character> remainCharacters)
     {
         if (remainCharacters.Count == 0) return false;
-        if (!CharacterManager.Instance.HaveCharacter()) return true;
+        if (!CharacterManager.Instance.HaveSpawnedCharacter()) return true;
         int characterPercent = Character_Pick_Percent; //80퍼센트 확률로 캐릭터 먼저 제공
         int value = Random.Range(1, 101);
         if (value > characterPercent) { return false; }

@@ -31,6 +31,12 @@ public class CharacterInfoPanel : MonoBehaviour
         CharacterStat characterTotalStat = CharacterManager.Instance.GetTotalCharacterStat(characterDataSO);
         statIconAll.SetIcon(characterTotalStat);
     }
+    private void UpdateCharacterStat_basic()
+    {
+        //캐릭터를 가지고있지 않으면 그냥 기본 캐릭터 스텟을 화면에 보여준다.
+        CharacterStat characterStat =  CharacterManager.Instance.GetBasicCharacterStat(characterDataSO);
+        statIconAll.SetIcon(characterStat);
+    }
 
     private void OnDestroy()
     {
@@ -54,8 +60,20 @@ public class CharacterInfoPanel : MonoBehaviour
         characterNameText.text = characterDataSO.CharacterName;
         //스킬 및 스탯 정보 셋팅
         skillIconAll.SetIcon(characterDataSO);
-        UpdateCharacterStat();
-
+        
+        //만약 캐릭터를 가지고있지않다면? 장비 설정 버튼 비활성화
+        if (CharacterManager.Instance.HaveCharacterDict.ContainsKey(characterDataSO.CharacterId))
+        {
+            //캐릭터를 가지고있음
+            UpdateCharacterStat();
+            equipmentButton.interactable = true;
+            
+        }
+        else
+        {
+            UpdateCharacterStat_basic();
+            equipmentButton.interactable = false;
+        }
         this.gameObject.SetActive(true);
     }
 

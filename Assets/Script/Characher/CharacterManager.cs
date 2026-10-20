@@ -246,8 +246,9 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         return remainCharacterList;
     }
-    public bool HaveCharacter()
+    public bool HaveSpawnedCharacter()
     {
+        //인게임에서 소환중인 캐릭터가 있는지 확인하는 메서드
         if (spawnedCharacterList.Count == 0) return false;
         return true;
     }
@@ -258,6 +259,14 @@ public class CharacterManager : Singleton<CharacterManager>
         CharacterInstance characterInstance = CharacterManager.Instance.HaveCharacterDict[data.CharacterId];
         return characterInstance.GetCharacterTotalStat();
     }
+    public CharacterStat GetBasicCharacterStat(CharacterDataSO data)
+    {
+        //캐릭터의 기본 스텟을 참조해서 캐릭터 스텟을 만드는 메서드 
+        CharacterStat characterStat = new CharacterStat();
+        characterStat.SetData(data.CharacterBaseStat.attack, data.CharacterBaseStat.criticalPercent, data.CharacterBaseStat.criticalDamageRate, data.CharacterBaseStat.armorPenetration);
+        return characterStat;
+    }
+
 
     #region 캐릭터 장비 관련 
     public CharacterEquipment GetCharacterEquipment(string characterId)
