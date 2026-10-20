@@ -24,10 +24,18 @@ public class CharacterInfoPanel : MonoBehaviour
     {
         closeButton.onClick.AddListener(OnClose);
         equipmentButton.onClick.AddListener(OnEquipClick);
+        equipmentMountPanel.CharacterStatChangeRequest += UpdateCharacterStat;
     }
+    private void UpdateCharacterStat()
+    {
+        CharacterStat characterTotalStat = CharacterManager.Instance.GetTotalCharacterStat(characterDataSO);
+        statIconAll.SetIcon(characterTotalStat);
+    }
+
     private void OnDestroy()
     {
         closeButton.onClick.RemoveAllListeners();
+        equipmentMountPanel.CharacterStatChangeRequest -= UpdateCharacterStat;
     }
     private void OnClose()
     {
@@ -46,10 +54,7 @@ public class CharacterInfoPanel : MonoBehaviour
         characterNameText.text = characterDataSO.CharacterName;
         //스킬 및 스탯 정보 셋팅
         skillIconAll.SetIcon(characterDataSO);
-        CharacterInstance characterInstance = CharacterManager.Instance.HaveCharacterDict[data.CharacterId];
-        CharacterStat characterTotalStat = characterInstance.GetCharacterTotalStat();
-        statIconAll.SetIcon(characterTotalStat);
-        //statIconAll.SetIcon(characterDataSO);
+        UpdateCharacterStat();
 
         this.gameObject.SetActive(true);
     }

@@ -23,7 +23,8 @@ public class EquipmentMountPanel : MonoBehaviour
     [SerializeField] Image characterImage;
     [SerializeField] TextMeshProUGUI characterName;
     [SerializeField] StatIconAll statIconAll;
-    //캐릭터 장비 표시.
+    //장비 교환될때 해당 스텟을 반환 
+    public event Action CharacterStatChangeRequest;
 
     //아이템을 정렬하기 위한 버튼들 (추후 하자)
     [SerializeField] Button allItemShowButton;
@@ -51,6 +52,7 @@ public class EquipmentMountPanel : MonoBehaviour
         }
 
         //갱신
+        UpdateCharacterStat();
         UpdateEquipmentInventory();
         UpdateEquipmentUI();
     }
@@ -73,6 +75,7 @@ public class EquipmentMountPanel : MonoBehaviour
         //2. UI갱신
         //데이터 처리 끝나고 데이터 초기화 및 화면에 보이는 데이터 갱신
         //equipmentSlotUI.ClearData();
+        UpdateCharacterStat();
         UpdateEquipmentInventory(); 
         UpdateEquipmentUI();
 
@@ -131,19 +134,19 @@ public class EquipmentMountPanel : MonoBehaviour
         //캐릭터 정보 표시
         characterImage.sprite = curCharacterData.CharacterBodySprite;
         characterName.text = curCharacterData.CharacterName;
-        
+
 
         //변경사항 : 기본 능력치가 아니라, 장비까지 포함한 캐릭터의 능력치가 필요함. 
-        CharacterInstance characterInstance = CharacterManager.Instance.HaveCharacterDict[data.CharacterId];
-        CharacterStat characterTotalStat = characterInstance.GetCharacterTotalStat();
-        statIconAll.SetIcon(characterTotalStat);
+
 
         //현재 장비와 인벤토르 장비 표시
+        UpdateCharacterStat();
         UpdateEquipmentInventory();
         UpdateEquipmentUI();
 
         this.gameObject.SetActive(true);
     }
+
     private void ClearEquipmentUI()
     {
         bool canReturn = EquipmentButtonSpawner.Instance != null;
@@ -174,6 +177,12 @@ public class EquipmentMountPanel : MonoBehaviour
             //정보 있으면 해당정보로 설정
             pair.Value.UpdateUI(equipmentInstance, curCharacterData);
         }
+    }
+    private void UpdateCharacterStat()
+    {
+        CharacterStat characterTotalStat =  CharacterManager.Instance.GetTotalCharacterStat(curCharacterData);
+        statIconAll.SetIcon(characterTotalStat);
+        CharacterStatChangeRequest?.Invoke();
     }
     private void UpdateEquipmentInventory()
     {

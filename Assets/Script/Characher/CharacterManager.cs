@@ -249,6 +249,13 @@ public class CharacterManager : Singleton<CharacterManager>
         return true;
     }
 
+    public CharacterStat GetTotalCharacterStat(CharacterDataSO data)
+    {
+        //캐릭터의 장비+ 기본스텟을 더한 능력치를 반환하는 메서드
+        CharacterInstance characterInstance = CharacterManager.Instance.HaveCharacterDict[data.CharacterId];
+        return characterInstance.GetCharacterTotalStat();
+    }
+
     #region 캐릭터 장비 관련 
     public CharacterEquipment GetCharacterEquipment(string characterId)
     {

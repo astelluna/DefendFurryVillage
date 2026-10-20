@@ -19,7 +19,6 @@ public class EquipmentSlotUI : MonoBehaviour
     private void Awake()
     {
         slotButton.onClick.AddListener(OnSlotButtonClick);
-        ClearData();
     }
     private void OnDestroy()
     {
