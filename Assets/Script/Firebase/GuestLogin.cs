@@ -44,7 +44,7 @@ public class GuestLogin : MonoBehaviour
             user = result.User;
 
 
-            await FirestoreManager.Instance.CheckAndCreateNewAccount(); //새로운 계정인지 체크해서 새 계정이면 데이터 만듬
+            await FirestoreManager.Instance.CreateNewAccount(); //새로운 계정인지 체크해서 새 계정이면 데이터 만듬
 
             GusetLoginRequest?.Invoke(true);
             Debug.Log($"익명 로그인 성공: UID: {user.UserId}");
