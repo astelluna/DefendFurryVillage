@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d57c636b95b496c43991771e936a238d, type: 3}
   m_Name: CharacherDataSO_Fox
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDataSO
-  <CharacterId>k__BackingField: Fox
+  <CharacterId>k__BackingField: 1000
   <CharacterName>k__BackingField: "\uC5EC\uC6B0"
   <CharacterBodySprite>k__BackingField: {fileID: 21300000, guid: 5fbc1606299a4a14499ac7acfee86780, type: 3}
   <CharacterPortraitSprite>k__BackingField: {fileID: 21300000, guid: 7f6fe63b77269fe4fbcfee208a01ecc7, type: 3}
@@ -24,6 +24,9 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   <BasicWeaponDataSO>k__BackingField: {fileID: 11400000, guid: b03f93eba77166248a9af0e85d41b585, type: 2}
   <SpecialWeaponDataSO>k__BackingField: {fileID: 11400000, guid: df576e89de0ec2e41b65797c231e200e, type: 2}
+  <PurchasePrice>k__BackingField:
+    <CurrencyType>k__BackingField: 0
+    <Amount>k__BackingField: 111
   <CharacterBaseStat>k__BackingField:
     <attack>k__BackingField: 10
     <criticalPercent>k__BackingField: 2

@@ -24,6 +24,9 @@ MonoBehaviour:
     m_EditorAssetChanged: 0
   <BasicWeaponDataSO>k__BackingField: {fileID: 11400000, guid: b03f93eba77166248a9af0e85d41b585, type: 2}
   <SpecialWeaponDataSO>k__BackingField: {fileID: 11400000, guid: c1a97758e9c5a9f43b5676f3df960814, type: 2}
+  <PurchasePrice>k__BackingField:
+    <CurrencyType>k__BackingField: 0
+    <Amount>k__BackingField: 5
   <CharacterBaseStat>k__BackingField:
     <attack>k__BackingField: 10
     <criticalPercent>k__BackingField: 1

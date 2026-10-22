@@ -1,6 +1,7 @@
 using Firebase;
 using Firebase.Extensions;
 using Firebase.Firestore;
+using Mono.Cecil.Cil;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -16,6 +17,8 @@ public enum eItemtype
 
 public class FirestoreManager : Singleton<FirestoreManager>
 {
+    //데이터를 쓰고, 읽는 전용 매니저 (Firestore를 이용한다)
+
     private FirebaseFirestore db;
     private bool isReady;
     Task initTask;
@@ -30,6 +33,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
     const string characterText = "characters";
     const string levelText = "level";
     const string expText = "exp";
+    const string goldText = "gold";
 
     protected override void OnAwake()
     {
@@ -148,7 +152,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
         });
         return true;
     }
-    public async Task<List<ItemDbInfo>> LoadItemAsync_All(eItemtype itemtype)
+    public async Task<List<ItemDbInfo>> LoadItemAsyncAll_Init(eItemtype itemtype)
     {
         await WaitForInitAsync();
         //특정 타입의 아이템 전체를 불러올거임. 
@@ -201,13 +205,14 @@ public class FirestoreManager : Singleton<FirestoreManager>
         {
             //DB에서 캐릭터 레벨 정보를 불러온뒤, 캐릭터 정보를 CharacterManager에 Set 해준다.
             CharacterDataDb levelDataDB = document.ConvertTo<CharacterDataDb>();
-            waitTaskList.Add(MakeCharacterInstance(levelDataDB.id, levelDataDB));
+            waitTaskList.Add(MakeRuntimeCharacterInstance_Sync(levelDataDB.id, levelDataDB));
         }
         await Task.WhenAll(waitTaskList);
 
     }
-    private async Task MakeCharacterInstance(string characterId, CharacterDataDb levelDataDB)
+    private async Task MakeRuntimeCharacterInstance_Sync(string characterId, CharacterDataDb characterData)
     {
+        //캐릭터 새로 생성할때 해당데이터를 런타임 데이터에도 추가
         await CharacterManager.Instance.InitalizeCharacterTask;
         IReadOnlyDictionary<string, CharacterDataSO> allCharacterDict = CharacterManager.Instance.AllCharacterSODict;
         if(!allCharacterDict.ContainsKey(characterId))
@@ -217,76 +222,41 @@ public class FirestoreManager : Singleton<FirestoreManager>
         }
         //캐릭터매니저에 정보 설정
         CharacterDataSO characterSO = allCharacterDict[characterId];
-        CharacterInstance characterInstance = new CharacterInstance(characterSO, levelDataDB);
+        CharacterInstance characterInstance = new CharacterInstance(characterSO, characterData);
         CharacterManager.Instance.AddHaveCharacterInstance(characterInstance);
-    }
-
-    private async Task<bool> AddNewCharacter(string characterId)
-    {
-        string userId = FirebaseAuthManager.Instance.User.UserId;
-        int initLevel = 1;
-        int initExp = 0;
-
-        DocumentReference characterRef = db.Collection(userText).Document(userId).Collection(characterText).Document(characterId);
-        
-        CharacterDataDb characterLevelDataDB = new CharacterDataDb(characterId, initLevel, initExp);
-        Dictionary<string, object> characterDataDict = new Dictionary<string, object>()
-        {
-            {levelText,initLevel },
-            {expText,initExp }
-        };
-        try
-        {
-            await characterRef.SetAsync(characterLevelDataDB);
-        }
-        catch(Exception e)
-        {
-            MyLog.LogError($"캐릭터 DB 저장 실패 ({characterId}): {e.Message}");
-            return false;
-        }
-        try
-        {
-            //캐릭터 인게임에도  정보 필요
-            await MakeCharacterInstance(characterId, characterLevelDataDB);
-        }
-        catch(Exception e)
-        {
-            //실패하면 DB에서 지워버림
-            MyLog.LogError($"캐릭터 인스턴스 생성 실패 ({characterId}): {e.Message}");
-            await RollbackCharacterAdd(characterRef);
-            return false;
-        }
-
-        return true;
-    }
-    private async Task RollbackCharacterAdd(DocumentReference characterRef)
-    {
-        try { await characterRef.DeleteAsync(); }
-        catch (Exception e) { MyLog.LogError($"롤백 실패, 수동 확인 필요: {e.Message}"); }
     }
 
     public async Task CheckAndCreateNewAccount()
     {
         string userId = FirebaseAuthManager.Instance.User.UserId;
-        await initTask;
+        await WaitForInitAsync();
 
         //새로운 계정인지 체크
-        DocumentReference docRef = db.Collection("users").Document(userId);
+        DocumentReference docRef = db.Collection(userText).Document(userId);
         DocumentSnapshot docSnapShot = await docRef.GetSnapshotAsync();
         if (docSnapShot.Exists) return;
 
         //새로운 계정을 생성할때 할 행동들 진행
+
         //기본 캐릭터 넣어주기
-        if (!await AddNewCharacter("1001"))
+        ShopProduct shopProduct = new ShopProduct();
+        Currency currency = new Currency();
+        currency.SetData(eCurrencyType.gameMoney, 0);
+        shopProduct.SetData(eProductType.character, "1000", "X이건안씀X", currency, 1);
+        if (!await PurchaseProduct_Character(shopProduct))
         {
-            //실패했으면 문서 안만들어줌 -> 다음에 다시 시도함
+            //상점에 0원으로 구매하고, 캐릭터를 추가해준다.
             return;
         }
         // 2) 성공했을 때만 계정 문서 생성
+        //생성일시와 돈을 추가 
         await docRef.SetAsync(new Dictionary<string, object>
         {
             { "createdAt", FieldValue.ServerTimestamp }
-        });
+        },SetOptions.MergeAll);
+        //3) 돈을 추가해주기.
+        var money = await AddGold(10000);
+        MyLog.Log($"초기화되어서 {money}얻음");
     }
 
     #region 캐릭터가 장착하고있는 아이템의 정보를 바꿔야 할때 
@@ -496,5 +466,150 @@ public class FirestoreManager : Singleton<FirestoreManager>
         }
     }
 
+    #endregion
+
+    #region 계정의 골드전용 메서드
+    public async Task<long> AddGold(int amount)
+    {
+        if(amount < 0) { return -1; } //실패표시, 호출쪽에서 처리하기위한 반환값
+
+        await WaitForInitAsync();
+        string userId = FirebaseAuthManager.Instance.User.UserId;
+        DocumentReference docRef = db.Collection(userText).Document(userId);
+        long result = 0;
+        try
+        {
+            result = await db.RunTransactionAsync<long>(async transaction =>
+            {
+                DocumentSnapshot snap = await transaction.GetSnapshotAsync(docRef);
+                long current = snap.Exists && snap.TryGetValue<long>(goldText, out long g) ? g : 0;
+                long addValue = current + amount;
+                transaction.Set(docRef, new Dictionary<string, object>()
+                {
+                    { goldText, addValue}
+                }, SetOptions.MergeAll);
+                return addValue;
+            });
+        }
+        catch (Exception e)
+        {
+            MyLog.LogError($"골드 추가 실패: {e.Message}");
+            return -1;
+        }
+        //트랜젝션이 끝나고 난뒤, 동기화 처리를 한다.
+        if (result >= 0) SyncWithCurrencyManger(result);
+        return result;
+
+    }
+    public async Task<bool> TrySpendGold(int cost)
+    {
+        //0원이면 그냥 true, 아니면 false
+        if (cost == 0) return true;
+        if (cost < 0) return false;
+        //골드 소비 진행. 실패하면 false 반환하는 메서드
+        await WaitForInitAsync();
+        string userId = FirebaseAuthManager.Instance.User.UserId;
+        DocumentReference docRef = db.Collection(userText).Document(userId);
+        long result = 0;
+        try
+        {
+            result = await db.RunTransactionAsync<long>(async transaction =>
+            {
+                DocumentSnapshot snap = await transaction.GetSnapshotAsync(docRef);
+                long current = (snap.Exists && snap.TryGetValue<long>(goldText, out long g)) ? g : 0;
+                long subValue = current - cost;
+                if (subValue < 0) return -1;
+
+                transaction.Set(docRef, new Dictionary<string, object>()
+                {
+                    { goldText,subValue}
+                },SetOptions.MergeAll);
+                return subValue;
+            });
+        }
+        catch (Exception e)
+        {
+            MyLog.LogError($"골드 소비 실패: {e.Message}");
+            return false;
+        }
+        //트랜젝션이 끝나고 난뒤, 동기화 처리를 한다.
+        if (result < 0) return false;
+        SyncWithCurrencyManger(result);
+        return true;
+    }
+    private void SyncWithCurrencyManger(long amount)
+    {
+        CurrencyManager.Instance.SetGameMoney(amount);
+    }
+    public async Task<long> LoadGold()
+    {
+        await WaitForInitAsync();
+        string userId = FirebaseAuthManager.Instance.User.UserId;
+        DocumentReference docRef = db.Collection(userText).Document(userId);
+
+        DocumentSnapshot snap = await docRef.GetSnapshotAsync();
+        if (!snap.Exists) return 0;
+        if (!snap.TryGetValue<long>(goldText, out long resultGold)) { return 0; }
+
+        return resultGold;
+
+    }
+    #endregion
+
+    #region 구매 관련 메서드 
+    public async Task<bool> PurchaseProduct_Character(ShopProduct shopProduct)
+    {
+        await WaitForInitAsync();
+        //트랜젝션으로 돈을 쓰고, 캐릭터 추가까지 DB에 완료되는지 확인, 이후에 런타임에 데이터 추가해야함
+        string userId = FirebaseAuthManager.Instance.User.UserId;
+        int initLevel = 1;
+        int initExp = 0;
+        string characterId = shopProduct.ProductId;
+
+        //초기 캐릭터 데이터를 만들어준다.
+        CharacterDataDb initCharacterData = new CharacterDataDb(characterId, initLevel, initExp);
+        long resultGold;
+        try
+        {
+            resultGold = await db.RunTransactionAsync<long>(async transaction =>
+            {
+                //트랜젝션 - 읽기부터 전부 해주자.
+                //골드를 불러오고, 현재 서버의 골드량이 구매하기에 충분한지부터 확인해보자. 
+                DocumentReference goldRef = db.Collection(userText).Document(userId);
+                DocumentSnapshot goldSnap = await transaction.GetSnapshotAsync(goldRef);
+                DocumentReference characterRef = db.Collection(userText).Document(userId).Collection(characterText).Document(characterId);
+                DocumentSnapshot characterSanp = await transaction.GetSnapshotAsync(characterRef);
+                //스냅샷 존재 확인, 골드는 없으면 안됨, 캐릭터는 있으면 안됨
+                if (!goldSnap.Exists)
+                {
+                    return -1;
+                }
+                if (characterSanp.Exists) { return -1; }
+                //읽기
+                long curGold = goldSnap.TryGetValue<long>(goldText, out long g) ? g : 0;
+                long subGold = curGold - shopProduct.Price.Amount;
+                if (subGold < 0) { return -1; }
+                //골드가 충분하므로 골드를 차감
+                transaction.Set(goldRef, new Dictionary<string, object>()
+                {
+                    {goldText,subGold }
+                },SetOptions.MergeAll);
+                //골드 소모했으므로 캐릭터를 추가해주자.
+                transaction.Set(characterRef, initCharacterData);
+                return subGold;
+            });
+        }
+        catch(Exception e)
+        {
+            MyLog.LogError($"캐릭터 추가 실패 : {e}");
+            return false;
+        }
+        
+        if (resultGold < 0) { return false; }
+        //트랜젝션이 정상적으로 끝났다면? 런타임 데이터도 수정해주자.
+        SyncWithCurrencyManger(resultGold);
+        await MakeRuntimeCharacterInstance_Sync(characterId, initCharacterData);
+        return true;
+    }
     #endregion
 }

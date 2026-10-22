@@ -19,6 +19,7 @@ public class MainPanelChanger : MonoBehaviour
     [SerializeField] CharacterShowPanel characterShowPanel;
     //[SerializeField] EquipmentPanel equipmentPanel;
     [SerializeField] MainMenuPanel mainMenuPanel;
+    [SerializeField] ShopPanel shopPanel;
 
 
     //[SerializeField] CharacterSelectPanel characterSelectPanel;
@@ -36,18 +37,24 @@ public class MainPanelChanger : MonoBehaviour
             characterShowPanel,
             //equipmentPanel,
             mainMenuPanel,
+            shopPanel,
             worldSelectManager
         };
         //버튼 이벤트들 추가
         characterButton.onClick.AddListener(()=> ChangePanel(characterShowPanel));
         //equipmentButton.onClick.AddListener(()=> ChangePanel(equipmentPanel));
         mainMenuButton.onClick.AddListener(()=> ChangePanel(mainMenuPanel));
+        shopButton.onClick.AddListener(() => ChangePanel(shopPanel));
         battleButton.onClick.AddListener(()=> ChangePanel(worldSelectManager));
     }
 
     private void OnDestroy()
     {
+        characterButton.onClick.RemoveAllListeners();
         equipmentButton.onClick.RemoveAllListeners();
+        mainMenuButton.onClick.RemoveAllListeners();
+        shopButton.onClick.RemoveAllListeners();
+        battleButton.onClick.RemoveAllListeners();
     }
 
     private void ShowMainMenuPanel(IMainMenuPanel selectedPanel)

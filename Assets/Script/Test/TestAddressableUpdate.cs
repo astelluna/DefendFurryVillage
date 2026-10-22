@@ -52,11 +52,15 @@ public class TestAddressableUpdate : MonoBehaviour
         //1. 가지고있는 캐릭터와 그 캐릭터의 장비 정보를 불러서 Charactermanager에 정보 설정
         await FirestoreManager.Instance.LoadAndSetHaveCharacter_Init();
 
-        //2. 인벤토리 - 장비 아이템 저장
-        List<ItemDbInfo> equipmentItemDbList = await FirestoreManager.Instance.LoadItemAsync_All(eItemtype.equipment);
+        //2. 골드를 가져와서 셋팅
+        long gold = await FirestoreManager.Instance.LoadGold();
+        CurrencyManager.Instance.SetGameMoney(gold);
+
+        //3. 인벤토리 - 장비 아이템 저장
+        List<ItemDbInfo> equipmentItemDbList = await FirestoreManager.Instance.LoadItemAsyncAll_Init(eItemtype.equipment);
         EquipmentManager.Instance.InitHaveEquipmentItem(equipmentItemDbList);
         //아이템(소모품, 기타) 아이템 저장
-        List<ItemDbInfo> itemDbList = await FirestoreManager.Instance.LoadItemAsync_All(eItemtype.item);
+        List<ItemDbInfo> itemDbList = await FirestoreManager.Instance.LoadItemAsyncAll_Init(eItemtype.item);
         ItemManager.Instance.InitManager(itemDbList);
         //모두 끝나면 다음 씬으로 이동
 

@@ -22,7 +22,9 @@ public class CharacterManager : Singleton<CharacterManager>
 
     //어떤 캐릭터를 가지고있고, 해당 캐릭터의 정보를 담아두는 딕셔너리 (DB에서 읽어서 Set됨)
     Dictionary<string, CharacterInstance> haveCharacterDict = new Dictionary<string, CharacterInstance>();
+    Dictionary<string, CharacterDataSO> unHaveCharacterDict = new Dictionary<string, CharacterDataSO>();
     public IReadOnlyDictionary<string, CharacterInstance> HaveCharacterDict => haveCharacterDict;
+    public IReadOnlyDictionary<string, CharacterDataSO> UnHaveCataracterDict => unHaveCharacterDict;
 
 
     //선택한 캐릭터 아이디 목록
@@ -58,7 +60,9 @@ public class CharacterManager : Singleton<CharacterManager>
             MyLog.LogError($"이미 캐릭터가 존재하는데 또 추가하려했습니다. 뭔가에러");
             return;
         }
+        //가지고있는 캐릭터 목록에는 추가, 안가지고 있는 캐릭터에는 삭제
         haveCharacterDict.Add(characterInstance.characterData.CharacterId, characterInstance);
+        unHaveCharacterDict.Remove(characterInstance.characterData.CharacterId); 
     }
 
     //TODO. 그냥 인게임에서 사용하는 필드, 메서드들을 따로 클래스 파서 관리하는것도 좋을듯. 초기화해야할때 new 하기?
@@ -127,9 +131,10 @@ public class CharacterManager : Singleton<CharacterManager>
             //초기화
             allCharacterSOList.Add(characterDataSO);
             allCharacterSODict.Add(characterDataSO.CharacterId, characterDataSO);
-
-
+            unHaveCharacterDict.Add(characterDataSO.CharacterId, characterDataSO);
         }
+
+
     }
     public void SetCharacterSpawnPos(CharacterSpawnPosition spawnPos)
     {

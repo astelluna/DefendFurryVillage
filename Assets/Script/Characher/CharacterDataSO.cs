@@ -20,7 +20,13 @@ public class CharacterDataSO : ScriptableObject
     [field: SerializeField] public WeaponDataSO BasicWeaponDataSO { get; private set; }
     [field: SerializeField] public WeaponDataSO SpecialWeaponDataSO { get; private set; }
 
+    //캐릭터 가격 정보 
+    [Header("캐릭터 구매 가격 정보")]
+    [field: SerializeField] public Currency PurchasePrice { get; private set; }
+
     //인게임 정보
     [Header("아래부터 인게임 정보")]
     [field: SerializeField] public CharacterStat CharacterBaseStat { get; private set; }
+
+    
 }
