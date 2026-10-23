@@ -7,7 +7,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     protected bool isDestroyOnLoad = true;
     //MVP에서 싱글톤 매니저의 이벤트를 해제(Dispose)해야되는데 이때 Null체크가 필요해서 추가
     //isHaveInstance를 안쓰고 if(Manager.Instance != null) 이렇게 하면 인스턴스에 접근해서 새로 생겨버림
-    public static bool isHaveInstance => _instance != null;
+    //public static bool isHaveInstance => _instance != null;
 
     //Instance 프로퍼티와 Awake에서 둘다 null체크를 하는 이유:
     //외부에서 Instance로 호출하는경우 생성되고
@@ -22,12 +22,12 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             {
                 _instance = FindAnyObjectByType<T>(); //찾아봄
 
-                if (_instance == null)
-                {
-                    GameObject singletonObj = new GameObject();
-                    _instance = singletonObj.AddComponent<T>();
-                    singletonObj.name = typeof(T).ToString();
-                }
+                //if (_instance == null)
+                //{
+                //    GameObject singletonObj = new GameObject();
+                //    _instance = singletonObj.AddComponent<T>();
+                //    singletonObj.name = typeof(T).ToString();
+                //}
             }
             return _instance;
         }

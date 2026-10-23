@@ -25,6 +25,8 @@ public class CurrencyManager : Singleton<CurrencyManager>
     //재화를 관리하고 처리하는 매니저
     public long gameMoney { get; private set; }
 
+    public event Action<long> OnGameMoneyChange;
+
     protected override void OnAwake()
     {
     }
@@ -33,6 +35,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
     {
         //초기 DB에서 값을 읽어서 재화를 Set 해주는 메서드
         gameMoney = amount;
+        OnGameMoneyChange?.Invoke(gameMoney);
     }
     public bool CanBuyProduct(long cost)
     {

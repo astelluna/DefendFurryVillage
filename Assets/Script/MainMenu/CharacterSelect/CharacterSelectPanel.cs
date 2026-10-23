@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,6 +8,8 @@ public class CharacterSelectPanel : MonoBehaviour
 {
     [SerializeField] StatIconAll statIconAll;
     [SerializeField] SkillIconAll skillIconAll;
+    [SerializeField] TextMeshProUGUI selectedCharacterNameText;
+    [SerializeField] TextMeshProUGUI selectedCharacterLevelText;
 
     //가지고있는 캐릭터가 표시되는 스코롤뷰
     [SerializeField] CharacterSelectScrollView characterSelectScrollView;
@@ -60,14 +63,14 @@ public class CharacterSelectPanel : MonoBehaviour
     public void SelectCharacterAndShowInfo(CharacterSelectButton selectButton, CharacterInstance characterInstance)
     {
         //캐릭터 정보 표시
-        //statIconAll.SetIcon(characterDataSO);
-        //CharacterInstance characterInstance = CharacterManager.Instance.HaveCharacterDict[characterDataSO.CharacterId];
         CharacterStat characterTotalStat = characterInstance.GetCharacterTotalStat();
         statIconAll.SetIcon(characterTotalStat);
         skillIconAll.SetIcon(characterInstance.characterData);
+        selectedCharacterNameText.text = characterInstance.characterData.CharacterName;
+        selectedCharacterLevelText.text = characterInstance.characterDataDb.level.ToString();
 
         //선택한 리스트에 하나씩 추가를 해준다.
-        if(characterSelectedUIManager.SetData(characterInstance, out bool selected))
+        if (characterSelectedUIManager.SetData(characterInstance, out bool selected))
         {
             //변했으면 패널에 변경점이 있음
             selectButton.UpdateCheckImage(selected);

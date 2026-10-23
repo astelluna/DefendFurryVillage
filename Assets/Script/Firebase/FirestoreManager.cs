@@ -245,7 +245,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
             return false;
         }
         //정보 설정
-        if(!characterInstance.characterLevelDataDb.SetCharacterEquipmentDB(equipmentType, equipInstance))
+        if(!characterInstance.characterDataDb.SetCharacterEquipmentDB(equipmentType, equipInstance))
         {
             MyLog.LogError("캐릭터 DB에 정보설정 실패");
             return false;

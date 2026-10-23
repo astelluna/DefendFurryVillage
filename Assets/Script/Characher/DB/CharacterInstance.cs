@@ -7,7 +7,7 @@ public class CharacterInstance
 {
     //어떤 캐릭터가 어떤 레벨과 경험치를 가지고있고, 실제 SO데이터는 뭔지 넣어둔다.
     public CharacterDataSO characterData { get; private set; }
-    public CharacterDataDb characterLevelDataDb { get; private set; }
+    public CharacterDataDb characterDataDb { get; private set; }
     public CharacterEquipment characterEquipment { get; private set; }
 
     private CharacterStat totalCharacterStat = new CharacterStat();
@@ -18,7 +18,6 @@ public class CharacterInstance
         CharacterStat characterBaseStat = characterData.CharacterBaseStat;
         CharacterStat equipmentStat = characterEquipment.GetEquipmentStat();
         totalCharacterStat.SetFromSum(characterBaseStat, equipmentStat);
-        //totalCharacterStat = characterBaseStat.CreateNewAddStat(equipmentStat);
         return totalCharacterStat;
     }
 
@@ -30,12 +29,12 @@ public class CharacterInstance
 
         if (soData.CharacterId != levelData.id) throw new ArgumentException($"DB와 SO의 ID가 다릅니다. SO:{soData.CharacterId}, DB:{levelData.id}");
         characterData = soData;
-        characterLevelDataDb = levelData;
+        characterDataDb = levelData;
 
 
 
         characterEquipment = new CharacterEquipment();
-        characterEquipment.UpdateCharacterEquipment_DB(characterLevelDataDb);
+        characterEquipment.UpdateCharacterEquipment_DB(characterDataDb);
 
     }
 }

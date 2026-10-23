@@ -6,7 +6,6 @@ public class CharacterSelectedUIManager : MonoBehaviour
 {
     //선택된 캐릭터들에 대해 표시되고, 게임시작 버튼 누르면 해당 캐릭터 정보를 보내는 클래스
     [SerializeField] List<CharacterSelectedShowUI> selectedUIList = new List<CharacterSelectedShowUI>();
-    //Dictionary<CharacterDataSO, CharacterSelectedShowUI> selectedCharacterDict = new Dictionary<CharacterDataSO, CharacterSelectedShowUI>();
     Dictionary<string, CharacterSelectedShowUI> selectedCharacterDict = new Dictionary<string, CharacterSelectedShowUI>();
     private bool selectedState = false;
     public bool HaveSelectedCharacter => selectedCharacterDict.Count > 0;

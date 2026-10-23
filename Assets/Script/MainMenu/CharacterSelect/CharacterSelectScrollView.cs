@@ -36,13 +36,7 @@ public class CharacterSelectScrollView : MonoBehaviour
     public void CharacterShow(CharacterSelectPanel selectPanel)
     {
         characterSelectPanel = selectPanel;
-
-        //캐릭터를 가져오는데, 해금되지 않은 캐릭터는 불러오지 말아야함. (아예 불러오지말자)
         //정보를 가져오기. (현재 플레이어가 가지고있는 캐릭터)
-
-        //TEST -> 나중에 HaveCharacter로 바꾸기
-        //IReadOnlyList<CharacterDataSO> characterDataSOList = CharacterManager.Instance.HaveCharacterSOList;
-        
         IReadOnlyDictionary<string, CharacterInstance> haveCharacterDict = CharacterManager.Instance.HaveCharacterDict;
         foreach(KeyValuePair<string, CharacterInstance> pair in haveCharacterDict)
         {

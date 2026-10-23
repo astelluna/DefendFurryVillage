@@ -6,11 +6,15 @@ public class CastleWall : MonoBehaviour
     [SerializeField] int hp = 1500;
     [SerializeField] int defense = 0;
 
+    [SerializeField] CastelWallUI castelWallUI;
     DefenserInfo defenserInfo;
-
     public event Action CastleDestroyRequest;
 
-    //public void TakeDamage(int dmg)
+    private void Start()
+    {
+        castelWallUI.UpdateWallHp(hp);
+    }
+
     public void TakeDamage(AttackerInfo attackerInfo)
     {
         if(defenserInfo == null)
@@ -25,6 +29,7 @@ public class CastleWall : MonoBehaviour
             hp = 0;
             CastleDestroyRequest?.Invoke();
         }
+        castelWallUI.UpdateWallHp(hp);
         //MyLog.Log($"HP {hp}");
     }
 
