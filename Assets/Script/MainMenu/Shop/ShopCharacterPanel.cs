@@ -25,9 +25,21 @@ public class ShopCharacterPanel : MonoBehaviour
             shopItem.purchaseRequest -= shopPanel.PurchaseProcess;
             Destroy(shopItem.gameObject);
         }
-        this.gameObject.SetActive(false);
+        makedCharacterItemList.Clear();
+    }
+    public void UpdatePanel()
+    {
+        Init();
+        MakeUI();
     }
     public void ShowPanel()
+    {
+        if (this.gameObject.activeInHierarchy)  { return; } //이미 열려있다면 안해줌
+
+        MakeUI();
+        this.gameObject.SetActive(true);
+    }
+    private void MakeUI()
     {
         //캐릭터 구매 패널 클릭 -> 구매할수 있는 캐릭터 목록이 나온다
         IReadOnlyDictionary<string, CharacterDataSO> unHaveCharacterDict = CharacterManager.Instance.UnHaveCataracterDict;
@@ -42,10 +54,11 @@ public class ShopCharacterPanel : MonoBehaviour
             shopItem.SetProductData(shopProduct);
             makedCharacterItemList.Add(shopItem);
         }
-        this.gameObject.SetActive(true);
     }
+
     public void ClosePanel()
     {
         Init();
+        this.gameObject.SetActive(false);
     }
 }

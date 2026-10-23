@@ -34,19 +34,6 @@ public class CurrencyManager : Singleton<CurrencyManager>
         //초기 DB에서 값을 읽어서 재화를 Set 해주는 메서드
         gameMoney = amount;
     }
-    public async Task<bool> TrySpendMoney(int cost)
-    {
-        //돈을 써본다. 실제로 돈이 있다면 재화를 감소시키고 진행한다.
-        long subValue = gameMoney - cost;
-        if(subValue < 0)
-        {
-            //돈을 쓰지 못함.
-            return false;
-        }
-        //쓸수있다면? 진행. FirestorManager 내에서 성공하면 알아서 동기화까지 진행함
-        bool isSuccess =  await FirestoreManager.Instance.TrySpendGold(cost);
-        return isSuccess;
-    }
     public bool CanBuyProduct(long cost)
     {
         //게임머니로 살수있는지 체크

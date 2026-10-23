@@ -47,6 +47,11 @@ public class MainPanelChanger : MonoBehaviour
         shopButton.onClick.AddListener(() => ChangePanel(shopPanel));
         battleButton.onClick.AddListener(()=> ChangePanel(worldSelectManager));
     }
+    private void Start()
+    {
+        //시작하자마자 메인패널 뜨게하자.
+        ChangePanel(mainMenuPanel);
+    }
 
     private void OnDestroy()
     {

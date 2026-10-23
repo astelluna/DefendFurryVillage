@@ -16,15 +16,15 @@ public struct ShopProduct
     public eProductType ProductType { get; private set; }
     public string ProductId { get; private set; }
     public string DisplayName { get; private set; }
-    public Currency Price { get; private set; }
-    public int Amount { get; private set; }
-    public void SetData(eProductType type, string id, string name, Currency currency, int count)
+    public Currency Price { get; private set; } //가격
+    public int Count { get; private set; } //지급 갯수
+    public void SetData(eProductType type, string id, string name, Currency currency, int cnt)
     {
         ProductType = type;
         ProductId = id;
         DisplayName = name;
         Price = currency;
-        Amount = count;
+        Count = cnt;
     }
 }
 
@@ -85,20 +85,16 @@ public class ShopPanel : MonoBehaviour, IMainMenuPanel
         }
         
 
-        string msg = $"{itemName}을 {product.Amount} {itemTypeString}으로 구매하시겠습니까?";
+        string msg = $"{itemName}을 {product.Price.Amount} {itemTypeString}으로 구매하시겠습니까?";
         ShopProduct productBuf = product;
         shopPurchaseConfirmPanel.ShowPanel(msg, () => PurchaseItem(productBuf));
     }
     private async void PurchaseItem(ShopProduct shopProduct)
     {
-        //TODo. 돈 차감되고, 아이템을 획득하도록 진행해야함
-        bool purchaseSuccess = await CurrencyManager.Instance.TrySpendMoney(shopProduct.Amount);
-        if(!purchaseSuccess)
-        {
-            MyLog.LogError($"결제 실패.");
-            return;
-        }
-        //구매 진행. 금액은 빠져나갔으므로 구매한 항목을 지급해야함.
+        //돈 차감되고, 아이템을 획득하도록 진행
+
+        bool purchaseSuccess = false;
+        //구매 진행.
         MyLog.Log($"{shopProduct.Price.CurrencyType} {shopProduct.Price.Amount} 구매");
 
         switch(shopProduct.ProductType)
@@ -122,6 +118,9 @@ public class ShopPanel : MonoBehaviour, IMainMenuPanel
         {
             MyLog.Log($"{shopProduct.ProductType}항목 구매 완료");
         }
+        //끝나고나서 확인창 닫고, UI 갱신한번 해주자
+        shopPurchaseConfirmPanel.ClosePanel();
+        shopPurchasableCharacterPanel.UpdatePanel();
     }
     private async Task<bool> PurcharseCharacter(ShopProduct product)
     {
