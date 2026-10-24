@@ -135,7 +135,7 @@ public class EquipmentManager : Singleton<EquipmentManager>
         //테스트용 데이터 넣기 
         foreach(var item in allEquipmentDataList)
         {
-            allEquipmentItemDict.Add(item.EquipmentId,item);
+            allEquipmentItemDict.Add(item.Id,item);
         }
 
         //TODO. 일단 수동으로 호출해보자. 
@@ -143,7 +143,7 @@ public class EquipmentManager : Singleton<EquipmentManager>
         test1.Add(0, 3); //0레벨 3개, 
         test1.Add(1, 4); //1레벨 4개,
         test1.Add(2, 5); //2레벨 5개,
-        AddEquipmentHaveData("1001", test1); //아이템 1000이라는 id의 0,1,2레벨 템을 넣어줌
+        AddEquipmentHaveData("30000", test1); //아이템 1000이라는 id의 0,1,2레벨 템을 넣어줌
     }
     public EquipmentDataSO GetEquipmentData(string id)
     {
@@ -166,7 +166,7 @@ public class EquipmentManager : Singleton<EquipmentManager>
     {
         //필요없을듯? AddEquipmentCount를 쓰면 될듯?;
         //장비 하나를 추가한다.
-        string equipmentId = data.EquipmentDataSO.EquipmentId;
+        string equipmentId = data.EquipmentDataSO.Id;
         int level = data.Level;
 
         AddEquipmentCount(equipmentId, level, amount);
@@ -176,14 +176,14 @@ public class EquipmentManager : Singleton<EquipmentManager>
     public bool TryEquip(CharacterEquipment target, EquipmentInstance data)
     {
         //data에서 정보를 꺼내자
-        string id = data.EquipmentDataSO.EquipmentId;
+        string id = data.EquipmentDataSO.Id;
         int level = data.Level;
         int count = GetEquipmentCount(id, level);
         if (count <= 0) return false;
         var type = data.EquipmentDataSO.EquipmentType;
         var old = target.GetEquipment(type);
         //기존에 착용하던 장비를 빼서 인벤토리에 1개 채워준다.
-        if (old != null) AddEquipmentCount(old.EquipmentDataSO.EquipmentId, old.Level, 1);
+        if (old != null) AddEquipmentCount(old.EquipmentDataSO.Id, old.Level, 1);
         //인벤토리에서 1개 빼서 장착해준다.
         if (GetEquipment(id,level))
         {
@@ -217,7 +217,7 @@ public class EquipmentManager : Singleton<EquipmentManager>
         }
         //2. 런타임 데이터도 수정해준다. (장착 장비와, 인벤토리에 아이템+1)
         characterEquipment.UpdateCharacterEquipment_DB(characterDataDb);
-        AddEquipmentCount(curEquipment.EquipmentDataSO.EquipmentId, curEquipment.Level, 1);
+        AddEquipmentCount(curEquipment.EquipmentDataSO.Id, curEquipment.Level, 1);
 
         return true;
 
@@ -236,7 +236,7 @@ public class EquipmentManager : Singleton<EquipmentManager>
 
         //동일 장비를 장착하면 false
         if (oldEquipment != null &&
-        oldEquipment.EquipmentDataSO.EquipmentId == newEquipment.EquipmentDataSO.EquipmentId &&
+        oldEquipment.EquipmentDataSO.Id == newEquipment.EquipmentDataSO.Id &&
         oldEquipment.Level == newEquipment.Level)
         {
             return false; // 이미 장착 중
@@ -253,9 +253,9 @@ public class EquipmentManager : Singleton<EquipmentManager>
         characterEquipment.UpdateCharacterEquipment_DB(characterDataDb);
         if(oldEquipment != null)
         {
-            AddEquipmentCount(oldEquipment.EquipmentDataSO.EquipmentId, oldEquipment.Level, +1);
+            AddEquipmentCount(oldEquipment.EquipmentDataSO.Id, oldEquipment.Level, +1);
         }
-        AddEquipmentCount(newEquipment.EquipmentDataSO.EquipmentId, newEquipment.Level, -1);
+        AddEquipmentCount(newEquipment.EquipmentDataSO.Id, newEquipment.Level, -1);
         return true;
 
     }

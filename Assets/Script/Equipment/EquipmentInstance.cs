@@ -27,7 +27,7 @@ public class EquipmentInstance
 
     public bool IsSameEquipment(EquipmentInstance other)
     {
-        if(EquipmentDataSO.EquipmentId == other.EquipmentDataSO.EquipmentId && Level == other.Level)
+        if(EquipmentDataSO.Id == other.EquipmentDataSO.Id && Level == other.Level)
         {
             return true;
         }

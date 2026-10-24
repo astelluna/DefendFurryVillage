@@ -67,16 +67,17 @@ public class ItemManager : Singleton<ItemManager>
     {
         if (allItemDataDict == null)
         {
+            allItemDataDict = new Dictionary<string, ItemDataSO>();
             //초기 1회 사용중이라면 초기화
             foreach(var item in allItemDataList)
             {
-                if (allItemDataDict.ContainsKey(item.ItemId))
+                if (allItemDataDict.ContainsKey(item.Id))
                 {
-                    MyLog.LogError($"{item.name}항목의 {item.ItemId}의 중복된 아이템키의 아이템이 있습니다");
+                    MyLog.LogError($"{item.name}항목의 {item.Id}의 중복된 아이템키의 아이템이 있습니다");
                     continue;
                 }
 
-                allItemDataDict.Add(item.ItemId, item);
+                allItemDataDict.Add(item.Id, item);
             }
         }
     }

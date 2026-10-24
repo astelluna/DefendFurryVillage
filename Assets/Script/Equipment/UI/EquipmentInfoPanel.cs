@@ -36,7 +36,7 @@ public class EquipmentInfoPanel : MonoBehaviour
     }
     private void OnMountButtonClick()
     {
-        int count = EquipmentManager.Instance.GetEquipmentCount(equipmentLevelData.EquipmentDataSO.EquipmentId, equipmentLevelData.Level);
+        int count = EquipmentManager.Instance.GetEquipmentCount(equipmentLevelData.EquipmentDataSO.Id, equipmentLevelData.Level);
 
         if(count <= 0)
         {
@@ -51,10 +51,10 @@ public class EquipmentInfoPanel : MonoBehaviour
     //public void SetAndShowPanel(string name, string desc, string level)
     public void SetAndShowPanel(EquipmentInstance data)
     {
-        int count = EquipmentManager.Instance.GetEquipmentCount(data.EquipmentDataSO.EquipmentId, data.Level);
+        int count = EquipmentManager.Instance.GetEquipmentCount(data.EquipmentDataSO.Id, data.Level);
 
         equipmentLevelData = data;
-        itemNameText.text = data.EquipmentDataSO.EquipmentName;
+        itemNameText.text = data.EquipmentDataSO.DisplayName;
         itemDescText.text = data.GetEquipmentDescription();
         countText.text = count.ToString();
         levelText.text = $"업그레이드 단계: {data.Level.ToString()}";

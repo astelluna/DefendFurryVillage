@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Transactions;
 using UnityEngine.TextCore.Text;
+using static UnityEditor.Progress;
 
 
 public enum eItemtype
@@ -121,11 +122,10 @@ public class FirestoreManager : Singleton<FirestoreManager>
             itemKey = key;
             return true;
         }
-
     }
     public async void SaveItem_Test()
     {
-        await SaveItemAsync(eItemtype.equipment, "1001", 3, 5);
+        //await SaveItemAsync(eItemtype.equipment, "30000", 3, 5);
     }
 
     //저장 및 불러오기
@@ -201,6 +201,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
     //보유 캐릭터 불러오기
     public async Task LoadAndSetHaveCharacter_Init()
     {
+        await WaitForInitAsync();
         string userId = FirebaseAuthManager.Instance.User.UserId;
         //초기 1회 해당 유저가 가지고있는 전체 캐릭터 정보를 불러오고, 정보를 셋팅해준다.
         CollectionReference characterRef = db.Collection(userText).Document(userId).Collection(characterText);
@@ -231,10 +232,20 @@ public class FirestoreManager : Singleton<FirestoreManager>
         CharacterInstance characterInstance = new CharacterInstance(characterSO, characterData);
         CharacterManager.Instance.AddHaveCharacterInstance(characterInstance);
     }
+    public async Task InventoryData_Sync()
+    {
+        //아이템 인벤토리를 런타임 데이터와 동기화 하려는 메서드.
+        List<ItemDbInfo> equipmentItemDbList = await LoadItemAsyncAll_Init(eItemtype.equipment);
+        EquipmentManager.Instance.InitHaveEquipmentItem(equipmentItemDbList);
+        //아이템(소모품, 기타) 아이템 저장
+        List<ItemDbInfo> itemDbList = await LoadItemAsyncAll_Init(eItemtype.item);
+        ItemManager.Instance.InitManager(itemDbList);
+    }
 
     #region 캐릭터가 장착하고있는 아이템의 정보를 바꿔야 할때 
     public async Task<bool> SaveCharacterEquipment(CharacterDataSO dataSO, EquipmentInstance equipInstance, eEquipmentType equipmentType)
     {
+        await WaitForInitAsync();
         string userId = FirebaseAuthManager.Instance.User.UserId;
         //ref부터 찾자.
         DocumentReference characterRef = db.Collection(userText).Document(userId).Collection(characterText).Document(dataSO.CharacterId);
@@ -262,7 +273,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
         string uid = FirebaseAuthManager.Instance.User.UserId;
         //필요한게 뭘까? 일단 주소가 필요함. 1. 캐릭터 주소, 2. 인벤토리 주소
         //1. 인벤토리 주소
-        string equipmentKey = MakeItemKey(equipmentInstance.EquipmentDataSO.EquipmentId, equipmentInstance.Level);
+        string equipmentKey = MakeItemKey(equipmentInstance.EquipmentDataSO.Id, equipmentInstance.Level);
         DocumentReference equipmentReference = db
             .Collection(userText).Document(uid)
             .Collection(inventoryText).Document(itemType_equipment)
@@ -292,7 +303,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
                 CharacterEquipmentDataDB equippedData =  characterDataDb.GetCharacterEquipmentDataDB(equipmentType);
                 if (equippedData == null) { return null; }
 
-                if(equippedData.equipmentId != equipmentInstance.EquipmentDataSO.EquipmentId ||
+                if(equippedData.equipmentId != equipmentInstance.EquipmentDataSO.Id ||
                 equippedData.equipmentLevel != equipmentInstance.Level)
                 {
                     return null;
@@ -330,7 +341,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
 
         // 새 장비의 인벤토리 문서
         string newKey = MakeItemKey(
-            newEquipment.EquipmentDataSO.EquipmentId,
+            newEquipment.EquipmentDataSO.Id,
             newEquipment.Level);
 
         DocumentReference newItemRef = db
@@ -344,7 +355,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
         if (oldEquipment != null)
         {
             string oldKey = MakeItemKey(
-                oldEquipment.EquipmentDataSO.EquipmentId,
+                oldEquipment.EquipmentDataSO.Id,
                 oldEquipment.Level);
 
             oldItemRef = db
@@ -470,7 +481,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
             return -1;
         }
         //트랜젝션이 끝나고 난뒤, 동기화 처리를 한다.
-        if (result >= 0) SyncWithCurrencyManger(result);
+        if (result >= 0) CurrencyManger_Sync(result);
         return result;
 
     }
@@ -507,11 +518,12 @@ public class FirestoreManager : Singleton<FirestoreManager>
         }
         //트랜젝션이 끝나고 난뒤, 동기화 처리를 한다.
         if (result < 0) return false;
-        SyncWithCurrencyManger(result);
+        CurrencyManger_Sync(result);
         return true;
     }
-    private void SyncWithCurrencyManger(long amount)
+    private void CurrencyManger_Sync(long amount)
     {
+        //db데이터와 런타임 재화정보 동기화
         CurrencyManager.Instance.SetGameMoney(amount);
     }
     public async Task<long> LoadGold()
@@ -531,29 +543,68 @@ public class FirestoreManager : Singleton<FirestoreManager>
 
     #region 트랜젝션 공통코드 및 처리
 
-    private long AddCharacter_Transaction(Firebase.Firestore.Transaction transaction, 
+    private long AddCharacter_Transaction(Firebase.Firestore.Transaction transaction,
         DocumentReference characterRef, DocumentSnapshot characterSnap,
         DocumentReference userRef, DocumentSnapshot userSnap,
         CharacterDataDb characterDataDb, string characterId, long price)
     {
-        //트랜젝션 공통 코드 - 돈이 충분하면 차감하고, 캐릭터 생성 및 돈을 적용
+        //캐릭터 트랜젝션 공통 코드 - 돈이 충분하면 차감하고, 캐릭터 생성 및 돈을 적용
+        if (price < 0) { return -1; }
         if (characterSnap.Exists) { return -1; }
-        //돈부터 확인.
-        long curGold = userSnap.Exists && userSnap.TryGetValue<long>(goldText, out long g) ? g : 0;
-        long subValue = curGold - price;
-        if (subValue < 0) { return -1; }
+
         //쓰기
-        transaction.Set(userRef, new Dictionary<string, object>()
-            {
-                {goldText,subValue }
-            }, SetOptions.MergeAll);
+        long subValue = ModifyGold_Transaction(transaction, userRef, userSnap, -price); //골드 트랜젝션
+        if (subValue < 0)
+        {
+            throw new Exception("캐릭터 추가 실패.");
+            return -1;
+        }
         transaction.Set(characterRef, characterDataDb);
         return subValue;
     }
-    //해야할거: 트렌젝션 - 캐릭터 및 골드를 얻는 공통 트랜젝션 코드를 넣는다. 
-    //신규 캐릭터 생성에 대해서 한번 처리해보자. 
+    private long ModifyGold_Transaction(Firebase.Firestore.Transaction transaction, DocumentReference userRef, DocumentSnapshot userSnap, long amount)
+    {
+        //골드를 증감/차감하는 공통 트랜젝션. 차감의 경우 실패하면 -1 반환
+        long curGold = userSnap.Exists && userSnap.TryGetValue<long>(goldText, out long g) ? g : 0;
+        long totalValue = curGold + amount;
+
+        if (totalValue < 0) 
+        {
+            //-1로 했지만 정상작동 발생시킬수도있어서 예외로 트랜젝션 취소시키자
+            throw new Exception("골드 추가 실패.");
+            //return -1; 
+        }
+        transaction.Set(userRef, new Dictionary<string, object>()
+        {
+            {goldText,totalValue }
+        }, SetOptions.MergeAll);
+
+        return totalValue;
+    }
+    private int ModifyInventoryItem_Transaction(Firebase.Firestore.Transaction transaction, DocumentReference itemRef, DocumentSnapshot itemSnap, string itemKey, int count)
+    {
+        //string값, count
+        //기존에 db에 이미 존재하는지 확인하자.
+        int cnt = (int)(itemSnap.Exists && itemSnap.TryGetValue<long>(countText, out long c) ? c : 0);
+        int result = cnt + count;
+
+        if (result < 0) 
+        {
+            throw new Exception("장비 갯수 추가 실패.");
+            return -1; 
+        } //장비 갯수가 음수가 되면 안됨.
+
+        //쓰자
+        transaction.Set(itemRef, new Dictionary<string, object>()
+        {
+            {countText,  result }
+        }, SetOptions.MergeAll);
+
+        return result;
+    }
     public async Task<bool> CreateNewAccount()
     {
+        //신규 캐릭터 생성에 대해서 처리. 캐릭터 및 골드를 얻는 공통 트렌젝션 코드로 구현
         await WaitForInitAsync();
         string userId = FirebaseAuthManager.Instance.User.UserId;
         
@@ -600,7 +651,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
         }
         if (!isTransactionSuccess) { return false; }
         //트랜젝션이 정상적으로 끝났다면? 런타임 데이터도 수정해주자.
-        SyncWithCurrencyManger(initAccountGold); //새로 생성해주면서 초기 골드로 넣엇으므로 초기 골드로 넣어줌
+        CurrencyManger_Sync(initAccountGold); //새로 생성해주면서 초기 골드로 넣엇으므로 초기 골드로 넣어줌
         await MakeRuntimeCharacterInstance_Sync(characterId, initCharacterData);
         return true;
     }
@@ -636,9 +687,114 @@ public class FirestoreManager : Singleton<FirestoreManager>
         }
         if (transactionResult < 0) { return false; }
         //트랜젝션이 정상적으로 끝났다면? 런타임 데이터동기화
-        SyncWithCurrencyManger(transactionResult); //새로 생성해주면서 초기 골드로 넣엇으므로 초기 골드로 넣어줌
+        CurrencyManger_Sync(transactionResult); //새로 생성해주면서 초기 골드로 넣엇으므로 초기 골드로 넣어줌
         await MakeRuntimeCharacterInstance_Sync(characterId, initCharacterData);
         return true;
     }
+    #endregion
+
+    #region 보상 지급 메서드
+    public class RewardPendingItemDB
+    {
+        //생성할떄 미리 채워줄것들
+        public string typeId;
+        public string ItemId;
+        public int Count;
+        //트랜젝션 안에서 채워줄 것들
+        public DocumentReference ItemRef;
+        public DocumentSnapshot ItemSnap;
+
+    }
+
+    public async Task<bool> GiveReward(RewardDataSO rewardDataSO)
+    {
+        //보상 정보를 DB에 저장하고 런타임 동기화하는 메서드
+        await WaitForInitAsync();
+        string userId = FirebaseAuthManager.Instance.User.UserId;
+        //돈과 장비를 지급한다.
+        long resultGold;
+
+        //딕셔너리로 미리 결과를 만들어둔다.
+        Dictionary<string, RewardPendingItemDB> rewardInfoDict = new Dictionary<string, RewardPendingItemDB>();
+        foreach(var item in rewardDataSO.RewardItemList)
+        {
+            eItemtype itemType = item.itemDataSO.Itemtype;
+            string itemKey = "";
+            switch (itemType)
+            {
+                case eItemtype.equipment:
+                    //무조건 레벨 0 고정할거임. 
+                    itemKey = MakeItemKey(item.itemDataSO.Id, 0);
+                    break;
+                case eItemtype.item:
+                    //아이템은 아직 없음. 
+                    break;
+            }
+            if (itemKey == "") continue;
+            string itemTypeKey;
+            if (!MakeItemTypeToKey_ForInventory(itemType, out itemTypeKey))
+            {
+                return false;
+            }
+            if (rewardInfoDict.ContainsKey(itemKey))
+            {
+                //Count를 더해준다.
+                rewardInfoDict[itemKey].Count += item.Count;
+            }
+            else
+            {
+                RewardPendingItemDB rewardPendingItemDBBuf = new RewardPendingItemDB()
+                {
+                    typeId = itemTypeKey,
+                    ItemId = itemKey,
+                    Count = item.Count
+                };
+                rewardInfoDict.Add(itemKey, rewardPendingItemDBBuf);
+            }
+        }
+
+        
+        //트랜젝션으로 돈을 저장시키자.
+        try
+        {
+            resultGold = await db.RunTransactionAsync<long>(async transaction =>
+            {
+                //모든 ref와 스냅샷을 미리 가져온다. 
+                DocumentReference userRef = db.Collection(userText).Document(userId);
+                DocumentSnapshot userSnap = await transaction.GetSnapshotAsync(userRef);
+
+                //Ref 찾기 및 저장
+                foreach(var item in rewardInfoDict)
+                {
+                    DocumentReference itemRef = db.Collection(userText).Document(userId).Collection(inventoryText).Document(item.Value.typeId).Collection(itemCollect).Document(item.Value.ItemId);
+                    DocumentSnapshot itemSnap = await transaction.GetSnapshotAsync(itemRef);
+                    item.Value.ItemRef = itemRef;
+                    item.Value.ItemSnap = itemSnap;
+                }
+                //쓰기
+                long resGold = ModifyGold_Transaction(transaction, userRef, userSnap, rewardDataSO.RewardMoney); //골드 쓰기
+                if (resGold < 0) { return -1; }
+                //장비 쓰기
+                foreach (var item in rewardInfoDict.Values)
+                {
+                    //인벤토리에 아이템을 하나 넣어준다.
+                    int resCount = ModifyInventoryItem_Transaction(transaction, item.ItemRef, item.ItemSnap, item.ItemId, item.Count);
+                    if (resCount < 0) { return -1; }
+                }
+                return resGold;
+            });
+        }
+        catch(Exception e)
+        {
+            MyLog.LogError($"인벤토리에 아이템 추가 실패 : {e}");
+            return false;
+        }
+        if (resultGold < 0) { return false; }
+        //런타임 동기화
+        CurrencyManger_Sync(resultGold);
+        await InventoryData_Sync();
+        return true;
+    }
+    
     #endregion
 }

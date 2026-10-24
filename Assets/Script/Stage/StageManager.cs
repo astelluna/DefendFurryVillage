@@ -8,8 +8,8 @@ public class StageManager : Singleton<StageManager>
 {
     //어떤 스테이지를 선택하면 해당 스테이지의 정보대로 적을 소환한다. -> 일단 직렬화로 테스트 
 
-    [Header("!테스트!. 테스트가 필요하면 직접 넣기.")]
-    [SerializeField] StageDataSO stageDataSO;
+    [Header("!테스트!. 테스트가 필요하면 직접 넣기")]
+    [SerializeField] StageDataSO stageDataSO; //테스트할떄는 수동으로 넣어지고, 정상적일땐 알아서 데이터 설정됨
     
 
     [SerializeField] float spawnTime = 0.1f;
@@ -24,7 +24,7 @@ public class StageManager : Singleton<StageManager>
     int remainSpawnCount = 0;
     List<Enemy> aliveEnemyList = new List<Enemy>();
 
-    public event System.Action StageClearRequest;
+    public event System.Action<StageDataSO> StageClearRequest;
 
     #region 인게임씬에서 외부에서 전달받아서 정보 SET 하는 필드들
     StagePanel stagePanel; //스테이지 정보 표시하는 UI
@@ -173,7 +173,7 @@ public class StageManager : Singleton<StageManager>
         if(CheckStageClear())
         {
             MyLog.Log("스테이지 종료 - 이벤트 발동");
-            StageClearRequest?.Invoke();
+            StageClearRequest?.Invoke(stageDataSO);
         }
         
     }

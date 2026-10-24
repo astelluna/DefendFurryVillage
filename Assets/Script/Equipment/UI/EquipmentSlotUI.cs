@@ -50,7 +50,7 @@ public class EquipmentSlotUI : MonoBehaviour
     {
         equipmentInstanceData = equipmentData;
         curCharacterData = characterData;
-        slotButton.image.sprite = equipmentInstanceData.EquipmentDataSO.EquipmentImage;
+        slotButton.image.sprite = equipmentInstanceData.EquipmentDataSO.SpriteImage;
         equipmentLevelText.text = "+" + equipmentInstanceData.Level;
     }
 

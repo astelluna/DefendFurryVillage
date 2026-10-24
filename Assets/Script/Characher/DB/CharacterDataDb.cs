@@ -61,7 +61,7 @@ public class CharacterDataDb
             dataDB = new CharacterEquipmentDataDB();
             EquipmentDict.Add(equipmentKey, dataDB);
         }
-        dataDB.setData(equipmentInstance.EquipmentDataSO.EquipmentId, equipmentInstance.Level);
+        dataDB.setData(equipmentInstance.EquipmentDataSO.Id, equipmentInstance.Level);
         MyLog.Log("DB에 올리기전 - 설정 완료");
         return true;
     }

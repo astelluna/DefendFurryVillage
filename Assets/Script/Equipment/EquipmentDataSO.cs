@@ -8,13 +8,11 @@ public enum eEquipmentType
 }
 
 [CreateAssetMenu(menuName = "Equipment/EquipmentData")]
-public class EquipmentDataSO : ScriptableObject
+public class EquipmentDataSO : ItemDataSO
 {
     [Header("아이템 정보")]
-    [field: SerializeField] public string EquipmentId { get; private set; }
+    public override eItemtype Itemtype => eItemtype.equipment;
     [field: SerializeField] public eEquipmentType EquipmentType { get; private set; }
-    [field: SerializeField] public string EquipmentName { get; private set; }
-    [field: SerializeField] public Sprite EquipmentImage { get; private set; }
     //캐릭터 스텟을 몇 올리는지 나옴
     [Header("아이템 기본 스텟")]
     [field: SerializeField] public CharacterStat stat { get; private set; }
@@ -23,4 +21,7 @@ public class EquipmentDataSO : ScriptableObject
     [field: SerializeField] public int UpgradeCriticalRate { get; private set; } = 1;
     [field: SerializeField] public float UpgradeCriticalRatio { get; private set; } = 1f;
     [field: SerializeField] public float UpgradeArmorPenetrate { get; private set; } = 1f;
+
+    
 }
+

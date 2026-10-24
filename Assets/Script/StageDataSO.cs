@@ -7,5 +7,6 @@ public class StageDataSO : ScriptableObject
     [field: SerializeField] public int StageId { get; private set; }
     [field: SerializeField] public string StageName { get; private set; }
     [field: SerializeField] public string StageDesc { get; private set; }
+    [field: SerializeField] public RewardDataSO RewardData { get; private set; } //보상 정보
     [field: SerializeField] public List<WaveDataSO> WaveDataList { get; private set; } = new List<WaveDataSO>();
 }

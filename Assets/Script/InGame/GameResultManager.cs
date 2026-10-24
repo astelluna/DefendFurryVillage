@@ -6,6 +6,7 @@ public class GameResultManager : MonoBehaviour
     [SerializeField] GameResultPanel gameResultPanel;
 
     [SerializeField] CastleWall castleWall; //성벽
+    [SerializeField] LoadingPanelInGame loadingPanelInGame;
 
     private void Awake()
     {
@@ -19,18 +20,23 @@ public class GameResultManager : MonoBehaviour
         castleWall.CastleDestroyRequest -= DefeatGame;
     }
 
-    private void ClearGame()
+    private async void ClearGame(StageDataSO stageDataSO)
     {
-        ShowGameResultPanel(true);
+        ShowGameResultPanel(true, stageDataSO.RewardData);
+        loadingPanelInGame.ShowLoadingPanel();
+        //db에 보상 지급하고, 알아서 런타임 데이터도 동기화됨.
+        await FirestoreManager.Instance.GiveReward(stageDataSO.RewardData);
+        loadingPanelInGame.UnShowLoadingPanel();
+
     }
     private void DefeatGame()
     {
         ShowGameResultPanel(false);
     }
-    private void ShowGameResultPanel(bool isClear)
+    private void ShowGameResultPanel(bool isClear, RewardDataSO rewardData = null)
     {
         Time.timeScale = 0f;
-        gameResultPanel.ShowGameResultPanel(isClear);
+        gameResultPanel.ShowGameResultPanel(isClear, rewardData);
     }
 
 

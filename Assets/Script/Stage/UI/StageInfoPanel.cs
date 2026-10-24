@@ -19,6 +19,11 @@ public class StageInfoPanel : MonoBehaviour
 
     public event Action StageEnterRequest;
 
+    //아이템 보상정보 표시하는 프리팹 객체
+    [SerializeField] Transform rewardItemMakePosition;
+    [SerializeField] RewardItemUI rewardItemUI;
+    List<RewardItemUI> rewardItemUIList = new List<RewardItemUI>();
+
     private void Awake()
     {
         closeButton.onClick.AddListener(CloseButtonClick);
@@ -40,6 +45,7 @@ public class StageInfoPanel : MonoBehaviour
 
     public void ShowPanel(StageDataSO data)
     {
+        Init();
         //스테이지 정보 넣기
         stageName.text = data.StageName;
         stageDesc.text = data.StageDesc;
@@ -83,8 +89,26 @@ public class StageInfoPanel : MonoBehaviour
 
             }
         }
+        //보상 정보도 표시해준다.
+        //TODO. 추후 오브젝트풀로 전환. 일단은 매번 생성하자 
+        RewardDataSO rewardDataSO = data.RewardData;
+        foreach(RewardItem item in rewardDataSO.RewardItemList)
+        {
+            RewardItemUI rewardItemPrefab =  Instantiate(rewardItemUI, rewardItemMakePosition);
+            rewardItemPrefab.SetData(item);
+            rewardItemUIList.Add(rewardItemPrefab);
+        }
 
         this.gameObject.SetActive(true);
+    }
+    private void Init()
+    {
+        //보상정보 리스트 만들어준거 파괴해준다
+        foreach(var item in rewardItemUIList)
+        {
+            Destroy(item.gameObject);
+        }
+        rewardItemUIList.Clear();
     }
 
 

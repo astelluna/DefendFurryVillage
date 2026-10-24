@@ -56,12 +56,8 @@ public class TestAddressableUpdate : MonoBehaviour
         long gold = await FirestoreManager.Instance.LoadGold();
         CurrencyManager.Instance.SetGameMoney(gold);
 
-        //3. 인벤토리 - 장비 아이템 저장
-        List<ItemDbInfo> equipmentItemDbList = await FirestoreManager.Instance.LoadItemAsyncAll_Init(eItemtype.equipment);
-        EquipmentManager.Instance.InitHaveEquipmentItem(equipmentItemDbList);
-        //아이템(소모품, 기타) 아이템 저장
-        List<ItemDbInfo> itemDbList = await FirestoreManager.Instance.LoadItemAsyncAll_Init(eItemtype.item);
-        ItemManager.Instance.InitManager(itemDbList);
+        //3. 인벤토리 - 아이템 동기화
+        await FirestoreManager.Instance.InventoryData_Sync();
         //모두 끝나면 다음 씬으로 이동
 
 

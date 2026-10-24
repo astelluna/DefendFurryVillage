@@ -16,6 +16,7 @@ MonoBehaviour:
   <StageName>k__BackingField: "\uC2DC\uC791\uB41C \uCE68\uACF5"
   <StageDesc>k__BackingField: "\uC54C\uC218\uC5C6\uB294 \uC801\uC758 \uCE68\uACF5\uC774
     \uC2DC\uC791\uB418\uC5C8\uC2B5\uB2C8\uB2E4"
+  <RewardData>k__BackingField: {fileID: 11400000, guid: 87de6116c5ece264f9308f3966b484a2, type: 2}
   <WaveDataList>k__BackingField:
   - {fileID: 11400000, guid: d80ee27ad959335478b02b61bff92c41, type: 2}
   - {fileID: 11400000, guid: d80ee27ad959335478b02b61bff92c41, type: 2}

@@ -1024,7 +1024,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ceca62b52d9548047b7b5ecd30289045, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemManager
-  allItemDataList: []
+  allItemDataList:
+  - {fileID: 11400000, guid: 48b4dd9aedc7cbe459cfb6cc0eb99da7, type: 2}
+  - {fileID: 11400000, guid: 80b27d518a395e2449427a4c3752c6f8, type: 2}
+  - {fileID: 11400000, guid: 53a36a2fc04db3249a3a394d6c09fad8, type: 2}
+  - {fileID: 11400000, guid: e7d089689aae0414fb60e2aa9f16dc51, type: 2}
 --- !u!4 &864004651
 Transform:
   m_ObjectHideFlags: 0
