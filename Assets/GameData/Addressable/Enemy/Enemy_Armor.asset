@@ -20,7 +20,7 @@ MonoBehaviour:
   <penetration>k__BackingField: 0
   <experience>k__BackingField: 5
   <attackRange>k__BackingField: 0
-  <Portrite>k__BackingField: {fileID: 21300000, guid: f3074d193b1ec1f49af8157298ed944a, type: 3}
+  <Portrite>k__BackingField: {fileID: 21300000, guid: b54a97bd93d668b4abd124f44af8bfc1, type: 3}
   <EnemyPrefab>k__BackingField:
     m_AssetGUID: 4ed091f2c66d84448ae1edf9a0ba6290
     m_SubObjectName: 

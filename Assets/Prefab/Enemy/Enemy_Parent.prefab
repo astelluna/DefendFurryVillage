@@ -227,7 +227,7 @@ GameObject:
   - component: {fileID: -1805444175364053157}
   - component: {fileID: 4252497606840152300}
   - component: {fileID: 265386055606643478}
-  - component: {fileID: -178616872222096013}
+  - component: {fileID: 6920662468274310095}
   m_Layer: 7
   m_Name: Enemy_Parent
   m_TagString: Untagged
@@ -345,8 +345,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fafeaca36d8e1b40b8cbe9ae39606f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimation
-  animator: {fileID: -178616872222096013}
---- !u!95 &-178616872222096013
+  animator: {fileID: 6920662468274310095}
+--- !u!95 &6920662468274310095
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
