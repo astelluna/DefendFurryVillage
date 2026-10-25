@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06d00af80f0c2694b905668dce31ea1c, type: 3}
+  m_Name: ShurikenData
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponDataSO
+  <WeaponIcon>k__BackingField: {fileID: 21300000, guid: 1e8f38210c14d1048b5c234d5caae9c3, type: 3}
+  <baseRange>k__BackingField: 8
+  <baseAttackRate>k__BackingField: 6
+  <baseDamage>k__BackingField: 1
+  <WeaponDescription>k__BackingField: "\uD68C\uC804\uD558\uB294 \uC218\uB9AC\uAC80\uC744
+    \uB358\uC9D1\uB2C8\uB2E4"
+  <weaponExecuteSO>k__BackingField: {fileID: 11400000, guid: 017c22824731db147ad60410ffa6afb9, type: 2}
+  basicAugmentDataSOList: []
+  existUpgradeAugmentDataList:
+  - {fileID: 11400000, guid: 04ca601f25511cb4f9a4f7791a786beb, type: 2}
+  - {fileID: 11400000, guid: 2fca14ecf7120614caa8585dec96b446, type: 2}
+  - {fileID: 11400000, guid: 5c10d71bed5783044b7eddc2fd585fdf, type: 2}
+  <ProjectileReferencePrefab>k__BackingField:
+    m_AssetGUID: 8ed067863a58b834dbf6dba9485c251c
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
