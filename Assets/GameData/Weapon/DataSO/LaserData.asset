@@ -21,7 +21,8 @@ MonoBehaviour:
   basicAugmentDataSOList: []
   existUpgradeAugmentDataList:
   - {fileID: 11400000, guid: f72be02a9b1c8114a893d0032e6a0882, type: 2}
-  - {fileID: 11400000, guid: 6a37eddf7e8e02844aa5ddcfa1e2d9df, type: 2}
+  - {fileID: 11400000, guid: 04ca601f25511cb4f9a4f7791a786beb, type: 2}
+  - {fileID: 11400000, guid: 5c10d71bed5783044b7eddc2fd585fdf, type: 2}
   <ProjectileReferencePrefab>k__BackingField:
     m_AssetGUID: 16992d3a229a39641865545c79e36a8b
     m_SubObjectName: 

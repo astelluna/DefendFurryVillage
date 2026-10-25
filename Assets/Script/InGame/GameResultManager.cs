@@ -16,7 +16,8 @@ public class GameResultManager : MonoBehaviour
     }
     private void OnDestroy()
     {
-        StageManager.Instance.StageClearRequest -= ClearGame;
+        if (StageManager.Instance != null) { StageManager.Instance.StageClearRequest -= ClearGame; }
+        
         castleWall.CastleDestroyRequest -= DefeatGame;
     }
 

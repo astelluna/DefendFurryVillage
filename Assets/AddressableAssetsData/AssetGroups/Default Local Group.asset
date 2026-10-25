@@ -33,12 +33,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 132b7349903ee1749b59717c38ed479b
-    m_Address: Characher/CharacherDataSO_Missile.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 16992d3a229a39641865545c79e36a8b
     m_Address: Assets/Prefab/Projectile/Laser.prefab
     m_ReadOnly: 0
@@ -57,18 +51,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2fca14ecf7120614caa8585dec96b446
     m_Address: Weapon/Augment/Data/New Augment Data SO_Stun.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 316d088be4a7c7047b9848cff17f5a68
-    m_Address: Characher/CharacherDataSO_Falling.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3189704a8b391aa428a1565fae590c9a
-    m_Address: Characher/CharacherDataSO_Laser.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
@@ -185,12 +167,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6f4f9493806e2cd46af1bd20005187b4
-    m_Address: Characher/CharacherDataSO_Shriken.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7d4d26dd4243506449ec7af6eefaf482
     m_Address: Weapon/DataSO/MissileData.asset
     m_ReadOnly: 0
@@ -201,12 +177,6 @@ MonoBehaviour:
     m_Address: Assets/Prefab/Projectile/Shuriken.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8eed1262298b4c14db3249d092e91bcd
-    m_Address: Characher/CharacherDataSO_ShootGun.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8fc8e4e3050d8394e917cbf8247c9334
     m_Address: Weapon/DataSO/ShurikenData.asset

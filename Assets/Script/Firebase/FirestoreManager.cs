@@ -40,6 +40,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
     //캐릭터 생성할때 쓰는 값
     int initCharacterLevel = 1;
     int initCharacterExp = 0;
+    string initBasicCharacterId = "10000"; //계정 생성시 기본 지급하는 캐릭터
     #endregion
 
     protected override void OnAwake()
@@ -611,7 +612,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
         ShopProduct shopProduct = new ShopProduct();
         Currency currency = new Currency();
         currency.SetData(eCurrencyType.gameMoney, 0);
-        shopProduct.SetData(eProductType.character, "1000", "X이건안씀X", currency, 1);
+        shopProduct.SetData(eProductType.character, initBasicCharacterId, "X이건안씀X", currency, 1);
         string characterId = shopProduct.ProductId;
         CharacterDataDb initCharacterData = new CharacterDataDb(characterId, initCharacterLevel, initCharacterExp);
         //long resMoney = 0;

@@ -15,7 +15,7 @@ MonoBehaviour:
   <addAttackDamage>k__BackingField: 0
   <reduceAttackRate>k__BackingField: 0
   <addProjectileScale>k__BackingField: 0.5
-  <addAttackCount>k__BackingField: 5
+  <addAttackCount>k__BackingField: 0
   <addPierceCount>k__BackingField: 0
   augmentSpecialDataSOList:
   - {fileID: 11400000, guid: 663115480594cea48a7c636f52959fac, type: 2}

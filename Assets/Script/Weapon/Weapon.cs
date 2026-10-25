@@ -42,7 +42,7 @@ public class Weapon : MonoBehaviour
     public IReadOnlyList<AugmentSpecialDataSO> AugmentSpecialDataSOList => augmentSpecialDataSOList;
 
     //발사 횟수가 2회이상일때 딜레이를 위해서 추가
-    protected float shootDelay = 0.5f;
+    protected float shootDelay = 0.3f;
     public WaitForSeconds continuousFireDelay { get; private set; }
 
 
@@ -78,11 +78,6 @@ public class Weapon : MonoBehaviour
     public async Task Init()
     {
         unUsedUpgradeAugmentDataList = new List<AugmentDataSO>(WeaponDataSO.ExistUpgradeAugmentDataList);
-
-
-
-        //weaponDataTask = AddressablePreloadManager.Instance.GetAsync<WeaponDataSO>(weaponDataAddressable);
-        //weaponDataSO = await weaponDataTask;
     }
     public void StartWeapon()
     {
@@ -158,7 +153,7 @@ public class Weapon : MonoBehaviour
         runtimeData.attackdamage = characterData.CharacterBaseStat.attack + WeaponDataSO.baseDamage + (int)(WeaponDataSO.baseDamage * damagePercent);
         runtimeData.attackRate = WeaponDataSO.baseAttackRate + (WeaponDataSO.baseAttackRate * ratePercent);
         runtimeData.bulletScale = 1f + (1f * bulletSizePercent);
-        runtimeData.plusAttackCount = attackCount;
+        runtimeData.plusAttackCount = 1 + attackCount;
         runtimeData.maxPierce = 1 + pierceCount;
         runtimeData.criticalPercent = characterData.CharacterBaseStat.criticalPercent;
         runtimeData.criticalDamgeRate = characterData.CharacterBaseStat.criticalDamageRate;

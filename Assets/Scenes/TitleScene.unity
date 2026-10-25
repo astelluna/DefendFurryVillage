@@ -1317,32 +1317,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterManager
   characterAddressableSOList:
-  - m_AssetGUID: 316d088be4a7c7047b9848cff17f5a68
+  - m_AssetGUID: ccab86491324ec045a89677e0f79cff4
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: b0ef4b0a24c8ff249a4bade56cfb7cb8
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: acf85f9107c41434790854a45b2a37f4
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   - m_AssetGUID: ff336df504980a546adea7b50af359c5
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
-  - m_AssetGUID: 3189704a8b391aa428a1565fae590c9a
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
-  - m_AssetGUID: 132b7349903ee1749b59717c38ed479b
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
-  - m_AssetGUID: 8eed1262298b4c14db3249d092e91bcd
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
-  - m_AssetGUID: 6f4f9493806e2cd46af1bd20005187b4
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 

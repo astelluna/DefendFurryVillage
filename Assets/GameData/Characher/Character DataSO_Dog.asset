@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d57c636b95b496c43991771e936a238d, type: 3}
   m_Name: Character DataSO_Dog
   m_EditorClassIdentifier: Assembly-CSharp::CharacterDataSO
-  <CharacterId>k__BackingField: 1001
+  <CharacterId>k__BackingField: 10001
   <CharacterName>k__BackingField: "\uAC1C"
   <CharacterBodySprite>k__BackingField: {fileID: 21300000, guid: 5fbc1606299a4a14499ac7acfee86780, type: 3}
   <CharacterPortraitSprite>k__BackingField: {fileID: 21300000, guid: 3889cc23d6227e04ca1f2f1fdefd2b88, type: 3}

@@ -3,13 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-[Serializable]
-public class TestEqipmentSerializeClass
-{
-    public string id;
-    public EquipmentDataSO dataSO;
-}
-
 public readonly struct EquipmentKey : IEquatable<EquipmentKey>
 {
     //딕셔너리에서 키값으로 쓸수있도록 상속받음
@@ -131,74 +124,23 @@ public class EquipmentManager : Singleton<EquipmentManager>
     }
     private void Start()
     {
-        //TODO. 추후에는 DB에서 받아서 만들어야함
-        //테스트용 데이터 넣기 
+        //모든 장비에 대해서 검색 가능하도록 딕셔너리 만듬
         foreach(var item in allEquipmentDataList)
         {
             allEquipmentItemDict.Add(item.Id,item);
         }
-
-        //TODO. 일단 수동으로 호출해보자. 
-        Dictionary<int, int> test1 = new Dictionary<int, int>();
-        test1.Add(0, 3); //0레벨 3개, 
-        test1.Add(1, 4); //1레벨 4개,
-        test1.Add(2, 5); //2레벨 5개,
-        AddEquipmentHaveData("30000", test1); //아이템 1000이라는 id의 0,1,2레벨 템을 넣어줌
     }
     public EquipmentDataSO GetEquipmentData(string id)
     {
-        if (!allEquipmentItemDict.ContainsKey(id)) return null;
+        //딕셔너리에서 장비 정보 검색
+        if (!allEquipmentItemDict.ContainsKey(id))
+        {
+            MyLog.LogError($"{id}에 해당하는 장비가 없습니다. 뭔가 에러");
+            return null;
+        }
 
         return allEquipmentItemDict[id];
     }
-    public void AddEquipmentHaveData(string id, Dictionary<int,int> itemData)
-    {
-        //생성자로 알아서 EquipmentData가 정보 설정하도록 해줌
-        foreach(var item in itemData)
-        {
-            int level = item.Key;
-            int count = item.Value;
-            AddEquipmentCount(id, level, count);
-
-        }
-    }
-    public void AddEquipment(EquipmentInstance data, int amount)
-    {
-        //필요없을듯? AddEquipmentCount를 쓰면 될듯?;
-        //장비 하나를 추가한다.
-        string equipmentId = data.EquipmentDataSO.Id;
-        int level = data.Level;
-
-        AddEquipmentCount(equipmentId, level, amount);
-
-    }
-
-    public bool TryEquip(CharacterEquipment target, EquipmentInstance data)
-    {
-        //data에서 정보를 꺼내자
-        string id = data.EquipmentDataSO.Id;
-        int level = data.Level;
-        int count = GetEquipmentCount(id, level);
-        if (count <= 0) return false;
-        var type = data.EquipmentDataSO.EquipmentType;
-        var old = target.GetEquipment(type);
-        //기존에 착용하던 장비를 빼서 인벤토리에 1개 채워준다.
-        if (old != null) AddEquipmentCount(old.EquipmentDataSO.Id, old.Level, 1);
-        //인벤토리에서 1개 빼서 장착해준다.
-        if (GetEquipment(id,level))
-        {
-            target.SetEquipment(type, data);
-            MyLog.Log("장착 성공");
-            return true;
-        }
-        else
-        {
-            //장착 실패
-            MyLog.Log("장착 실패");
-            return false;
-        }
-    }
-
     public async Task<bool> TryUnEquipAsync(CharacterDataSO characterDataSO, EquipmentInstance curEquipment)
     {
         //장비를 해제한다.
@@ -220,8 +162,6 @@ public class EquipmentManager : Singleton<EquipmentManager>
         AddEquipmentCount(curEquipment.EquipmentDataSO.Id, curEquipment.Level, 1);
 
         return true;
-
-        
     }
 
     public async Task<bool> TryEquipAsync(CharacterDataSO characterDataSO , EquipmentInstance newEquipment)
