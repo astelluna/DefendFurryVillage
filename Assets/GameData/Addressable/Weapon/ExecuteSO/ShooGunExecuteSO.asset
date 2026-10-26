@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d79bea6add6e0b7429c24838ce5184e6, type: 3}
   m_Name: ShooGunExecuteSO
   m_EditorClassIdentifier: Assembly-CSharp::ShooGunExecuteSO
+  shootEffect: {fileID: -2272431522357608720, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}

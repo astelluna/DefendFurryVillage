@@ -32,6 +32,9 @@ public abstract class Projectile : MonoBehaviour
     ObjPool<Projectile> projectilePool;
     public event Action<Projectile> OnProjectileDestroy;
 
+    //이펙트
+    [SerializeField] EffectScript projectileEffect;
+
     //총알 - 공격자 정보 
     AttackerInfo projectileAttackerInfo = new AttackerInfo();
 
@@ -102,7 +105,6 @@ public abstract class Projectile : MonoBehaviour
     }
 
 
-
     public abstract void Shoot();
 
     protected abstract void Move();
@@ -110,6 +112,12 @@ public abstract class Projectile : MonoBehaviour
     protected abstract void Init();
     protected virtual void DestroySelf()
     {
+        //이펙트를 표시
+        if(projectileEffect != null)
+        {
+            EffectManager.Instance.Playfbx(projectileEffect, this.transform);
+        }
+
         //파괴 이벤트를 보내고 풀도 스스로 반환시킴
         OnProjectileDestroy?.Invoke(this);
         

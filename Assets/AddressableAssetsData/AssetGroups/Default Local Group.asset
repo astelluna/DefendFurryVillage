@@ -212,6 +212,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: abdfcabf0ef5f014ca2e814d56ce4ba0
+    m_Address: Assets/Prefab/Projectile/Laser_test.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ac1d897a6c9335d4998149fcb133673a
     m_Address: Assets/Prefab/Projectile/Bullet_Blue.prefab
     m_ReadOnly: 0

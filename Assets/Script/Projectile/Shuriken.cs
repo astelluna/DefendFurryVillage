@@ -6,12 +6,12 @@ using UnityEngine;
 public class Shuriken : Projectile
 {
     [SerializeField] Rigidbody rb;
-    [SerializeField] float rotateSpeed = 40f;
+    [SerializeField] float rotateSpeed = 160f;
     [SerializeField] Transform modelTransform;
     //TODO. 원래는 외부에서 속도를 받아야하긴하는데. 그냥 고정 속도로 해보자. 그게 나을듯
     
     float maxBulletSpeed = 5.0f;
-    float moveDelay = 0.2f; //수리검이 적과 닿고있을때는 속도가 20%로 감소함
+    float moveDelay = 0.1f; //수리검이 적과 닿고있을때는 속도가 10%로 감소함
     float curBulletSpeed;
     bool canMove = false;
 

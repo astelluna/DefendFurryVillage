@@ -47,6 +47,9 @@ public class Enemy : MonoBehaviour
     //모델 프리팹 위치 
     [SerializeField] GameObject modelObject;
 
+    //피격 이펙트
+    [SerializeField] EffectScript hitEffect;
+
     bool _isMove = true;
 
     bool isMove {
@@ -312,14 +315,19 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int dmg)
     {
-        //TODO -> 데미지 처리
         curHp -= dmg;
         MyLog.Log($"{dmg} 만큼 데미지 받음, HP: {curHp}");
-        
-        if(curHp <= 0 )
+
+        if (curHp <= 0 )
         {
             Dead();
         }
+        else
+        {
+            //이펙트 재생
+            EffectManager.Instance.Playfbx(hitEffect, this.transform);
+        }
+        
     }
 
     private void Dead()

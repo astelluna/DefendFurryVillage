@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d918526c70525e045b8631817e21c037, type: 3}
   m_Name: FallingExecuteSO
   m_EditorClassIdentifier: Assembly-CSharp::FallingExecuteSO
+  shootEffect: {fileID: -2272431522357608720, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
   basicExplodeRadius: 3

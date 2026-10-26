@@ -315,6 +315,7 @@ MonoBehaviour:
   statusEffectController: {fileID: 4252497606840152300}
   enemyAnimation: {fileID: 265386055606643478}
   modelObject: {fileID: 7450853655413377045}
+  hitEffect: {fileID: -2251630909639843705, guid: 621ee87fa935f8b45812df359c751d17, type: 3}
   enemyData:
     m_AssetGUID: 
     m_SubObjectName: 

@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class WeaponExecuteSO : ScriptableObject
 {
     //총알 발사 로직은 대부분 같고, 여러번 발사할때 어떤 기준으로 적을 선택하는지와 총알 발사 정보를 어떤식으로 설정하는지만 다르다
-
+    [SerializeField] EffectScript shootEffect; //무기 발사할때 이펙트가 필요하면
     public IEnumerator ShootWeapon(Weapon weapon)
     {
         while (true)
@@ -32,6 +32,10 @@ public abstract class WeaponExecuteSO : ScriptableObject
                     ShootAt(trf, weapon);
                     weapon.SetWeaponCoolTime();
                     weapon.InvokeWeaponShootEvent();
+                    if(shootEffect != null)
+                    {
+                        EffectManager.Instance.Playfbx(shootEffect,weapon.transform); //이펙트 추가
+                    }
                     yield return weapon.continuousFireDelay;
                 }
             }

@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31811fe3b8ecde04c9fabd6e8cba560c, type: 3}
   m_Name: MissileExecuteSO
   m_EditorClassIdentifier: Assembly-CSharp::MissileExecuteSO
+  shootEffect: {fileID: -2272431522357608720, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
   basicExplodeRadius: 3
