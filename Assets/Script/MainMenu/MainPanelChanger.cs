@@ -10,7 +10,6 @@ public class MainPanelChanger : MonoBehaviour
 {    
     //어떤 버튼을 누르면 패널을 열어주고, 그런 안내하는 역할을 하도록 하자
     [SerializeField] Button characterButton;
-    [SerializeField] Button equipmentButton;
     [SerializeField] Button mainMenuButton;
     [SerializeField] Button shopButton;
     [SerializeField] Button battleButton;
@@ -42,7 +41,6 @@ public class MainPanelChanger : MonoBehaviour
         };
         //버튼 이벤트들 추가
         characterButton.onClick.AddListener(()=> ChangePanel(characterShowPanel));
-        //equipmentButton.onClick.AddListener(()=> ChangePanel(equipmentPanel));
         mainMenuButton.onClick.AddListener(()=> ChangePanel(mainMenuPanel));
         shopButton.onClick.AddListener(() => ChangePanel(shopPanel));
         battleButton.onClick.AddListener(()=> ChangePanel(worldSelectManager));
@@ -56,7 +54,6 @@ public class MainPanelChanger : MonoBehaviour
     private void OnDestroy()
     {
         characterButton.onClick.RemoveAllListeners();
-        equipmentButton.onClick.RemoveAllListeners();
         mainMenuButton.onClick.RemoveAllListeners();
         shopButton.onClick.RemoveAllListeners();
         battleButton.onClick.RemoveAllListeners();
