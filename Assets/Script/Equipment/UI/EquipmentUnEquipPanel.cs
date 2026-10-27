@@ -21,6 +21,10 @@ public class EquipmentUnEquipPanel : MonoBehaviour
         unEquipButton.onClick.RemoveAllListeners();
         closeButton.onClick.RemoveAllListeners();
     }
+    private void OnDisable()
+    {
+        OnCloseButtonClick();
+    }
     private void OnUnEquipButtonClick()
     {
         onConfirm?.Invoke();

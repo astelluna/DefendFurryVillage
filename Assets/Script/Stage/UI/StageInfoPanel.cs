@@ -29,6 +29,10 @@ public class StageInfoPanel : MonoBehaviour
         closeButton.onClick.AddListener(CloseButtonClick);
         stageEnterButton.onClick.AddListener(OnStageEnterButtonClick);
     }
+    private void OnDisable()
+    {
+        CloseButtonClick();
+    }
     private void OnDestroy()
     {
         closeButton.onClick.RemoveAllListeners();

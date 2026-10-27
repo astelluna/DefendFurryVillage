@@ -7,7 +7,6 @@ public class CharacterSelectButton : MonoBehaviour
     //캐릭터 선택창에 있는 캐릭터 버튼들. 선택하면 이벤트 발동, 
     [SerializeField] Image checkImage;
     Button button;
-    //CharacterDataSO characterDataSO;
     CharacterInstance characterInstanceData;
 
     //public event Action<CharacterSelectButton ,CharacterDataSO> OnCharacterSelectButtonClicked;
@@ -41,6 +40,12 @@ public class CharacterSelectButton : MonoBehaviour
     public void UpdateCheckImage(bool isSelected)
     {
         checkImage.gameObject.SetActive(isSelected);
+    }
+    public void Init()
+    {
+        characterInstanceData = null;
+        button.image.sprite = null;
+        checkImage.gameObject.SetActive(false);
     }
 
 

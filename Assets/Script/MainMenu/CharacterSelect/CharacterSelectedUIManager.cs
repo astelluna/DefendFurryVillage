@@ -12,6 +12,22 @@ public class CharacterSelectedUIManager : MonoBehaviour
 
     public event Action<bool> OnChangeSelectedState; //캐릭터가 선택/비선택 되었을때 외부에 게임시작 버튼을 활성/비활성화 할거임
 
+    private void OnDisable()
+    {
+        //비활성화 되면 데이터 초기화 해야함
+        Init();
+    }
+
+    private void Init()
+    {
+        selectedState = false;
+        foreach(var item in selectedUIList)
+        {
+            item.CancelUI();
+        }
+        selectedCharacterDict.Clear();
+    }
+    
     public void CheckState()
     {
         //게임시작 버튼 비활성/활성화를 위한 캐릭터를 1개라도 선택했는지 상태체크하는 메서드

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ShopCharacterPanel : MonoBehaviour
@@ -7,6 +8,8 @@ public class ShopCharacterPanel : MonoBehaviour
     [SerializeField] ShopItemUI shopItemUIPrefab;
     [SerializeField] Transform makePosition;
 
+    [SerializeField] TextMeshProUGUI soldoutText;
+     
     [SerializeField] ShopPanel shopPanel;
 
     List<ShopItemUI> makedCharacterItemList = new List<ShopItemUI>();
@@ -53,6 +56,16 @@ public class ShopCharacterPanel : MonoBehaviour
             shopProduct.SetData(eProductType.character, pair.Value.CharacterId, pair.Value.CharacterName, pair.Value.PurchasePrice, 1);
             shopItem.SetProductData(shopProduct);
             makedCharacterItemList.Add(shopItem);
+        }
+
+        //구매할 항목이 없다면 판매완료 텍스트 띄우기
+        if(makedCharacterItemList.Count > 0)
+        {
+            soldoutText.gameObject.SetActive(false);
+        }
+        else
+        {
+            soldoutText.gameObject.SetActive(true);
         }
     }
 

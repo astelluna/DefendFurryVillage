@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a0f5a4914c7b3a4892d322ad611698c, type: 3}
   m_Name: StageData_1_1
   m_EditorClassIdentifier: Assembly-CSharp::StageDataSO
-  <StageId>k__BackingField: 1001
+  <StageId>k__BackingField: 30101
   <StageName>k__BackingField: "\uC2DC\uC791\uB41C \uCE68\uACF5"
   <StageDesc>k__BackingField: "\uC54C\uC218\uC5C6\uB294 \uC801\uC758 \uCE68\uACF5\uC774
     \uC2DC\uC791\uB418\uC5C8\uC2B5\uB2C8\uB2E4"

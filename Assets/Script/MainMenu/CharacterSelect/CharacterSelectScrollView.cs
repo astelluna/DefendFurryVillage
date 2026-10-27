@@ -24,6 +24,7 @@ public class CharacterSelectScrollView : MonoBehaviour
     {
         foreach (CharacterSelectButton item in characterSelectButtonList)
         {
+            item.Init();
             item.OnCharacterSelectButtonClicked -= OnCharacterSelect;
             if(CaracterSelectButtonSpawner.Instance != null)
             {

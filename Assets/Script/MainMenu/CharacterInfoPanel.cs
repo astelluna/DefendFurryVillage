@@ -37,6 +37,10 @@ public class CharacterInfoPanel : MonoBehaviour
         CharacterStat characterStat =  CharacterManager.Instance.GetBasicCharacterStat(characterDataSO);
         statIconAll.SetIcon(characterStat);
     }
+    private void OnDisable()
+    {
+        OnClose();
+    }
 
     private void OnDestroy()
     {

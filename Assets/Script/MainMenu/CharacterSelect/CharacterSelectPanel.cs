@@ -32,9 +32,19 @@ public class CharacterSelectPanel : MonoBehaviour
         selectCompleteButton.onClick.RemoveAllListeners();
         closeButton.onClick.RemoveAllListeners();
     }
+    private void OnDisable()
+    {
+        OnCloseButtonClick();
+    }
 
+    private void Init()
+    {
+        //모든 선택된 상태들에 대해서 초기화 해주자
+        selectCompleteButton.interactable = false;
+    }
     private void OnCloseButtonClick()
     {
+        Init();
         this.gameObject.SetActive(false);
     }
     private void OnChangeGameStartButtonState(bool isInteractable)

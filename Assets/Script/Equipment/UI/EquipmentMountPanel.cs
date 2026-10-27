@@ -26,12 +26,6 @@ public class EquipmentMountPanel : MonoBehaviour
     //장비 교환될때 해당 스텟을 반환 
     public event Action CharacterStatChangeRequest;
 
-    //아이템을 정렬하기 위한 버튼들 (추후 하자)
-    [SerializeField] Button allItemShowButton;
-    [SerializeField] Button weaponAlignButton;
-    [SerializeField] Button armorAlignButton;
-    [SerializeField] Button accessoriesAlignButton;
-
     //장비 해제 확인 패널
     [SerializeField] EquipmentUnEquipPanel equipmentUnEquipPanel;
     public event Action<EquipmentInstance> UnEquipRequest;
@@ -119,6 +113,10 @@ public class EquipmentMountPanel : MonoBehaviour
     {
         UnInit();
 
+    }
+    private void OnDisable()
+    {
+        OnCloseButtonClick();
     }
     private void OnCloseButtonClick()
     {

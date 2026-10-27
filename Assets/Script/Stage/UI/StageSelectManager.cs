@@ -40,6 +40,10 @@ public class StageSelectManager : MonoBehaviour
         StageSelectReqest?.Invoke(stageDataSO);
         
     }
+    private void OnDisable()
+    {
+        ClosePanel();
+    }
 
 
     private void OnDestroy()

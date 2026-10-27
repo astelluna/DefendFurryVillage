@@ -1,4 +1,6 @@
 using System;
+using TMPro;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,11 +10,13 @@ public class StageSelectButton : MonoBehaviour
 
     [field: SerializeField] public StageDataSO stageDataSO { get; private set; }
     [SerializeField] Button stageButton;
+    [SerializeField] TextMeshProUGUI buttonText;
     public event Action<StageDataSO> OnStageButtonClicked;
 
     private void Awake()
     {
         stageButton.onClick.AddListener(StageButtonClick);
+        SetData(stageDataSO);
     }
     private void OnDestroy()
     {
@@ -22,6 +26,10 @@ public class StageSelectButton : MonoBehaviour
     private void StageButtonClick()
     {
         OnStageButtonClicked?.Invoke(stageDataSO);
+    }
+    private void SetData(StageDataSO data)
+    {
+        buttonText.text = data.GetStageFormat();
     }
 
 
