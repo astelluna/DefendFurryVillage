@@ -31,7 +31,7 @@ public class GameResultPanel : MonoBehaviour
     }
     private void OnExitButtonClick()
     {
-        this.gameObject.SetActive(false);
+        //this.gameObject.SetActive(false); //어짜피 씬 이동할거니까 닫지말자.
         Time.timeScale = 1f;
         Init();
         SceneManager.LoadScene(SceneController.Main);
