@@ -21,14 +21,17 @@ public class GameResultManager : MonoBehaviour
         castleWall.CastleDestroyRequest -= DefeatGame;
     }
 
-    private async void ClearGame(StageDataSO stageDataSO)
+    private async void ClearGame(StageDataSO stageDataSO, WorldStageInfo worldStageInfo)
     {
         ShowGameResultPanel(true, stageDataSO.RewardData);
         loadingPanelInGame.ShowLoadingPanel();
         //db에 보상 지급하고, 알아서 런타임 데이터도 동기화됨.
         await FirestoreManager.Instance.GiveReward(stageDataSO.RewardData);
-        loadingPanelInGame.UnShowLoadingPanel();
+        //스테이지 클리어 기록을 경신중인지 확인하고, db에 기록해야함
+        await StageManager.Instance.CheckAndUpdateStageBestRecord(worldStageInfo);
 
+        //전부 끝나면 로딩패널 해제
+        loadingPanelInGame.UnShowLoadingPanel();
     }
     private void DefeatGame()
     {

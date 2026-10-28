@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a0f5a4914c7b3a4892d322ad611698c, type: 3}
+  m_Name: StageData_3_1
+  m_EditorClassIdentifier: Assembly-CSharp::StageDataSO
+  <StageId>k__BackingField: 30101
+  <StageName>k__BackingField: "\uC2DC\uC791\uB41C \uCE68\uACF5"
+  <StageDesc>k__BackingField: "\uC54C\uC218\uC5C6\uB294 \uC801\uC758 \uCE68\uACF5\uC774
+    \uC2DC\uC791\uB418\uC5C8\uC2B5\uB2C8\uB2E4"
+  <RewardData>k__BackingField: {fileID: 11400000, guid: 87de6116c5ece264f9308f3966b484a2, type: 2}
+  <WaveDataList>k__BackingField:
+  - {fileID: 11400000, guid: d80ee27ad959335478b02b61bff92c41, type: 2}
+  - {fileID: 11400000, guid: d80ee27ad959335478b02b61bff92c41, type: 2}

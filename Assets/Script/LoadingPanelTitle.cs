@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class TestAddressableUpdate : MonoBehaviour
+public class LoadingPanelTitle : MonoBehaviour
 {
-    [SerializeField] Button testButton;
+    //[SerializeField] Button testButton;
     Action<bool> completeAction;
 
     //패널
@@ -14,18 +15,19 @@ public class TestAddressableUpdate : MonoBehaviour
 
     private void Awake()
     {
-        testButton.onClick.AddListener(OnButtonClick);
+        Invoke(nameof(OnStartButtonClick), 3f);
+        //testButton.onClick.AddListener(OnButtonClick);
         completeAction += Complete;
         loginPanel.LoginCompleteRequest += LoginComplete;
     }
     private void OnDestroy()
     {
-        testButton.onClick.RemoveAllListeners();
+        //testButton.onClick.RemoveAllListeners();
         completeAction -= Complete;
         loginPanel.LoginCompleteRequest -= LoginComplete;
     }
 
-    private void OnButtonClick()
+    private void OnStartButtonClick()
     {
         AddressableUpdateManager.Instance.StartUpdateCheck(completeAction);
     }
@@ -37,14 +39,13 @@ public class TestAddressableUpdate : MonoBehaviour
         {
             //로그인 창이 뜨게 하자.
             loginPanel.ShowPanel();
-
-
-            //SceneManager.LoadScene(SceneController.Main); -> 보류;
+            this.gameObject.SetActive(false);
         }
 
     }
     private async void LoginComplete()
     {
+        this.gameObject.SetActive(true);
         //로그인 성공 이후 필수 작업들을 진행해보자.
         await FirebaseAuthManager.Instance.AuthTcs.Task;
         string uid = FirebaseAuthManager.Instance.auth.CurrentUser.UserId;
@@ -58,8 +59,9 @@ public class TestAddressableUpdate : MonoBehaviour
 
         //3. 인벤토리 - 아이템 동기화
         await FirestoreManager.Instance.InventoryData_Sync();
+        //4. 스테이지 - 정보 동기화 
+        await FirestoreManager.Instance.ProgressInit_Sync();
         //모두 끝나면 다음 씬으로 이동
-
 
         SceneManager.LoadScene(SceneController.Main);
     }

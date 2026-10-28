@@ -94,12 +94,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 521f0df8e1fe77a49a0cba1be72e4e24
-    m_Address: StageAndWave/New Stage Data SO.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 58a77103edd617c49b60f5c32198d299
     m_Address: Character/Character_ShootGun.prefab
     m_ReadOnly: 0
@@ -110,11 +104,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5d6f025ce4d135f44a3ae618f832b271
-    m_Address: StageAndWave/StageData_1_3.asset
-    m_ReadOnly: 0
-    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5f7c1b18f22cb6a4fa76c3796e220792
     m_Address: Enemy/BasicEnemy.asset
@@ -242,11 +231,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b3859af650b29c3428a48fe8c6a0315e
     m_Address: Assets/Prefab/Projectile/Missile.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b576aa153ed876e44a5ae24abfb00fde
-    m_Address: StageAndWave/StageData_1_2.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

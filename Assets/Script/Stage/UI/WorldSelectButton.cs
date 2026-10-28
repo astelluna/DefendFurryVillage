@@ -8,15 +8,13 @@ public class WorldSelectButton : MonoBehaviour
 {
     [SerializeField] Button worldSelectButton;
     [SerializeField] TextMeshProUGUI worldText;
-    [field: SerializeField] public string WorldName { get; private set; }
-    [field: Header("월드번호는 1부터 시작")]
-    [field:SerializeField] public int WorldIndex { get; private set; }
+    //[field: SerializeField] public string WorldName { get; private set; }
+    public int WorldIndex { get; private set; } //월드번호는 1부터 시작
     public event Action<int> OnWorldSelectButton;
 
     private void Awake()
     {
         worldSelectButton.onClick.AddListener(WorldSelectButtonClick);
-        worldText.text = WorldName;
     }
     private void OnDestroy()
     {
@@ -27,6 +25,12 @@ public class WorldSelectButton : MonoBehaviour
     {
         //버튼을 클릭하면 어떤 패널을 띄울거임. 
         OnWorldSelectButton?.Invoke(WorldIndex);
+    }
+    //public void SetWorldIndex(int idx)
+    public void SetData(string worldName ,int idx)
+    {
+        worldText.text = worldName;
+        WorldIndex = idx;
     }
 
 }

@@ -4,14 +4,58 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
+public class StageProgressData
+{
+    //현재 최대로 클리어한 월드, 스테이지 진행 정보에 대해서 기록. (초기에 DB에서 읽어서 설정됨)
+    //다음에 플레이할수 있는 스테이지를 지정한다.
+    public long worldId { get; private set; }
+    public long stageId { get; private set; }
+    public void SetData(long wld, long stg)
+    {
+        worldId = wld;
+        stageId = stg;
+    }
+
+    public void SetData(WorldStageInfo info)
+    {
+        //설정 명령이 들어오면, 스테이지 마지막인지 확인해서 월드 count를 +1 해줌
+        int worldIndex = info.WorldIndex;
+        int stageIndex = 1; //초기 1부터 시작
+        if(info.StageIndex == info.maxStageIndex)
+        {
+            worldIndex += 1;
+        }
+        else
+        {
+            stageIndex = info.StageIndex + 1;
+        }
+        worldId = worldIndex;
+        stageId = stageIndex;
+    }
+}
+public class WorldStageInfo
+{
+    //현재 선택한 스테이지 정보를 저장하기 위해서 새로 선언함
+    public int WorldIndex { get; private set; }
+    public int StageIndex { get; private set; }
+    public int maxStageIndex { get; private set; } //현재 스테이지의 최대 갯수 지정
+    public void SetData(int worldIdx, int stageIdx,int maxStageIdx)
+    {
+        WorldIndex = worldIdx;
+        StageIndex = stageIdx;
+        maxStageIndex = maxStageIdx;
+    }
+}
 public class StageManager : Singleton<StageManager>
 {
     //어떤 스테이지를 선택하면 해당 스테이지의 정보대로 적을 소환한다. -> 일단 직렬화로 테스트 
-
-    [Header("!테스트!. 테스트가 필요하면 직접 넣기")]
-    [SerializeField] StageDataSO stageDataSO; //테스트할떄는 수동으로 넣어지고, 정상적일땐 알아서 데이터 설정됨
-    
-
+    [Header("월드 갯수만큼 데이터 지정")]
+    [SerializeField] List<WorldDataSO> allWorldDataSOList;
+    public IReadOnlyList<WorldDataSO> AllWorldDataSoList => allWorldDataSOList;
+    StageDataSO selectedStageData;
+    WorldStageInfo worldStageInfo = new WorldStageInfo(); //현재 선택한 월드,스테이지 정보
+    public StageProgressData BestStageProgressData { get; private set; } = new StageProgressData(); //DB에서 정보를 받아서 셋팅되는 최고기록 스테이지 진행상황
+    [Header("인게임- 몬스터 소환 주기")]
     [SerializeField] float spawnTime = 0.1f;
 
     
@@ -24,12 +68,14 @@ public class StageManager : Singleton<StageManager>
     int remainSpawnCount = 0;
     List<Enemy> aliveEnemyList = new List<Enemy>();
 
-    public event System.Action<StageDataSO> StageClearRequest;
+    public event System.Action<StageDataSO, WorldStageInfo> StageClearRequest;
 
     #region 인게임씬에서 외부에서 전달받아서 정보 SET 하는 필드들
-    StagePanel stagePanel; //스테이지 정보 표시하는 UI
+    StagePanelInGame stageInGamePanel; //스테이지 정보 표시하는 UI
     StageEnemySpawnPosition stageEnemySpawnPosition; //소환 위치 담아둔 게임오브젝트
     #endregion
+
+    
 
     protected override void OnAwake()
     {
@@ -50,6 +96,7 @@ public class StageManager : Singleton<StageManager>
         aliveEnemyList.Clear();
     }
 
+    #region 인게임씬에서 사용되는 메서드
     public async Task InitForIngameScene()
     {
         //인게임 씬에 진입했을때 해야하는 행동 정의
@@ -58,7 +105,7 @@ public class StageManager : Singleton<StageManager>
     private async Task RegisterEnemySpawner()
     {
         HashSet<EnemyDataSO> enemyHash = new HashSet<EnemyDataSO>();
-        foreach (var item in stageDataSO.WaveDataList)
+        foreach (var item in selectedStageData.WaveDataList)
         {
             foreach (var enemy in item.EnemieList)
             {
@@ -93,14 +140,15 @@ public class StageManager : Singleton<StageManager>
         StartWaveDelay_Test();
         //StartWave(curWaveIndex);
     }
-    public void SetStageData(StageDataSO data)
+    public void SetStageData(StageDataSO data, WorldStageInfo worldStageData)
     {
-        stageDataSO = data;
+        selectedStageData = data;
+        worldStageInfo = worldStageData;
     }
-    public void SetIngameData(StagePanel panel, StageEnemySpawnPosition  spawnPosition)
+    public void SetIngameData(StagePanelInGame panel, StageEnemySpawnPosition  spawnPosition)
     {
         //인게임에서 필요한 스테이지 관련 정보를 넣음
-        stagePanel = panel;
+        stageInGamePanel = panel;
         stageEnemySpawnPosition = spawnPosition;
     }
     private void StartWaveDelay_Test()
@@ -112,12 +160,12 @@ public class StageManager : Singleton<StageManager>
     private void StartWave(int index)
     {
         MyLog.Log($"{index}번째 웨이브 시작");
-        if (index < 0 || index >= stageDataSO.WaveDataList.Count)
+        if (index < 0 || index >= selectedStageData.WaveDataList.Count)
         {
             MyLog.LogError("웨이브 인덱스가 이상함");
             return;
         }
-        var curWaveData = stageDataSO.WaveDataList[index];
+        var curWaveData = selectedStageData.WaveDataList[index];
         StartCoroutine(spawnCor(curWaveData,index));
     }
 
@@ -173,13 +221,13 @@ public class StageManager : Singleton<StageManager>
         if(CheckStageClear())
         {
             MyLog.Log("스테이지 종료 - 이벤트 발동");
-            StageClearRequest?.Invoke(stageDataSO);
+            StageClearRequest?.Invoke(selectedStageData, worldStageInfo);
         }
         
     }
     private void RequestUpdateStagePanel()
     {
-        stagePanel.UpdateStageInfo(curWaveIndex + 1, stageDataSO.WaveDataList.Count, aliveEnemyList.Count);
+        stageInGamePanel.UpdateStageInfo(curWaveIndex + 1, selectedStageData.WaveDataList.Count, aliveEnemyList.Count);
     }
 
     private void StartNextWaveDelyed()
@@ -192,18 +240,41 @@ public class StageManager : Singleton<StageManager>
     private bool CheckWaveClear()
     {
         if (remainSpawnCount != 0) return false;
-        if (curWaveIndex + 1 >= stageDataSO.WaveDataList.Count) return false;
+        if (curWaveIndex + 1 >= selectedStageData.WaveDataList.Count) return false;
 
         return true;
     }
     private bool CheckStageClear()
     {
-        if(remainSpawnCount == 0 && curWaveIndex + 1 >= stageDataSO.WaveDataList.Count)
+        if(remainSpawnCount == 0 && curWaveIndex + 1 >= selectedStageData.WaveDataList.Count)
         {
             return true;
         }
         return false;
     }
+    #endregion
 
+    #region 일반 스테이지 데이터
+    public void SetProgressDataFromDB(ProgressDataDB progressDataDB)
+    {
+        BestStageProgressData.SetData(progressDataDB.WorldId, progressDataDB.StageId);
+    }
+    public async Task  CheckAndUpdateStageBestRecord(WorldStageInfo worldStageInfo)
+    {
+        //기록하기전에 클리어했으면 다음 
+        //BestStageProgressData 형식은 다음에 플레이할수있는 스테이지를 표시하므로 worldStageInfo로 BestStageProgressData형식을 만든다
+        StageProgressData stageProgressData = new StageProgressData();
+        stageProgressData.SetData(worldStageInfo);
+
+
+        //현재 스테이지 클리어 기록이 기록 경신을 한것인지 체크하고, 기록 경신했으면 업데이트
+        if (stageProgressData.worldId > BestStageProgressData.worldId || 
+            (stageProgressData.worldId >= BestStageProgressData.worldId && stageProgressData.stageId > BestStageProgressData.stageId))
+        {
+            //기록 경신
+            await FirestoreManager.Instance.ProgressSave(stageProgressData.worldId, stageProgressData.stageId);
+        }
+    }
+    #endregion
 
 }

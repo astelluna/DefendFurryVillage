@@ -5,7 +5,7 @@ public class LoadingPanelInGame : MonoBehaviour
 {
     //[SerializeField] StageManager 
     //인게임씬에서 정보설정을 위해 필요한 직렬화
-    [SerializeField] StagePanel stagePanel;
+    [SerializeField] StagePanelInGame stagePanel;
     [SerializeField] StageEnemySpawnPosition stageEnemySpawnPosition;
     [SerializeField] CharacterSpawnPosition characterSpawnPosition;
     public void ShowLoadingPanel()

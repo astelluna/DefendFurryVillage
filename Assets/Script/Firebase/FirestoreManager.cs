@@ -3,11 +3,19 @@ using Firebase.Firestore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Transactions;
-using UnityEngine.TextCore.Text;
+using UnityEngine;
 using static UnityEditor.Progress;
-
-
+[FirestoreData]
+public class ProgressDataDB
+{
+    [FirestoreProperty] public long WorldId { get; set; }
+    [FirestoreProperty] public long StageId { get; set; }
+    public void SetData(long world, long stage)
+    {
+        WorldId = world;
+        StageId = stage;
+    }
+}
 public enum eItemtype
 {
     equipment, item
@@ -33,14 +41,17 @@ public class FirestoreManager : Singleton<FirestoreManager>
     const string expText = "exp";
     const string goldText = "gold";
     const string createdText = "createdAt";
+    const string progressText = "progress";
 
     #region 캐릭터및 계정 생성할때 초기 값들
     //계정 생성할때 쓰는 값
-    long initAccountGold = 10000; //초기 골드
+    const long initAccountGold = 10000; //초기 골드
     //캐릭터 생성할때 쓰는 값
-    int initCharacterLevel = 1;
-    int initCharacterExp = 0;
-    string initBasicCharacterId = "10000"; //계정 생성시 기본 지급하는 캐릭터
+    const int initCharacterLevel = 1;
+    const int initCharacterExp = 0;
+    const string initBasicCharacterId = "10000"; //계정 생성시 기본 지급하는 캐릭터
+    const long initWorldId = 1;
+    const long initStageId = 1;
     #endregion
 
     protected override void OnAwake()
@@ -626,7 +637,9 @@ public class FirestoreManager : Singleton<FirestoreManager>
                 DocumentReference userRef = db.Collection(userText).Document(userId);
                 DocumentSnapshot characterSnap = await transaction.GetSnapshotAsync(characterRef);
                 DocumentSnapshot userSnap = await transaction.GetSnapshotAsync(userRef);
-
+                DocumentReference progressRef = db.Collection(userText).Document(userId).Collection(progressText).Document(progressText);
+                ProgressDataDB progressDataDB = new ProgressDataDB();
+                progressDataDB.SetData(initWorldId, initStageId);
                 //만약 유저가 이미 있었다면? 바로 취소 
                 if (userSnap.Exists) { return false; }
 
@@ -641,7 +654,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
                 {
                     {goldText, initAccountGold }
                 },SetOptions.MergeAll);
-
+                transaction.Set(progressRef, progressDataDB, SetOptions.MergeAll);
                 return true; 
             });
         }
@@ -796,6 +809,81 @@ public class FirestoreManager : Singleton<FirestoreManager>
         await InventoryData_Sync();
         return true;
     }
-    
+
+    #endregion
+
+    #region 계정 진행도 (월드, 스테이지) 저장 및 불러오기
+
+    private void Progress_Sync(ProgressDataDB progressDataDB)
+    {
+        StageManager.Instance.SetProgressDataFromDB(progressDataDB);
+    }
+    public async Task ProgressInit_Sync()
+    {
+        //초기에 동기화가 필요할때
+        ProgressDataDB data = await ProgressLoad();
+        Progress_Sync(data);
+    }
+
+    public async Task ProgressSave(long worldId, long stageId)
+    {
+        //게임 진행도(월드, 스테이지)를 저장한다.
+        await WaitForInitAsync();
+        string userId = FirebaseAuthManager.Instance.User.UserId;
+
+        //Ref 찾기 및 저장
+        DocumentReference progressRef = db.Collection(userText).Document(userId).Collection(progressText).Document(progressText);
+        DocumentSnapshot snap = await progressRef.GetSnapshotAsync();
+
+        ProgressDataDB progressDataDB = new ProgressDataDB();
+        progressDataDB.SetData(worldId, stageId);
+
+        if (snap.Exists)
+        {
+            //만약 저장하려는 값이 현재 최신 데이터보다 이전값이라면? 취소
+            var current = snap.ConvertTo<ProgressDataDB>();
+            bool isFurther = progressDataDB.WorldId > current.WorldId ||
+                             (progressDataDB.WorldId == current.WorldId && progressDataDB.StageId > current.StageId);
+            if (!isFurther)
+            {
+                MyLog.LogError("현재 진행도보다 이전의 진행도로 덮어쓰려고 했습니다. 에러");
+                return;
+            }
+        }
+
+
+        //데이터 저장
+        await progressRef.SetAsync(progressDataDB);
+        Progress_Sync(progressDataDB);
+    }
+    public async Task<ProgressDataDB> ProgressLoad()
+    {
+        //스테이지 진행도를 반환한다
+        try
+        {
+            await WaitForInitAsync();
+            string userId = FirebaseAuthManager.Instance.User.UserId;
+
+            //Ref 찾기
+            DocumentReference progressRef = db.Collection(userText).Document(userId).Collection(progressText).Document(progressText);
+            DocumentSnapshot progressSnap = await progressRef.GetSnapshotAsync();
+
+            // 문서가 없으면 (처음 접속한 유저) 기본값 반환
+            if (!progressSnap.Exists)
+            {
+                var newData = new ProgressDataDB();
+                newData.SetData(1, 1);
+                return newData;
+            }
+
+            return progressSnap.ConvertTo<ProgressDataDB>();
+        }
+        catch(Exception e)
+        {
+            MyLog.LogError($"진행도 로드실패 {e}");
+            return null;
+        }
+    }
+
     #endregion
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -19,7 +20,7 @@ public class CharacterSelectPanel : MonoBehaviour
     [SerializeField] Button closeButton;
 
     StageDataSO stageDataSO;
-
+    WorldStageInfo worldStageInfo;
     private void Awake()
     {
         characterSelectedUIManager.OnChangeSelectedState += OnChangeGameStartButtonState;
@@ -63,7 +64,7 @@ public class CharacterSelectPanel : MonoBehaviour
         //다음 인게임씬으로 이동하기전에 싱글톤 매니저들에 정보를 설정해준다 
         List<CharacterInstance> selectedInstanceList = characterSelectedUIManager.GetSelectedCharacter();
         CharacterManager.Instance.SetSelectedCharacter(selectedInstanceList);
-        StageManager.Instance.SetStageData(stageDataSO);
+        StageManager.Instance.SetStageData(stageDataSO,worldStageInfo);
         //씬 이동
         SceneManager.LoadScene(SceneController.InGame);
 
@@ -87,10 +88,11 @@ public class CharacterSelectPanel : MonoBehaviour
         }
 
     }
-    public void ShowPanelAndSetData(StageDataSO data)
+    public void ShowPanelAndSetData(StageDataSO data, WorldStageInfo worldStageData )
     {
 
         stageDataSO = data;
+        worldStageInfo = worldStageData;
         characterSelectScrollView.CharacterShow(this);
         this.gameObject.SetActive(this);
         
