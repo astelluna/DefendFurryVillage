@@ -42,80 +42,69 @@ public class AddressableUpdateManager : MonoBehaviour
 
     private IEnumerator UpdateRoutine(Action<bool> onComplete)
     {
-        // =========================================================
-        // 1. Addressables 초기화
-        // =========================================================
-
-        AsyncOperationHandle initHandle;
-
-        try
-        {
-            // false = 자동 Release 하지 않음
-            initHandle = Addressables.InitializeAsync(false);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"[Addressables] 초기화 호출 실패\n{e}");
-            onComplete?.Invoke(false);
-            yield break;
-        }
+        AsyncOperationHandle<IResourceLocator> initHandle = Addressables.InitializeAsync(false);
 
         yield return initHandle;
 
-        if (!initHandle.IsValid())
+        // 핸들이 유효할 때만 상태를 검사하고 Release
+        if (initHandle.IsValid())
         {
-            Debug.LogError("[Addressables] 초기화 Handle이 무효합니다.");
-            onComplete?.Invoke(false);
-            yield break;
-        }
-
-        if (initHandle.Status != AsyncOperationStatus.Succeeded)
-        {
-            Debug.LogError(
-                $"[Addressables] 초기화 실패 : {initHandle.Status}"
-            );
+            if (initHandle.Status != AsyncOperationStatus.Succeeded)
+            {
+                Debug.LogError($"[Addressables] 초기화 실패 : {initHandle.Status}");
+                Addressables.Release(initHandle);
+                onComplete?.Invoke(false);
+                yield break;
+            }
 
             Addressables.Release(initHandle);
-            onComplete?.Invoke(false);
-            yield break;
+        }
+        else
+        {
+            // 이미 초기화되어 핸들이 해제된 경우 → 정상으로 간주
+            Debug.Log("[Addressables] 이미 초기화되어 있습니다.");
         }
 
         Debug.Log("[Addressables] 초기화 완료");
-
-        Addressables.Release(initHandle);
 
 
         // =========================================================
         // 2. Remote Catalog 업데이트 확인
         // =========================================================
 
+        List<string> catalogsToUpdate = new List<string>();
+
         AsyncOperationHandle<List<string>> checkHandle =
             Addressables.CheckForCatalogUpdates(false);
 
         yield return checkHandle;
 
-        if (!checkHandle.IsValid())
+        if (checkHandle.IsValid())
         {
-            Debug.LogError(
-                "[Addressables] Catalog 확인 Handle이 무효합니다."
-            );
+            if (checkHandle.Status != AsyncOperationStatus.Succeeded)
+            {
+                Debug.LogError(
+                    $"[Addressables] Catalog 업데이트 확인 실패 : {checkHandle.Status}"
+                );
 
-            onComplete?.Invoke(false);
-            yield break;
-        }
+                Addressables.Release(checkHandle);
+                onComplete?.Invoke(false);
+                yield break;
+            }
 
-        if (checkHandle.Status != AsyncOperationStatus.Succeeded)
-        {
-            Debug.LogError(
-                $"[Addressables] Catalog 업데이트 확인 실패 : {checkHandle.Status}"
-            );
+            // Release 전에 결과를 복사해 둡니다.
+            if (checkHandle.Result != null)
+                catalogsToUpdate = new List<string>(checkHandle.Result);
 
             Addressables.Release(checkHandle);
-            onComplete?.Invoke(false);
-            yield break;
         }
-
-        List<string> catalogsToUpdate = checkHandle.Result;
+        else
+        {
+            Debug.LogWarning(
+                "[Addressables] Catalog 확인 Handle이 무효합니다. " +
+                "원격 Catalog가 없는 환경으로 보고 업데이트를 건너뜁니다."
+            );
+        }
 
         Debug.Log(
             $"[Addressables] 업데이트할 Catalog 수 : {catalogsToUpdate.Count}"
@@ -139,7 +128,6 @@ public class AddressableUpdateManager : MonoBehaviour
                     "[Addressables] Catalog 업데이트 Handle이 무효합니다."
                 );
 
-                Addressables.Release(checkHandle);
                 onComplete?.Invoke(false);
                 yield break;
             }
@@ -151,7 +139,6 @@ public class AddressableUpdateManager : MonoBehaviour
                 );
 
                 Addressables.Release(updateHandle);
-                Addressables.Release(checkHandle);
 
                 onComplete?.Invoke(false);
                 yield break;
@@ -161,8 +148,6 @@ public class AddressableUpdateManager : MonoBehaviour
 
             Addressables.Release(updateHandle);
         }
-
-        Addressables.Release(checkHandle);
 
 
         // =========================================================

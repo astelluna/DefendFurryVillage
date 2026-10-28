@@ -53,6 +53,16 @@ public class CharacterManager : Singleton<CharacterManager>
     //어드레서블 핸들
     private readonly Dictionary<string, CharacterAddressableHandle> characterAddressableHandleDict = new Dictionary<string, CharacterAddressableHandle>();
 
+    public void ClearHaveCharacterInstances()
+    {
+        //가지고있는 캐릭터 목록을 비워줄때 사용 -> DB에서 다시 읽어오기 위해서
+        haveCharacterDict.Clear();
+        unHaveCharacterDict.Clear();
+        foreach (var item in allCharacterSODict)
+        {
+            unHaveCharacterDict.Add(item.Key, item.Value);
+        }
+    }
     public void AddHaveCharacterInstance(CharacterInstance characterInstance)
     {
         if(haveCharacterDict.ContainsKey(characterInstance.characterData.CharacterId))

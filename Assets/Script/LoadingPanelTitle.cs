@@ -50,6 +50,8 @@ public class LoadingPanelTitle : MonoBehaviour
         await FirebaseAuthManager.Instance.AuthTcs.Task;
         string uid = FirebaseAuthManager.Instance.auth.CurrentUser.UserId;
         //아래부터 DB에서 최초로 정보 1회씩 불러와서 런타임에 설정.
+        //0. 계정이 존재하는지 확인하고 없으면 만들어주기
+        await FirestoreManager.Instance.CreateNewAccount(); //새로운 계정인지 체크해서 새 계정이면 데이터 만듬
         //1. 가지고있는 캐릭터와 그 캐릭터의 장비 정보를 불러서 Charactermanager에 정보 설정
         await FirestoreManager.Instance.LoadAndSetHaveCharacter_Init();
 

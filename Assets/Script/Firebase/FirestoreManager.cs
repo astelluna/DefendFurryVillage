@@ -3,8 +3,6 @@ using Firebase.Firestore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEngine;
-using static UnityEditor.Progress;
 [FirestoreData]
 public class ProgressDataDB
 {
@@ -213,13 +211,18 @@ public class FirestoreManager : Singleton<FirestoreManager>
     //보유 캐릭터 불러오기
     public async Task LoadAndSetHaveCharacter_Init()
     {
+        //init이므로 전부 버리고 다시 불러오자
         await WaitForInitAsync();
         string userId = FirebaseAuthManager.Instance.User.UserId;
         //초기 1회 해당 유저가 가지고있는 전체 캐릭터 정보를 불러오고, 정보를 셋팅해준다.
+        await CharacterManager.Instance.InitalizeCharacterTask;
         CollectionReference characterRef = db.Collection(userText).Document(userId).Collection(characterText);
         QuerySnapshot result = await characterRef.GetSnapshotAsync();
         List<Task> waitTaskList = new List<Task>();
-        
+
+        //가지고있는 런타임 캐릭터 목록 초기화
+        CharacterManager.Instance.ClearHaveCharacterInstances();
+
         foreach (DocumentSnapshot document in result.Documents)
         {
             //DB에서 캐릭터 레벨 정보를 불러온뒤, 캐릭터 정보를 CharacterManager에 Set 해준다.
@@ -667,6 +670,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
         //트랜젝션이 정상적으로 끝났다면? 런타임 데이터도 수정해주자.
         CurrencyManger_Sync(initAccountGold); //새로 생성해주면서 초기 골드로 넣엇으므로 초기 골드로 넣어줌
         await MakeRuntimeCharacterInstance_Sync(characterId, initCharacterData);
+        await ProgressInit_Sync();
         return true;
     }
     #endregion
