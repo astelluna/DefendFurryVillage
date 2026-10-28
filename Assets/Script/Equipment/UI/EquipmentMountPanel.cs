@@ -34,7 +34,6 @@ public class EquipmentMountPanel : MonoBehaviour
     CharacterDataSO curCharacterData;
 
     bool isInitalized = false;
-
     private async void MountEquipment(EquipmentInstance data)
     {
         //어떤 행동을 해달라고 위임을 해버리자. 장비 장착 행동이니까 EquipmentManager에
@@ -81,6 +80,7 @@ public class EquipmentMountPanel : MonoBehaviour
         isInitalized = true;
         closeButton.onClick.AddListener(OnCloseButtonClick);
         equipmentInfoPanel.MountEquipmentRequest += MountEquipment;
+        equipmentInfoPanel.UpdatePanelRequest += UpdatePanel;
 
         equipmentSlotDict = new Dictionary<eEquipmentType, EquipmentSlotUI>();
         //장비 슬롯 설정
@@ -101,6 +101,7 @@ public class EquipmentMountPanel : MonoBehaviour
         isInitalized = false;
         closeButton.onClick.RemoveAllListeners();
         equipmentInfoPanel.MountEquipmentRequest -= MountEquipment;
+        equipmentInfoPanel.UpdatePanelRequest -= UpdatePanel;
 
         foreach (EquipmentSlotUI item in equipmentSlotArray)
         {
@@ -133,12 +134,15 @@ public class EquipmentMountPanel : MonoBehaviour
         characterImage.sprite = curCharacterData.CharacterBodySprite;
         characterName.text = curCharacterData.CharacterName;
 
+        UpdatePanel();
+        this.gameObject.SetActive(true);
+    }
+    public void UpdatePanel()
+    {
         //현재 장비와 인벤토르 장비 표시
         UpdateCharacterStat();
         UpdateEquipmentInventory();
         UpdateEquipmentUI();
-
-        this.gameObject.SetActive(true);
     }
 
     private void ClearEquipmentUI()

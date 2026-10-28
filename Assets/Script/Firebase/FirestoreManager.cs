@@ -139,35 +139,69 @@ public class FirestoreManager : Singleton<FirestoreManager>
     }
 
     //저장 및 불러오기
-    public async Task<bool> SaveItemAsync(eItemtype itemtype, string itemId, int level, int count)
+    //public async Task<bool> SaveItemAsync(eItemtype itemtype, string itemId, int level, int count)
+    public async Task<bool> UpgradeItemAsync(eItemtype itemtype, string beforeItemId, int beforeLevel, string afterItemId, int afterLevel)
     {
+        //장비 업그레이드할때 이전 장비는 -1, 강화장비는 +1 개 해주는 메서드
         //초기화 끝났는지 대기
         await WaitForInitAsync();
 
+        //강화 이전 아이템은 -1개 해주고, 강화 이후 아이템은 +1개 해줘야한다
         string userId = FirebaseAuthManager.Instance.User.UserId;
-
-        //DB의 Ref 주소 생성
+        string beforeItemKey = MakeItemKey(beforeItemId, beforeLevel);
+        string afterItemKey = MakeItemKey(afterItemId, afterLevel);
         string itemTypeKey = "";
-        if(!MakeItemTypeToKey_ForInventory(itemtype, out itemTypeKey))
+        if (!MakeItemTypeToKey_ForInventory(itemtype, out itemTypeKey))
         {
-            return false; 
+            return false;
         }
-        string itemKey = MakeItemKey(itemId, level);
-        //Ref 찾기 및 저장
-        DocumentReference itemRef = db.Collection(userText).Document(userId).Collection(inventoryText).Document(itemTypeKey).Collection(itemCollect).Document(itemKey);
-        if (count <= 0)
+        DocumentReference beforeItemRef = db.Collection(userText).Document(userId).Collection(inventoryText).Document(itemTypeKey).Collection(itemCollect).Document(beforeItemKey);
+        DocumentReference afterItemRef = db.Collection(userText).Document(userId).Collection(inventoryText).Document(itemTypeKey).Collection(itemCollect).Document(afterItemKey);
+
+        try
         {
-            MyLog.Log("갯수0개로 인해서 인벤토리에서 삭제합니다");
-            await itemRef.DeleteAsync();
-            return true;
+            await db.RunTransactionAsync(async transaction =>
+            {
+                DocumentSnapshot beforeItemSnap = await transaction.GetSnapshotAsync(beforeItemRef);
+                DocumentSnapshot afterItemSnap = await transaction.GetSnapshotAsync(afterItemRef);
+                int beforeItemCount = beforeItemSnap.Exists && beforeItemSnap.TryGetValue(countText, out long beforeCnt) ? (int)beforeCnt : 0;
+                int afterItemCount = afterItemSnap.Exists && afterItemSnap.TryGetValue(countText, out long afterCnt) ? (int)afterCnt : 0;
+
+                
+                if(beforeItemCount == 0)
+                {
+                    //만약 beforeItemcount가 0이라면 에러 띄워야함 (이전 장비가 없는데 없는 장비가 강화된거임. 이상함)
+                    throw new Exception($"장비 갯수가 0인데 아이템을 차감하려함");
+                }
+                //트렌젝션 등록 -> 장비 갯수를 강화 이전 아이템은 -1, 강화한 아이템은 +1 
+                int remain = beforeItemCount - 1;
+                if (remain <= 0) 
+                {
+                    transaction.Delete(beforeItemRef); 
+                }
+                else
+                {
+                    ModifyInventoryItem_Transaction(transaction, beforeItemRef, beforeItemSnap, beforeItemKey, -1);
+                }
+                ModifyInventoryItem_Transaction(transaction, afterItemRef, afterItemSnap, afterItemKey, 1);
+            });
         }
+        catch(Exception e)
+        {
+            MyLog.LogError($"강화한 장비 인벤토리에 추가 실패 : {e}");
+            return false;
+        }
+        //런타임 데이터 동기화
+        await InventoryData_Sync();
+
         //딕셔너리로 저장해서 나중에 꺼내올때 구분이 가능하게 해준다
-        await itemRef.SetAsync(new Dictionary<string, object>
-        {
-            { countText, count }
-        });
+        //await itemRef.SetAsync(new Dictionary<string, object>
+        //{
+        //    { countText, count }
+        //});
         return true;
     }
+
     public async Task<List<ItemDbInfo>> LoadItemAsyncAll_Init(eItemtype itemtype)
     {
         await WaitForInitAsync();

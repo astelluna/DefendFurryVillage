@@ -12,22 +12,37 @@ public class EquipmentInfoPanel : MonoBehaviour
     [SerializeField] Button mountButton;
     [SerializeField] Button closeButton;
 
+    [SerializeField] Button upgradeButton; //장비 강화 버튼
+    [SerializeField] EquipmentUpgradePanel upgradePanel;
+
     public event Action<EquipmentInstance> MountEquipmentRequest;
-    EquipmentInstance equipmentLevelData;
+    public event Action UpdatePanelRequest;
+    EquipmentInstance equipmentInstance;
     private void Awake()
     {
         closeButton.onClick.AddListener(OnCloseButtonClick);
         mountButton.onClick.AddListener(OnMountButtonClick);
+        upgradeButton.onClick.AddListener(OnUpgradeButtonClick);
     }
     private void OnDestroy()
     {
         closeButton.onClick.RemoveAllListeners();
         mountButton.onClick.RemoveAllListeners();
+        upgradeButton.onClick.RemoveAllListeners();
+    }
+    private void OnUpgradeButtonClick()
+    {
+        upgradePanel.ShowPanel(equipmentInstance, this);
     }
 
     public void ClosePanel()
     {
         OnCloseButtonClick();
+    }
+    public void OnRequestUpdate()
+    {
+        UpdatePanelRequest.Invoke();
+        ClosePanel();
     }
 
     private void OnCloseButtonClick()
@@ -36,7 +51,7 @@ public class EquipmentInfoPanel : MonoBehaviour
     }
     private void OnMountButtonClick()
     {
-        int count = EquipmentManager.Instance.GetEquipmentCount(equipmentLevelData.EquipmentDataSO.Id, equipmentLevelData.Level);
+        int count = EquipmentManager.Instance.GetEquipmentCount(equipmentInstance.EquipmentDataSO.Id, equipmentInstance.Level);
 
         if(count <= 0)
         {
@@ -44,7 +59,7 @@ public class EquipmentInfoPanel : MonoBehaviour
             return;
         }
 
-        MountEquipmentRequest?.Invoke(equipmentLevelData);
+        MountEquipmentRequest?.Invoke(equipmentInstance);
         this.gameObject.SetActive(false);
     }
 
@@ -53,7 +68,7 @@ public class EquipmentInfoPanel : MonoBehaviour
     {
         int count = EquipmentManager.Instance.GetEquipmentCount(data.EquipmentDataSO.Id, data.Level);
 
-        equipmentLevelData = data;
+        equipmentInstance = data;
         itemNameText.text = data.EquipmentDataSO.DisplayName;
         itemDescText.text = data.GetEquipmentDescription();
         countText.text = count.ToString();

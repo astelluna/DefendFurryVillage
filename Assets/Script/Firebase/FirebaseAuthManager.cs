@@ -23,7 +23,7 @@ public class FirebaseAuthManager : Singleton<FirebaseAuthManager>
 
                 auth = FirebaseAuth.DefaultInstance;
                 //테스트할때 이거 켜놓기
-                SignOut_Test();
+                //SignOut_Test();
 
                 AuthTcs.TrySetResult(true);
             });
