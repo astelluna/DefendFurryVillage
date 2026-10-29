@@ -84,7 +84,7 @@ public class Weapon : MonoBehaviour
         SetWeaponCoolTime();
         if (shootCor == null)
         {
-            shootCor = StartCoroutine(WeaponDataSO.weaponExecuteSO.ShootWeapon(this));
+            shootCor = StartCoroutine(WeaponDataSO.weaponExecuteSO.ShootWeapon(this, WeaponDataSO.ShootSound, WeaponDataSO.DestroySound));
         }
     }
 

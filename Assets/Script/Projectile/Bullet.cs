@@ -9,22 +9,10 @@ public class Bullet : Projectile
     [SerializeField] float lifeTime = 10f;
     [SerializeField] Rigidbody rb;
 
-    //TODO. 원래는 외부에서 속도를 받아야하긴하는데. 그냥 고정 속도로 해보자. 그게 나을듯
+    // 고정 속도로
     float bulletSpeed = 8;
-
     bool isTriggered = false; //두개 이상 객체에 동시에 충돌해서 추가
-
     bool canMove = false;
-
-    //지금 해볼것 -> 관통력을 추가해서 몇개이상 관통이 가능하게 할건지 체크해야함.
-    //int maxPierceCount = 1;
-
-
-    //int damage;
-
-
-
-
 
     protected override void OnEnable()
     {
@@ -45,10 +33,6 @@ public class Bullet : Projectile
         }
         
     }
-
-    
-
-
     private void OnTriggerEnter(Collider other)
     {
         if (isTriggered) return;
@@ -57,24 +41,6 @@ public class Bullet : Projectile
 
         if (other.gameObject.TryGetComponent(out Enemy enemy))
         {
-
-            //TODO. 추후 오브젝트풀 반환시켜야하고, 바로 죽는게 아닌 데미지 처리하고 죽으면 반환해야함
-            //TODO. 적 총알 충돌 처리 -> 추후에는 데미지 달게 할거임
-
-            //일단 n초후에 데미지 받는 거를 테스트 해보자
-            //foreach (AugmentSpecialDataSO item in augmentSpecialDataSOList)
-            //{
-            //    IOnHit onHit = item as IOnHit;
-            //    if (onHit != null)
-            //    {
-            //        onHit.OnHit(weaponRuntimeData, enemy);
-            //    }
-            //}
-            //ApplyAugmentHit(enemy);
-            //DamageInfo damageInfo =  MakeDamageInfo(enemy);
-            //int calcDamage = DamageManager.Instance.CalcDamage(damageInfo);
-            //enemy.TakeDamage(calcDamage);
-
             //적에 데미지 적용 
             ProcessHit(enemy);
             //총알 관통력이 전부 소모되었으면 총알 없앰

@@ -15,6 +15,9 @@ public class EnemyDataSO : ScriptableObject
     [Header("몬스터 이미지 및 프리팹")]
     [field: SerializeField] public Sprite Portrite { get; private set; }
     [field: SerializeField] public AssetReferenceEnemy EnemyPrefab { get; private set; }
+    [Header("사운드")]
+    [field: SerializeField] public AudioClip DeadSound { get; private set; }
+    [field: SerializeField] public AudioClip AttackSound { get; private set; }
 
     public bool CanRangedAttack()
     {

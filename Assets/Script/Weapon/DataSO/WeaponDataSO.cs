@@ -31,5 +31,7 @@ public class WeaponDataSO : ScriptableObject
     //[field: SerializeField] public Projectile ProjectilePrefab { get; private set; } //총알 종류
     [Header("총알프리팹-어드레서블")]
     [field: SerializeField] public AssetReferenceProjectile ProjectileReferencePrefab { get; private set; }
-
+    [Header("사운드")]
+    [field: SerializeField] public AudioClip ShootSound { get; private set; } //발사 소리
+    [field: SerializeField] public AudioClip DestroySound { get; private set; } //미사일 폭발 등으로 인해 투사체가 파괴될때 소리 나야하면 추가
 }

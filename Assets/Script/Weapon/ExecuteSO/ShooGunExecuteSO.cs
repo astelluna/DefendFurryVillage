@@ -5,7 +5,7 @@ public class ShooGunExecuteSO : WeaponExecuteSO
 {
     int bulletCount = 5;
     float spreadAngle = 90;
-    protected override void ShootAt(Transform enemyTarget, Weapon weapon)
+    protected override void ShootAt(Transform enemyTarget, Weapon weapon, AudioClip destroySound)
     {
         float startAngle = -spreadAngle / 2f;
         float angleStep = bulletCount > 1 ? spreadAngle / (bulletCount - 1) : 0f; // 30
@@ -22,7 +22,7 @@ public class ShooGunExecuteSO : WeaponExecuteSO
             //발사체로 Bullet.cs쓴다
             //Projectile projectile = Instantiate(weapon.ProjectilePrefab, weapon.transform.position, rotation);
             Projectile projectile = ProjectileSpawner.Instance.GetPrefabByPool(weapon.transform, weapon.ProjectilePrefab);
-            projectile.SetProjectileDataAndInit(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
+            projectile.SetProjectileDataAndInit(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList), destroySound);
             projectile.SetDirectionRotation(rotation);
 
             projectile.Shoot();

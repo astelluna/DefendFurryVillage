@@ -36,7 +36,7 @@ public class AugmentSpecialSpreadProjectileSO : AugmentSpecialDataSO, IOnHit
             {
                 weaponRuntimeData.maxPierce = 30;
             }
-            projectile.SetProjectileDataAndInit(weaponRuntimeData, null); //null로 해서 다른 특수효과 재귀적으로 호출되지않게 해야할듯
+            projectile.SetProjectileDataAndInit(weaponRuntimeData, null, null); //null로 해서 다른 특수효과 재귀적으로 호출되지않게 해야할듯
             projectile.SetDirectionToDirection(enemy.transform.position, directionList[i]);
             projectile.Shoot();
             projectile.gameObject.SetActive(true);

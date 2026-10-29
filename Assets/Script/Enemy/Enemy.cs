@@ -174,7 +174,7 @@ public class Enemy : MonoBehaviour
         damageInfo.SetAttackerInfo(runtimeStat.attack, 0, 0, runtimeStat.penetration);
     }
 
-    private async void OnEnable()
+    private void OnEnable()
     {
         //await setAddressableTask;
         isStun = false;
@@ -297,6 +297,7 @@ public class Enemy : MonoBehaviour
         {
             if (castleWall == null) break;
             castleWall.TakeDamage(damageInfo);
+            if (EnemyDataSO.AttackSound != null) { SoundManager.Instance.PlayVoice(EnemyDataSO.AttackSound); }
             yield return delay;
         }
     }
@@ -333,6 +334,7 @@ public class Enemy : MonoBehaviour
     private void Dead()
     {
         MyLog.Log("사망처리");
+        if(EnemyDataSO.DeadSound != null) { SoundManager.Instance.PlayVoice(EnemyDataSO.DeadSound); }
         LevelUpManager.Instance.GetExperience(EnemyDataSO.experience);
         OnEnemyDead?.Invoke(this);
         enemyPool.ReturnObject(this);

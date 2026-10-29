@@ -8,13 +8,13 @@ public class BasicGunExecuteSO : WeaponExecuteSO
         return fixedTarget;
     }
 
-    protected override void ShootAt(Transform enemyTarget, Weapon weapon)
+    protected override void ShootAt(Transform enemyTarget, Weapon weapon, AudioClip destroySound)
     {
         //Projectile projectile = Instantiate(weapon.ProjectilePrefab, weapon.transform.position, weapon.transform.rotation);
         Projectile projectile = ProjectileSpawner.Instance.GetPrefabByPool(weapon.transform, weapon.ProjectilePrefab);
 
         projectile.gameObject.SetActive(false);
-        projectile.SetProjectileDataAndInit(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
+        projectile.SetProjectileDataAndInit(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList), destroySound);
         projectile.SetDirectionToEnemyPosition(enemyTarget.position);
         projectile.Shoot();
         projectile.gameObject.SetActive(true);

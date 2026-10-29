@@ -69,14 +69,14 @@ public class Character : MonoBehaviour
     private void Start()
     {
         basicWeapon.OnWeaponShoot += characterAnimation.PlayAttackBasic;
-        specialWeapon.OnWeaponShoot += characterAnimation.PlayAttackSpecial;
+        specialWeapon.OnWeaponShoot += SpecialWeaponShooted;
 
         //WeaponAttackStart();
     }
     private void OnDestroy()
     {
         basicWeapon.OnWeaponShoot -= characterAnimation.PlayAttackBasic;
-        specialWeapon.OnWeaponShoot -= characterAnimation.PlayAttackSpecial;
+        specialWeapon.OnWeaponShoot -= SpecialWeaponShooted;
     }
 
     private async Task Preload_Data()
@@ -158,5 +158,10 @@ public class Character : MonoBehaviour
             WeaponAttackStart();
         }
     }
-
+    private void SpecialWeaponShooted()
+    {
+        characterAnimation.PlayAttackSpecial();
+        if(CharacterInstanceData.characterData.AttackSound != null) { SoundManager.Instance.PlayVoice(CharacterInstanceData.characterData.AttackSound); }
+        
+    }
 }

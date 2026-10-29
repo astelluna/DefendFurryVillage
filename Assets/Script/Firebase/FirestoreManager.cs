@@ -3,6 +3,7 @@ using Firebase.Firestore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Transactions;
 [FirestoreData]
 public class ProgressDataDB
 {
@@ -140,7 +141,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
 
     //저장 및 불러오기
     //public async Task<bool> SaveItemAsync(eItemtype itemtype, string itemId, int level, int count)
-    public async Task<bool> UpgradeItemAsync(eItemtype itemtype, string beforeItemId, int beforeLevel, string afterItemId, int afterLevel)
+    public async Task<bool> UpgradeItemAsync(eItemtype itemtype, string beforeItemId, int beforeLevel, string afterItemId, int afterLevel, int cost)
     {
         //장비 업그레이드할때 이전 장비는 -1, 강화장비는 +1 개 해주는 메서드
         //초기화 끝났는지 대기
@@ -157,13 +158,17 @@ public class FirestoreManager : Singleton<FirestoreManager>
         }
         DocumentReference beforeItemRef = db.Collection(userText).Document(userId).Collection(inventoryText).Document(itemTypeKey).Collection(itemCollect).Document(beforeItemKey);
         DocumentReference afterItemRef = db.Collection(userText).Document(userId).Collection(inventoryText).Document(itemTypeKey).Collection(itemCollect).Document(afterItemKey);
+        DocumentReference userRef = db.Collection(userText).Document(userId);
 
+        long resultGold = 0;
         try
         {
-            await db.RunTransactionAsync(async transaction =>
+            resultGold = await db.RunTransactionAsync<long>(async transaction =>
             {
+                long gold = 0;
                 DocumentSnapshot beforeItemSnap = await transaction.GetSnapshotAsync(beforeItemRef);
                 DocumentSnapshot afterItemSnap = await transaction.GetSnapshotAsync(afterItemRef);
+                DocumentSnapshot userSnap = await transaction.GetSnapshotAsync(userRef);
                 int beforeItemCount = beforeItemSnap.Exists && beforeItemSnap.TryGetValue(countText, out long beforeCnt) ? (int)beforeCnt : 0;
                 int afterItemCount = afterItemSnap.Exists && afterItemSnap.TryGetValue(countText, out long afterCnt) ? (int)afterCnt : 0;
 
@@ -184,6 +189,9 @@ public class FirestoreManager : Singleton<FirestoreManager>
                     ModifyInventoryItem_Transaction(transaction, beforeItemRef, beforeItemSnap, beforeItemKey, -1);
                 }
                 ModifyInventoryItem_Transaction(transaction, afterItemRef, afterItemSnap, afterItemKey, 1);
+                //골드의 경우에도 차감 필요
+                gold = ModifyGold_Transaction(transaction, userRef, userSnap, -cost);
+                return gold;
             });
         }
         catch(Exception e)
@@ -192,13 +200,9 @@ public class FirestoreManager : Singleton<FirestoreManager>
             return false;
         }
         //런타임 데이터 동기화
+        CurrencyManger_Sync(resultGold);
         await InventoryData_Sync();
 
-        //딕셔너리로 저장해서 나중에 꺼내올때 구분이 가능하게 해준다
-        //await itemRef.SetAsync(new Dictionary<string, object>
-        //{
-        //    { countText, count }
-        //});
         return true;
     }
 

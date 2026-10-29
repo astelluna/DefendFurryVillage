@@ -3,7 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Weapon/Execute/WeaponExecute_Shuriken")]
 public class ShurikenExecuteSO : WeaponExecuteSO
 {
-    protected override void ShootAt(Transform enemyTarget, Weapon weapon)
+    protected override void ShootAt(Transform enemyTarget, Weapon weapon, AudioClip destroySound)
     {
         //수리검은 기본적으로 자기 자신이 회전을 계속 한다. 그런 상태에서 
         Vector3 direction = enemyTarget.position - weapon.transform.position;
@@ -11,7 +11,7 @@ public class ShurikenExecuteSO : WeaponExecuteSO
         Quaternion rotation = Quaternion.LookRotation(direction);
         //Projectile projectile = Instantiate(weapon.ProjectilePrefab, weapon.transform.position, rotation);
         Projectile projectile = ProjectileSpawner.Instance.GetPrefabByPool(weapon.transform, weapon.ProjectilePrefab);
-        projectile.SetProjectileDataAndInit(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
+        projectile.SetProjectileDataAndInit(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList), destroySound);
         projectile.SetDirectionToEnemyPosition(enemyTarget.position);
         //projectile.SetTargetPos(enemyTarget.position);
         projectile.Shoot();

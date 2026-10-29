@@ -4,7 +4,7 @@ using UnityEngine;
 public class FallingExecuteSO : WeaponExecuteSO
 {
     [SerializeField] float basicExplodeRadius = 3f;
-    protected override void ShootAt(Transform enemyTarget, Weapon weapon)
+    protected override void ShootAt(Transform enemyTarget, Weapon weapon, AudioClip destroySound)
     {
         //Falling.cs 씀
         //Projectile projectile = Instantiate(weapon.ProjectilePrefab, weapon.transform.position, weapon.transform.rotation);
@@ -12,7 +12,7 @@ public class FallingExecuteSO : WeaponExecuteSO
 
 
         float explodeRadius = basicExplodeRadius + weapon.runtimeData.bulletScale;
-        projectile.SetProjectileDataAndInit(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList));
+        projectile.SetProjectileDataAndInit(weapon.runtimeData, new List<AugmentSpecialDataSO>(weapon.AugmentSpecialDataSOList), destroySound);
         projectile.SetMoveTartgetPos(enemyTarget.position);
         projectile.SetExplodeRadius(explodeRadius);
         projectile.Shoot();

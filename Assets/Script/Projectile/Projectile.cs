@@ -38,6 +38,8 @@ public abstract class Projectile : MonoBehaviour
     //총알 - 공격자 정보 
     AttackerInfo projectileAttackerInfo = new AttackerInfo();
 
+    public AudioClip destroySound { get; private set; } //투사체가 파괴될떄나는 소리 
+
     public void SetObjectPool(ObjPool<Projectile> pool)
     {
         projectilePool = pool;
@@ -72,13 +74,15 @@ public abstract class Projectile : MonoBehaviour
         transform.rotation = rotation;
     }
 
-    public virtual void SetProjectileDataAndInit(WeaponRuntimeData data, List<AugmentSpecialDataSO> specialDataSOs)
+    public virtual void SetProjectileDataAndInit(WeaponRuntimeData data, List<AugmentSpecialDataSO> specialDataSOs, AudioClip clip)
     {
         weaponRuntimeData = data;
         //null이면 빈거 넣음
         augmentSpecialDataSOList = (specialDataSOs == null) ? new List<AugmentSpecialDataSO>() : specialDataSOs;
         //총알 공격자 정보 셋팅
         projectileAttackerInfo.SetAttackerInfo(weaponRuntimeData.attackdamage, weaponRuntimeData.criticalPercent, weaponRuntimeData.criticalDamgeRate, weaponRuntimeData.armorPenetrate);
+        //적중시 소리
+        destroySound = clip;
         //총알 크기를 weaponRunTimeData만큼 키우거나 그래야한다면 Init에서 하자
         Init();
     }
@@ -115,7 +119,13 @@ public abstract class Projectile : MonoBehaviour
         //이펙트를 표시
         if(projectileEffect != null)
         {
+            
             EffectManager.Instance.Playfbx(projectileEffect, this.transform);
+        }
+        //사운드
+        if (destroySound != null)
+        {
+            SoundManager.Instance.PlaySFX(destroySound);
         }
 
         //파괴 이벤트를 보내고 풀도 스스로 반환시킴

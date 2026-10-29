@@ -17,6 +17,7 @@ public class EquipmentDataSO : ItemDataSO
     [Header("아이템 기본 스텟")]
     [field: SerializeField] public CharacterStat stat { get; private set; }
     [Header("아이템 업그레이드 시 오르는 스텟")]
+    [field: SerializeField] public int UpgradeCost { get; private set; } = 100; //업그레이드 할때마다 비용
     [field: SerializeField] public int UpgradeAttackValue { get; private set; } = 1;
     [field: SerializeField] public int UpgradeCriticalRate { get; private set; } = 1;
     [field: SerializeField] public float UpgradeCriticalRatio { get; private set; } = 1f;

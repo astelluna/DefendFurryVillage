@@ -32,3 +32,4 @@ MonoBehaviour:
     <criticalPercent>k__BackingField: 5
     <criticalDamageRate>k__BackingField: 2
     <armorPenetration>k__BackingField: 0
+  <AttackSound>k__BackingField: {fileID: 8300000, guid: 80d7f261371b421499212eddb083bfec, type: 3}

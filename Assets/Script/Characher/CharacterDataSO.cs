@@ -25,8 +25,9 @@ public class CharacterDataSO : ScriptableObject
     [field: SerializeField] public Currency PurchasePrice { get; private set; }
 
     //인게임 정보
-    [Header("아래부터 인게임 정보")]
+    [Header("인게임 정보")]
     [field: SerializeField] public CharacterStat CharacterBaseStat { get; private set; }
+    [Header("사운드")]
+    [field: SerializeField] public AudioClip AttackSound { get; private set; } //특수공격할때만 소리를 넣자
 
-    
 }

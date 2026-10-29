@@ -35,7 +35,6 @@ public class Falling : Projectile
     {
         if ((1 << other.gameObject.layer & TargetManager.Instance.GroundLayer.value) == 0) return;
         //바닥에 부딫힌 위치에서 범위를 계산해서 데미지를 주면 된다. 
-        //TODO. 추후 바닥에 부딫히면 충격파 이펙트 넣어야 함.
         var k = Physics.OverlapSphereNonAlloc(transform.position, explodeRadius, colliders);
         for(int i=0; i< k; i++)
         {
