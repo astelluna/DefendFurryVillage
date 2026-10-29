@@ -13,7 +13,20 @@
           "package_name": "com.kyj.DefendFurryVillage"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "841260331174-apu40rp94sfb7030eh3q9io7b42i2pf3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kyj.DefendFurryVillage",
+            "certificate_hash": "9974019d716f6da684c88e6197ad22c775ee61f3"
+          }
+        },
+        {
+          "client_id": "841260331174-b3vbcnb40t07vi7r53qsoq04jfgnaiis.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD3dO1a_0Yci7uTnIEfsYLAG5A9RDB4u_w"
@@ -21,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "841260331174-b3vbcnb40t07vi7r53qsoq04jfgnaiis.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
