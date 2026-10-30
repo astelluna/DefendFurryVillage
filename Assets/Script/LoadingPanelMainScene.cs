@@ -27,6 +27,7 @@ public class LoadingPanelMainScene : MonoBehaviour
         await CharacterManager.Instance.InitalizeCharacterTask;
         await AddressableManager.Instance.WaitPreloadAsync();
         this.gameObject.SetActive(false);
+        AdsManager.Instance.ShowInterstitial(null);
     }
 
     public void ShowPanel(bool isActive)
