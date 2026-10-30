@@ -7,13 +7,16 @@ public class SettingPanel : MonoBehaviour
     //계정 관련
     [SerializeField] Button logoutButton;
     [SerializeField] Button linkAccountButton;
+    [SerializeField] Button creditButton;
     [SerializeField] Button closeButton;
     [SerializeField] LogoutPanel logoutPanel;
     [SerializeField] LinkSocialAccountPanel linkSocialAccountPanel;
+    [SerializeField] CreditPanel creditPanel;
     private void Awake()
     {
         logoutButton.onClick.AddListener(ShowLogoutPanel);
         linkAccountButton.onClick.AddListener(ShowLinkPanel);
+        creditButton.onClick.AddListener(ShowCreditPanel);
         closeButton.onClick.AddListener(ClosPanel);
     }
     private void OnEnable()
@@ -28,6 +31,7 @@ public class SettingPanel : MonoBehaviour
     {
         logoutButton.onClick.RemoveAllListeners();
         linkAccountButton.onClick.RemoveAllListeners();
+        creditButton.onClick.RemoveAllListeners();
         closeButton.onClick.RemoveAllListeners();
     }
     private void ShowLogoutPanel()
@@ -37,6 +41,10 @@ public class SettingPanel : MonoBehaviour
     private void ShowLinkPanel()
     {
         linkSocialAccountPanel.ShowPanel();
+    }
+    private void ShowCreditPanel()
+    {
+        creditPanel.ShowPanel();
     }
     private void ClosPanel()
     {
