@@ -15,9 +15,6 @@ public class CharacterAddressableHandle
 
 public class AddressablePreloadManager : Singleton<AddressablePreloadManager>
 {    
-    //TODO. 변경 진행 -> Preload로 게임 시작하기전에 전부 한번씩 로드. 그 이후 개별 로딩이 필요하면 Preload에 존재하는지 확인하고, 없으면 load 하도록 하기.
-
-
     //GUID(RuntimeKey) : 에셋의 고유 ID 
     //PrimaryKey : 에셋을 찾을떄 사용하는 대표키
 
@@ -32,10 +29,11 @@ public class AddressablePreloadManager : Singleton<AddressablePreloadManager>
     private readonly Dictionary<string, string> guidToPrimaryKey = new();
 
     //프리로드 대기
-    Task allPreloadEnd;
+    Task<bool> allPreloadEnd;
+    private readonly TaskCompletionSource<bool> preloadTcs = new TaskCompletionSource<bool>();
     //public bool AllPreloadEnd => allPreloadEnd != null && allPreloadEnd.IsCompleted;
 
-    public async Task PreloadAll(string label)
+    public async Task<bool> PreloadAll(string label)
     {
         AsyncOperationHandle<IList<IResourceLocation>> locationsHandle =
         Addressables.LoadResourceLocationsAsync(label, typeof(object)); // 타입 제한 없음
@@ -57,6 +55,7 @@ public class AddressablePreloadManager : Singleton<AddressablePreloadManager>
         }
 
         Addressables.Release(locationsHandle);
+        return true;
     }
 
     /// <summary>
@@ -65,7 +64,7 @@ public class AddressablePreloadManager : Singleton<AddressablePreloadManager>
     /// </summary>
     public async Task<T> GetAsync<T>(AssetReferenceT<T> assetRef) where T : UnityEngine.Object
     {
-        await allPreloadEnd;
+        await preloadTcs.Task;
 
         string guid = assetRef.RuntimeKey.ToString();
 
@@ -108,10 +107,29 @@ public class AddressablePreloadManager : Singleton<AddressablePreloadManager>
         assetDict.Clear();
         guidToPrimaryKey.Clear();
     }
-    protected override async void OnAwake()
+    protected override void OnAwake()
     {
-        allPreloadEnd = PreloadAll("Preload");
-        await allPreloadEnd;
+    }
+
+    public async Task<bool> StartPreLoad()
+    {
+        if (allPreloadEnd == null)
+            allPreloadEnd = PreloadAll("Preload");
+
+        bool ok = false;
+        try
+        {
+            ok = await allPreloadEnd;
+        }
+        catch (System.Exception e)
+        {
+            MyLog.LogError($"프리로드 예외: {e}");
+        }
+        finally
+        {
+            preloadTcs.TrySetResult(ok);
+        }
+        return ok;
     }
 
     private void OnDestroy()

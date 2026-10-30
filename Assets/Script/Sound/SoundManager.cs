@@ -1,6 +1,11 @@
 using UnityEngine;
 using UnityEngine.Audio;
 
+public enum eVolumeType
+{
+    Master, BGM, SFX, Voice
+}
+
 public class SoundManager : Singleton<SoundManager>
 {
     [Header("Mixer")]
@@ -10,16 +15,17 @@ public class SoundManager : Singleton<SoundManager>
     public AudioSource bgmSource;    // Output: BGM 그룹
     public AudioSource sfxSource;    // Output: SFX 그룹
     public AudioSource voiceSource;  // Output: Voice 그룹
+
     protected override void OnAwake()
     {
     }
     void Start()
     {
         // 저장된 볼륨 적용
-        SetVolume("MasterVol", PlayerPrefs.GetFloat("MasterVol", 1f));
-        SetVolume("BGMVol", PlayerPrefs.GetFloat("BGMVol", 1f));
-        SetVolume("SFXVol", PlayerPrefs.GetFloat("SFXVol", 1f));
-        SetVolume("VoiceVol", PlayerPrefs.GetFloat("VoiceVol", 1f));
+        foreach(eVolumeType type in System.Enum.GetValues(typeof(eVolumeType)))
+        {
+            SetVolume(type, GetVolume(type));
+        }
     }
 
     // ---------- 재생 ----------
@@ -42,10 +48,16 @@ public class SoundManager : Singleton<SoundManager>
         //voiceSource.clip = clip;
         voiceSource.PlayOneShot(clip);
     }
-
+    // enum → 믹서 파라미터 이름 ("BGM" → "BGMVol")
+    private static string ParamName(eVolumeType type) => type + "Vol";
     // ---------- 볼륨 (설정창 슬라이더가 호출) ----------
-    public void SetVolume(string param, float value)
+    public float GetVolume(eVolumeType type)
     {
+        return PlayerPrefs.GetFloat(ParamName(type), 1f);
+    }
+    public void SetVolume(eVolumeType type, float value)
+    {
+        string param = ParamName(type);
         float db = Mathf.Log10(Mathf.Clamp(value, 0.0001f, 1f)) * 20f;
         mixer.SetFloat(param, db);
         PlayerPrefs.SetFloat(param, value);

@@ -26,7 +26,7 @@ public class GoogleLogin : MonoBehaviour
         //로그인 진행
         if (Application.isMobilePlatform)
         {
-            result = mobileLogin.GoogleSignInStart();
+            result = await mobileLogin.GoogleSignInAsync();
 
             MyLog.Log("Mobile");
         }
