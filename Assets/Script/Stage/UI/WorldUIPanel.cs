@@ -19,7 +19,7 @@ public class WorldUIPanel : MonoBehaviour
     private void Awake()
     {
         closeButton.onClick.AddListener(ClosePanel);
-        stageInfoPanel.StageEnterRequest += SelectedStage;
+        
         //스테이지 버튼들에 체크. 중복된것들이 있는지 확인한다
         HashSet<StageDataSO> stageDataSOHash = new HashSet<StageDataSO>();
         foreach(var item in stageSelectButtonArray)
@@ -37,26 +37,30 @@ public class WorldUIPanel : MonoBehaviour
             item.OnStageButtonClicked += ShowStageInfo;
         }
     }
-    private void SelectedStage()
+
+    private void OnEnable()
     {
-        //스테이지가 선택되었으니 이 정보를 통해 캐릭터 선택창으로 진입 필요
-        StageSelectReqest?.Invoke(stageDataSO, stageInfo);
-        
+        stageInfoPanel.StageEnterRequest += SelectedStage;
     }
     private void OnDisable()
     {
+        stageInfoPanel.StageEnterRequest -= SelectedStage;
         ClosePanel();
     }
-
-
     private void OnDestroy()
     {
         closeButton.onClick.RemoveAllListeners();
-        stageInfoPanel.StageEnterRequest -= SelectedStage;
+        
         foreach (var item in stageSelectButtonArray)
         {
             item.OnStageButtonClicked -= ShowStageInfo;
         }
+    }
+    private void SelectedStage()
+    {
+        //스테이지가 선택되었으니 이 정보를 통해 캐릭터 선택창으로 진입 필요
+        StageSelectReqest?.Invoke(stageDataSO, stageInfo);
+
     }
     private void ShowStageInfo(StageDataSO data, WorldStageInfo worldStageInfo)
     {

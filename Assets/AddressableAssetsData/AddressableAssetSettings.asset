@@ -72,7 +72,7 @@ MonoBehaviour:
       m_ProfileName: Default
       m_Values:
       - m_Id: 0b87ccbbe8f538445890a6b429ec0262
-        m_Value: https://pub-d409d4da02ff4e979ac976a278adebcf.r2.dev/[BuildTarget]/
+        m_Value: 'https://pub-d409d4da02ff4e979ac976a278adebcf.r2.dev/[BuildTarget]'
       - m_Id: 17180526f8cd4e44199a144ab331002d
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: 5ff3fe96d5823674a96c1c5d94c5f3a8

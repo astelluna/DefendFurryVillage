@@ -90,8 +90,8 @@ public class CharacterManager : Singleton<CharacterManager>
         TestDelayTaskStart();
         //Invoke(nameof(TestDelayTaskStart), 3f);
 
-        //인게임 테스트용.(인게임씬에서 실행하면 테스트용으로 실행한다)
-        ForIngameTestRoom();
+        //인게임 테스트용.(인게임씬에서 실행하면 테스트용으로 실행한다) -> 추후 진행
+        //ForIngameTestRoom();
     }
 
     public async Task ForIngameTestRoom()

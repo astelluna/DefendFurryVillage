@@ -8,6 +8,7 @@ public class StageInfoPanel : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI stageName;
     [SerializeField] TextMeshProUGUI stageDesc;
+    [SerializeField] TextMeshProUGUI rewardGoldText;
     [SerializeField] Button closeButton;
     [SerializeField] Button stageEnterButton;
     //StageDataSO stageDataSO;
@@ -53,6 +54,7 @@ public class StageInfoPanel : MonoBehaviour
         //스테이지 정보 넣기
         stageName.text = data.StageName;
         stageDesc.text = data.StageDesc;
+        rewardGoldText.text = data.RewardData.RewardMoney.ToString() + " G";
 
         //몬스터 종류가 어떤게 있는지 찾기 
         HashSet<EnemyDataSO> enemyDataHash = new HashSet<EnemyDataSO>();

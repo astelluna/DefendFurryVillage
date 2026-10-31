@@ -10,6 +10,7 @@ public class LevelUpManager : MonoBehaviour
     int level = 1;
     int maxExperience = 2;
     int curExperience = 0;
+    float experienceRatio = 0;
 
     private void Awake()
     {
@@ -50,6 +51,7 @@ public class LevelUpManager : MonoBehaviour
     }
     private void UpdateUI()
     {
-        levelUpUI.UpdateLevelUpUI(level, curExperience);
+        experienceRatio = (float)curExperience / maxExperience;
+        levelUpUI.UpdateLevelUpUI(level, experienceRatio);
     }
 }
