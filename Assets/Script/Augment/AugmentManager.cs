@@ -34,15 +34,12 @@ public class AugmentManager : MonoBehaviour
         }
 
         Instance = this;
+
+        augmentPanel.Close(); //초기에 패널 전부 닫은 상태로 시작
     }
     private void OnEnable()
     {
         CharacterManager.Instance.OnCharacterSpawnEnd += OnCharacterSpawnCompleted;
-    }
-    private void Start()
-    {
-        //시작하면 1번 띄우자 패널을 
-        //SetAndShowAugmentUI(1);
     }
 
     private void OnDestroy()

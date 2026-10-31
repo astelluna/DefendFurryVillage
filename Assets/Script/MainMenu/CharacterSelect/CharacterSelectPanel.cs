@@ -26,6 +26,7 @@ public class CharacterSelectPanel : MonoBehaviour
         characterSelectedUIManager.OnChangeSelectedState += OnChangeGameStartButtonState;
         selectCompleteButton.onClick.AddListener(OnSelectedCompleteButton);
         closeButton.onClick.AddListener(OnCloseButtonClick);
+        Init();
     }
     private void OnDestroy()
     {
@@ -40,6 +41,11 @@ public class CharacterSelectPanel : MonoBehaviour
 
     private void Init()
     {
+        selectedCharacterNameText.text = "";
+        selectedCharacterLevelText.text = "";
+        statIconAll.Clear();
+        skillIconAll.Clear();
+
         //모든 선택된 상태들에 대해서 초기화 해주자
         selectCompleteButton.interactable = false;
     }
@@ -90,7 +96,6 @@ public class CharacterSelectPanel : MonoBehaviour
     }
     public void ShowPanelAndSetData(StageDataSO data, WorldStageInfo worldStageData )
     {
-
         stageDataSO = data;
         worldStageInfo = worldStageData;
         characterSelectScrollView.CharacterShow(this);

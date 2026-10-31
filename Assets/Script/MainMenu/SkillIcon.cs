@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Purchasing;
 using UnityEngine.UI;
 
 public class SkillIcon : MonoBehaviour
@@ -11,5 +12,10 @@ public class SkillIcon : MonoBehaviour
     {
         skillSprite.sprite = sprite;
         skillDescText.text = desc;
+    }
+    public void Clear()
+    {
+        skillSprite.sprite = null;
+        skillDescText.text = "";
     }
 }

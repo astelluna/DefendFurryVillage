@@ -10,8 +10,8 @@ public class CharacterDataSO : ScriptableObject
     [field: SerializeField] public string CharacterId { get; private set; }
     [field: SerializeField] public string CharacterName { get; private set; }
     [Header("캐릭터 이미지")]
-    [field: SerializeField] public Sprite CharacterBodySprite { get; private set; }
-    [field: SerializeField] public Sprite CharacterPortraitSprite { get; private set; }
+    [field: SerializeField] public Sprite CharacterBodySprite { get; private set; } //얼굴~몸까지의 이미지
+    [field: SerializeField] public Sprite CharacterPortraitSprite { get; private set; } //얼굴 초상화 이미지
     [Header("캐릭터 프리팹")]
     [field: SerializeField] public AssetReferenceCharacter CharacterReferencePrefab { get; private set; }
 

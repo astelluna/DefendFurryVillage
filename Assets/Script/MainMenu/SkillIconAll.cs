@@ -10,4 +10,9 @@ public class SkillIconAll : MonoBehaviour
         basicSkillIcon.SetIconInfo(characterDataSO.BasicWeaponDataSO.WeaponIcon, characterDataSO.BasicWeaponDataSO.WeaponDescription);
         specialSkillIcon.SetIconInfo(characterDataSO.SpecialWeaponDataSO.WeaponIcon, characterDataSO.SpecialWeaponDataSO.WeaponDescription);
     }
+    public void Clear()
+    {
+        basicSkillIcon.Clear();
+        specialSkillIcon.Clear();
+    }
 }

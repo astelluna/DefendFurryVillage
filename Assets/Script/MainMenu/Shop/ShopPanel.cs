@@ -16,13 +16,15 @@ public struct ShopProduct
     public eProductType ProductType { get; private set; }
     public string ProductId { get; private set; }
     public string DisplayName { get; private set; }
+    public Sprite ProductImage { get; private set; }
     public Currency Price { get; private set; } //가격
     public int Count { get; private set; } //지급 갯수
-    public void SetData(eProductType type, string id, string name, Currency currency, int cnt)
+    public void SetData(eProductType type, string id, string name, Sprite image, Currency currency, int cnt)
     {
         ProductType = type;
         ProductId = id;
         DisplayName = name;
+        ProductImage = image;
         Price = currency;
         Count = cnt;
     }

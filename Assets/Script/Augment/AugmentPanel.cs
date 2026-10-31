@@ -42,6 +42,5 @@ public class AugmentPanel : MonoBehaviour
             item.gameObject.SetActive(false);
         }
         this.gameObject.SetActive(false);
-
     }
 }

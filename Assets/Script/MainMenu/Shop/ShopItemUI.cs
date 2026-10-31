@@ -30,8 +30,9 @@ public class ShopItemUI : MonoBehaviour
     }
     public void SetProductData(ShopProduct product)
     {
+        shopProduct = product;
         string currencyString = "";
-        if(product.Price.CurrencyType == eCurrencyType.gameMoney)
+        if(shopProduct.Price.CurrencyType == eCurrencyType.gameMoney)
         {
             currencyString = "G";
         }
@@ -40,10 +41,11 @@ public class ShopItemUI : MonoBehaviour
             currencyString = "₩";
         }
         
-        shopProduct = product;
-        itemNameText.text = product.DisplayName;
-        itemDescText.text = product.DisplayName + "를 구매합니다";
-        itemPurchaseButtonText.text = currencyString + " " + product.Price.Amount.ToString();
+        
+        itemNameText.text = shopProduct.DisplayName;
+        itemDescText.text = shopProduct.DisplayName + "를 구매합니다";
+        itemImage.sprite = shopProduct.ProductImage;
+        itemPurchaseButtonText.text = currencyString + " " + shopProduct.Price.Amount.ToString();
 
     }
 }

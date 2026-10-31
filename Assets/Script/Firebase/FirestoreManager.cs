@@ -664,7 +664,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
         ShopProduct shopProduct = new ShopProduct();
         Currency currency = new Currency();
         currency.SetData(eCurrencyType.gameMoney, 0);
-        shopProduct.SetData(eProductType.character, initBasicCharacterId, "X이건안씀X", currency, 1);
+        shopProduct.SetData(eProductType.character, initBasicCharacterId, "X이건안씀X", null, currency, 1);
         string characterId = shopProduct.ProductId;
         CharacterDataDb initCharacterData = new CharacterDataDb(characterId, initCharacterLevel, initCharacterExp);
         //long resMoney = 0;

@@ -4,7 +4,7 @@ using UnityEngine;
 public class ShooGunExecuteSO : WeaponExecuteSO
 {
     int bulletCount = 5;
-    float spreadAngle = 90;
+    float spreadAngle = 40;
     protected override void ShootAt(Transform enemyTarget, Weapon weapon, AudioClip destroySound)
     {
         float startAngle = -spreadAngle / 2f;

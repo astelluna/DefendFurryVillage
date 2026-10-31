@@ -14,4 +14,8 @@ public class StatIcon : MonoBehaviour
         //statImage.sprite = sprite; //이렇게 안하고 그냥 미리 넣어두자
         statText.text = basicText + text;
     }
+    public void Clear()
+    {
+        statText.text = "";
+    }
 }

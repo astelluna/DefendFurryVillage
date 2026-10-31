@@ -72,7 +72,7 @@ public class EquipmentInfoPanel : MonoBehaviour
         itemNameText.text = data.EquipmentDataSO.DisplayName;
         itemDescText.text = data.GetEquipmentDescription();
         countText.text = count.ToString();
-        levelText.text = $"업그레이드 단계: {data.Level.ToString()}";
+        levelText.text = $"{data.Level.ToString()}";
         this.gameObject.SetActive(true);
     }
 

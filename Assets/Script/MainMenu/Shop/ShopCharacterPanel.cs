@@ -53,7 +53,7 @@ public class ShopCharacterPanel : MonoBehaviour
             shopItem.purchaseRequest += shopPanel.PurchaseProcess;
             //상점 품목 데이터를 만든다
             ShopProduct shopProduct = new ShopProduct();
-            shopProduct.SetData(eProductType.character, pair.Value.CharacterId, pair.Value.CharacterName, pair.Value.PurchasePrice, 1);
+            shopProduct.SetData(eProductType.character, pair.Value.CharacterId, pair.Value.CharacterName,pair.Value.CharacterPortraitSprite, pair.Value.PurchasePrice, 1);
             shopItem.SetProductData(shopProduct);
             makedCharacterItemList.Add(shopItem);
         }
