@@ -39,11 +39,13 @@ public class WorldStageInfo
     public int WorldIndex { get; private set; }
     public int StageIndex { get; private set; }
     public int maxStageIndex { get; private set; } //현재 스테이지의 최대 갯수 지정
-    public void SetData(int worldIdx, int stageIdx,int maxStageIdx)
+    public Material worldMaterial { get; private set; }
+    public void SetData(int worldIdx, int stageIdx,int maxStageIdx, Material material)
     {
         WorldIndex = worldIdx;
         StageIndex = stageIdx;
         maxStageIndex = maxStageIdx;
+        worldMaterial = material;
     }
 }
 public class StageManager : Singleton<StageManager>
@@ -144,6 +146,10 @@ public class StageManager : Singleton<StageManager>
     {
         selectedStageData = data;
         worldStageInfo = worldStageData;
+    }
+    public Material GetFloorData()
+    {
+        return worldStageInfo.worldMaterial;
     }
     public void SetIngameData(StagePanelInGame panel, StageEnemySpawnPosition  spawnPosition)
     {

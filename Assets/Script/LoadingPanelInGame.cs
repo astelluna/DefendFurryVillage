@@ -48,7 +48,8 @@ public class LoadingPanelInGame : MonoBehaviour
     private void OnDestroy()
     {
         //인게임씬이 닫힐때 초기화되어야할것들 여기에 넣기 
-        CharacterManager.Instance.ReleaseFor_InGame();
+        if (CharacterManager.Instance != null) CharacterManager.Instance.ReleaseFor_InGame();
+
     }
 
 }

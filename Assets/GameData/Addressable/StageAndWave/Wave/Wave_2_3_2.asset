@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d2830971ea3cf149b03309e8b34a464, type: 3}
+  m_Name: Wave_2_3_2
+  m_EditorClassIdentifier: Assembly-CSharp::WaveDataSO
+  <EnemieList>k__BackingField:
+  - {fileID: 11400000, guid: eb6c65b87d4523240a75fb221e35c5ea, type: 2}
+  - {fileID: 11400000, guid: eb6c65b87d4523240a75fb221e35c5ea, type: 2}
+  - {fileID: 11400000, guid: eb6c65b87d4523240a75fb221e35c5ea, type: 2}
+  - {fileID: 11400000, guid: eb6c65b87d4523240a75fb221e35c5ea, type: 2}
+  - {fileID: 11400000, guid: eb6c65b87d4523240a75fb221e35c5ea, type: 2}
+  - {fileID: 11400000, guid: 648ce157bd6cfff44865528c67d929c5, type: 2}

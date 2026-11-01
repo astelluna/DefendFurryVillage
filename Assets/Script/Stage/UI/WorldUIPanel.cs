@@ -129,11 +129,8 @@ public class WorldUIPanel : MonoBehaviour
             }
             StageDataSO curStageData = worldDataSO.StageDataList[i];
             int stageIdx = i + 1;
-            stageSelectButtonArray[i].SetData(curStageData, worldIdx, stageIdx, stageSelectButtonArray.Length);
+            stageSelectButtonArray[i].SetData(curStageData, worldIdx, stageIdx, stageSelectButtonArray.Length, worldDataSO.worldMaterial);
         }
-        
-
-        //아래 버튼들의 스테이지 인덱스를 생성해준다.
     }
 
 

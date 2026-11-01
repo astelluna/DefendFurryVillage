@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0643e5cb6c0ffdc4f84893b58cad8922, type: 3}
   m_Name: RewardDataSO_Stage_1_2
   m_EditorClassIdentifier: Assembly-CSharp::RewardDataSO
-  <RewardMoney>k__BackingField: 200
+  <RewardMoney>k__BackingField: 150
   <RewardItemList>k__BackingField:
   - <itemDataSO>k__BackingField: {fileID: 11400000, guid: 80b27d518a395e2449427a4c3752c6f8, type: 2}
-    <Count>k__BackingField: 3
+    <Count>k__BackingField: 1

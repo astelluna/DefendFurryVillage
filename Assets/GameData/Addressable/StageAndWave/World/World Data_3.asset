@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: World Data_3
   m_EditorClassIdentifier: Assembly-CSharp::WorldDataSO
   <worldName>k__BackingField: "\uC6D4\uB4DC3"
+  <worldMaterial>k__BackingField: {fileID: 2100000, guid: 119b49d26b517cf4586e8647d3d562ef, type: 2}
   <StageDataList>k__BackingField:
   - {fileID: 11400000, guid: 6eb45a0e268af124c9dcef0768d72c60, type: 2}
   - {fileID: 11400000, guid: 1eeabc891be6a2f409815cf1b777c86a, type: 2}

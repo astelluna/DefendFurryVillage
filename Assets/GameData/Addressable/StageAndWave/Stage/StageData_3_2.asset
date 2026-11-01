@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a0f5a4914c7b3a4892d322ad611698c, type: 3}
   m_Name: StageData_3_2
   m_EditorClassIdentifier: Assembly-CSharp::StageDataSO
-  <StageId>k__BackingField: 30102
-  <StageName>k__BackingField: "\uACC4\uC18D\uB418\uB294 \uACF5\uACA9"
-  <StageDesc>k__BackingField: "\uC54C\uC218\uC5C6\uB294 \uC801\uC758 \uACF5\uACA9\uC774
-    \uACC4\uC18D\uB418\uACE0\uC788\uC2B5\uB2C8\uB2E4"
-  <RewardData>k__BackingField: {fileID: 11400000, guid: 56b45e407fe4f614fb7ce4b2444ec9b3, type: 2}
+  <StageName>k__BackingField: "\uC5B4\uB450\uC6B4 \uACF5\uACA9"
+  <StageDesc>k__BackingField: "\uC911\uC2EC\uC9C0\uB85C \uB2E4\uAC00\uAC08\uC218\uB85D
+    \uC5B4\uB450\uC6B4 \uAE30\uC6B4\uC774 \uB290\uAEF4\uC9D1\uB2C8\uB2E4"
+  <RewardData>k__BackingField: {fileID: 11400000, guid: c28e85bb2308f444d92112f6b6f448a2, type: 2}
   <WaveDataList>k__BackingField:
-  - {fileID: 11400000, guid: d80ee27ad959335478b02b61bff92c41, type: 2}
-  - {fileID: 11400000, guid: d80ee27ad959335478b02b61bff92c41, type: 2}
+  - {fileID: 11400000, guid: d00cac13af4df014e928c246a64e4e9e, type: 2}
+  - {fileID: 11400000, guid: 78461d25bf7b34b43b02eb9efa3ac5bb, type: 2}

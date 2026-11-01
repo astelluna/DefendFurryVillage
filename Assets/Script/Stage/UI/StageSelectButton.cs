@@ -26,11 +26,11 @@ public class StageSelectButton : MonoBehaviour
     {
         OnStageButtonClicked?.Invoke(stageDataSO, worldStageInfo);
     }
-    public void SetData(StageDataSO data, int worldIdx, int stageIdx, int maxStageIndex)
+    public void SetData(StageDataSO data, int worldIdx, int stageIdx, int maxStageIndex, Material material)
     {
         stageDataSO = data;
         buttonText.text = worldIdx + "_" + stageIdx;
-        worldStageInfo.SetData(worldIdx, stageIdx, maxStageIndex);
+        worldStageInfo.SetData(worldIdx, stageIdx, maxStageIndex, material);
     }
 
     public void ActiveButton(bool isActive)

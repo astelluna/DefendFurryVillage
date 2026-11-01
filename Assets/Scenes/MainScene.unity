@@ -2087,6 +2087,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2088956311621101223, guid: ca973dedfe56bf34c9c478fafb50c6cf, type: 3}
+      propertyPath: m_Interactable
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2612198134411032994, guid: ca973dedfe56bf34c9c478fafb50c6cf, type: 3}
       propertyPath: m_Name
       value: Button_worldSelect_2
@@ -2366,7 +2370,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &209855383
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21997,6 +22001,10 @@ PrefabInstance:
     - target: {fileID: 640238882617995224, guid: ca973dedfe56bf34c9c478fafb50c6cf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2088956311621101223, guid: ca973dedfe56bf34c9c478fafb50c6cf, type: 3}
+      propertyPath: m_Interactable
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2612198134411032994, guid: ca973dedfe56bf34c9c478fafb50c6cf, type: 3}
       propertyPath: m_Name

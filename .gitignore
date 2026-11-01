@@ -78,3 +78,6 @@ crashlytics-build.properties
 /[Aa]ssets/Firebase/*
 /[Aa]ssets/GeneratedLocalRepo/Firebase/*
 /[Aa]ssets/Resources
+
+# ServerData - For Cdn
+/ServerData/*

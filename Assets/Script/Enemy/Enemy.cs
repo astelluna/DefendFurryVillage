@@ -148,6 +148,7 @@ public class Enemy : MonoBehaviour
     {
         curHp = EnemyDataSO.maxHp;
         UpdateEnemyStat();
+        SetAnimationMove();  // 여기서 애니메이션 상태 반영
     }
 
     public void UpdateEnemyStat()
@@ -178,7 +179,8 @@ public class Enemy : MonoBehaviour
     {
         //await setAddressableTask;
         isStun = false;
-        isMove = true;
+        _isMove = true;
+        isMagnet = false;
         attackCor = null;
         exitGraceCor = null;
 
@@ -297,6 +299,7 @@ public class Enemy : MonoBehaviour
         {
             if (castleWall == null) break;
             castleWall.TakeDamage(damageInfo);
+            enemyAnimation.EnemyAttack();
             if (EnemyDataSO.AttackSound != null) { SoundManager.Instance.PlayVoice(EnemyDataSO.AttackSound); }
             yield return delay;
         }

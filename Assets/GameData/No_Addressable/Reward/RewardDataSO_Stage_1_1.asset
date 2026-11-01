@@ -14,9 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RewardDataSO
   <RewardMoney>k__BackingField: 100
   <RewardItemList>k__BackingField:
-  - <itemDataSO>k__BackingField: {fileID: 11400000, guid: 48b4dd9aedc7cbe459cfb6cc0eb99da7, type: 2}
-    <Count>k__BackingField: 1
-  - <itemDataSO>k__BackingField: {fileID: 11400000, guid: 80b27d518a395e2449427a4c3752c6f8, type: 2}
-    <Count>k__BackingField: 2
   - <itemDataSO>k__BackingField: {fileID: 11400000, guid: 53a36a2fc04db3249a3a394d6c09fad8, type: 2}
-    <Count>k__BackingField: 3
+    <Count>k__BackingField: 1
