@@ -33,28 +33,22 @@ public struct ShopProduct
 public class ShopPanel : MonoBehaviour, IMainMenuPanel
 {
     //상점 구조를 만들어야한다. 
-    //필요한것 : 캐릭터 구매. 일단 이걸로 끝
-
-    //미보유 캐릭터를 전부 불러온다; 그리고 표시한다; 근데 가격은?;
-
     [SerializeField] Button showCharacterPanelButton;
     [SerializeField] Button showCashPanelButton;
 
-    [Header("후원 상점 목록 - 고정")]
-    //TODO. 추후 만들거(캐릭터와는 다르게 고정으로 UI를 생성해야한다.)
-    [SerializeField] ShopItemUI removeAddSlot;
-    [SerializeField] ShopItemUI donationSlot;
     [Header("패널들")]
     [SerializeField] ShopPurchaseConfirmPanel shopPurchaseConfirmPanel; //구매 확인 패널
     [SerializeField] ShopCharacterPanel shopPurchasableCharacterPanel; //구매가능한 캐릭터를 띄우는 패널
+    [SerializeField] ShopCashPanel shopCashPanel; //현금으로 구매가능한 항목들
     private void Awake()
     {
-        //TODO. 패널이 열릴떄, 후원과, 광고제거 패키지는 구매를 했는지 초기 1회 체크가 필요함.
         showCharacterPanelButton.onClick.AddListener(ShowCharacterPanelButtonClicked);
+        showCashPanelButton.onClick.AddListener(ShowCashPanelButtonClicked);
     }
     private void OnDestroy()
     {
         showCharacterPanelButton.onClick.RemoveAllListeners();
+        showCashPanelButton.onClick.RemoveAllListeners();
     }
     public void PurchaseProcess(string itemName, ShopProduct product)
     {
@@ -138,14 +132,20 @@ public class ShopPanel : MonoBehaviour, IMainMenuPanel
     private void ShowCharacterPanelButtonClicked()
     {
         shopPurchasableCharacterPanel.ShowPanel();
+        shopCashPanel.ClosePanel();
     }
-
+    private void ShowCashPanelButtonClicked()
+    {
+        shopPurchasableCharacterPanel.ClosePanel();
+        shopCashPanel.ShowPanel();
+    }
     public void ShowPanel(bool isShow)
     {
         if(!isShow)
         {
             shopPurchasableCharacterPanel.ClosePanel();
             shopPurchaseConfirmPanel.ClosePanel();
+            shopCashPanel.ClosePanel();
         }
         else
         {
