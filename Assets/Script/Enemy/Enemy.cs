@@ -331,7 +331,8 @@ public class Enemy : MonoBehaviour
             //이펙트 재생
             EffectManager.Instance.Playfbx(hitEffect, this.transform);
         }
-        
+        //데미지폰트
+        DamageTextSpawner.Instance.GetPrefabByPool(this.transform, dmg);
     }
 
     private void Dead()
@@ -352,6 +353,7 @@ public class Enemy : MonoBehaviour
     public void OnHitDelay(int dmg, float delayTime)
     {
         //일정시간 이후에 데미지를 받아야 할때 사용한다.
+        if (!gameObject.activeInHierarchy) { return; } //데미지 주려고하는데 이미 죽은상태(비활성)이면 안함
         StartCoroutine(WaitForDelay(dmg,delayTime));
     }
 

@@ -31,6 +31,8 @@ public class CastleWall : MonoBehaviour
         }
         castelWallUI.UpdateWallHp(hp);
         //MyLog.Log($"HP {hp}");
+        //데미지폰트
+        DamageTextSpawner.Instance.GetPrefabByPool(this.transform, dmg);
     }
 
 }
