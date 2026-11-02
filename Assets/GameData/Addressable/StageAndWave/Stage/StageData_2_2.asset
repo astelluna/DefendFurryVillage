@@ -18,4 +18,4 @@ MonoBehaviour:
   <RewardData>k__BackingField: {fileID: 11400000, guid: e9190f753a191074e8d3165e1bfaae86, type: 2}
   <WaveDataList>k__BackingField:
   - {fileID: 11400000, guid: 826d959095c9b85478991268aab9a419, type: 2}
-  - {fileID: 11400000, guid: 826d959095c9b85478991268aab9a419, type: 2}
+  - {fileID: 11400000, guid: 1ed00f857d6d60c468aa0640e816dc7d, type: 2}

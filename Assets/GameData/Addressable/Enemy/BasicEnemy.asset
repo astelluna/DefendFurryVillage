@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BasicEnemy
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDataSO
   <attack>k__BackingField: 1
-  <defense>k__BackingField: 10
-  <maxHp>k__BackingField: 15
+  <defense>k__BackingField: 0
+  <maxHp>k__BackingField: 10
   <attackRate>k__BackingField: 1
   <moveSpeed>k__BackingField: 3
   <penetration>k__BackingField: 0

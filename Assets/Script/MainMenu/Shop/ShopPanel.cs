@@ -40,6 +40,9 @@ public class ShopPanel : MonoBehaviour, IMainMenuPanel
     [SerializeField] ShopPurchaseConfirmPanel shopPurchaseConfirmPanel; //구매 확인 패널
     [SerializeField] ShopCharacterPanel shopPurchasableCharacterPanel; //구매가능한 캐릭터를 띄우는 패널
     [SerializeField] ShopCashPanel shopCashPanel; //현금으로 구매가능한 항목들
+    [Header("상점 배경음악")]
+    [SerializeField] AudioClip audioClip;
+
     private void Awake()
     {
         showCharacterPanelButton.onClick.AddListener(ShowCharacterPanelButtonClicked);
@@ -49,6 +52,18 @@ public class ShopPanel : MonoBehaviour, IMainMenuPanel
     {
         showCharacterPanelButton.onClick.RemoveAllListeners();
         showCashPanelButton.onClick.RemoveAllListeners();
+    }
+    private void OnEnable()
+    {
+        PlayShopBGM();
+    }
+    private void OnDisable()
+    {
+        LoadingPanelMainScene.Instance.PlayBGM();
+    }
+    private void PlayShopBGM()
+    {
+        SoundManager.Instance.PlayBGM(audioClip);
     }
     public void PurchaseProcess(string itemName, ShopProduct product)
     {

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2595469458174935989}
   - component: {fileID: 3797076493240827861}
   - component: {fileID: 8048071947892466083}
+  - component: {fileID: 7786271931844644820}
   m_Layer: 5
   m_Name: Button_close
   m_TagString: Untagged
@@ -121,6 +122,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7786271931844644820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7017428646072336684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35228f512aca95d4693a01dab0c864f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonClickSound
+  audioClip: {fileID: 8300000, guid: 9ab9d0f600e1d764d8a04411d9c5f1d5, type: 3}
+  button: {fileID: 8048071947892466083}
 --- !u!1 &8612882195529869259
 GameObject:
   m_ObjectHideFlags: 0

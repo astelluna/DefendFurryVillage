@@ -20,12 +20,13 @@ public class AugmentDataSO : ScriptableObject
         if (addProjectileScale != 0) sb.Append($"투사체 크기를 {addProjectileScale}% ");
         if (addAttackCount != 0) sb.Append($"공격 횟수를 {addAttackCount} ");
         if (addPierceCount != 0) sb.Append($"관통 횟수를 {addPierceCount} ");
+        sb.Append("추가합니다");
         //특수 스킬들
-        foreach(var item in augmentSpecialDataSOList)
+        foreach (var item in augmentSpecialDataSOList)
         {
             sb.Append(item.GetDescription());
         }
-        sb.Append("추가합니다");
+        
         return sb.ToString();
     }
 }

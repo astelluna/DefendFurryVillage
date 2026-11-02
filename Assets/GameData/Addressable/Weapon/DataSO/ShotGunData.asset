@@ -30,5 +30,5 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
-  <ShootSound>k__BackingField: {fileID: 8300000, guid: 637fad31edecfc842a79722c2cdfe4c9, type: 3}
+  <ShootSound>k__BackingField: {fileID: 8300000, guid: e341588646db37b4aa60f15bc278b76a, type: 3}
   <DestroySound>k__BackingField: {fileID: 0}

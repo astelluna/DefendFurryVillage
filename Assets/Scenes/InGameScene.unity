@@ -1523,7 +1523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04e8328b0fc3dfa43ad842b267fafc59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CastleWall
-  hp: 2000
+  hp: 1000
   defense: 0
   castelWallUI: {fileID: 143062408}
 --- !u!1 &442801211
@@ -3680,6 +3680,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelUpManager
   levelUpUI: {fileID: 596613070}
+  maxExperience: 2
 --- !u!4 &1521075152
 Transform:
   m_ObjectHideFlags: 0
@@ -4802,7 +4803,7 @@ SceneRoots:
   - {fileID: 411512698}
   - {fileID: 180058352}
   - {fileID: 1193248397}
-  - {fileID: 874079965}
   - {fileID: 1154905489}
   - {fileID: 1375879967}
   - {fileID: 840444024}
+  - {fileID: 874079965}

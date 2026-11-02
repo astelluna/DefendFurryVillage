@@ -8,6 +8,8 @@ public class LoadingPanelInGame : MonoBehaviour
     [SerializeField] StagePanelInGame stagePanel;
     [SerializeField] StageEnemySpawnPosition stageEnemySpawnPosition;
     [SerializeField] CharacterSpawnPosition characterSpawnPosition;
+
+    [SerializeField] AudioClip audioClip;
     public void ShowLoadingPanel()
     {
         this.gameObject.SetActive(true);
@@ -19,6 +21,7 @@ public class LoadingPanelInGame : MonoBehaviour
 
     private async void Start()
     {
+        PlayBGM();
         ShowLoadingPanel();
         StageManager.Instance.SetIngameData(stagePanel, stageEnemySpawnPosition);
         CharacterManager.Instance.SetCharacterSpawnPos(characterSpawnPosition);
@@ -51,5 +54,8 @@ public class LoadingPanelInGame : MonoBehaviour
         if (CharacterManager.Instance != null) CharacterManager.Instance.ReleaseFor_InGame();
 
     }
-
+    public void PlayBGM()
+    {
+        SoundManager.Instance.PlayBGM(audioClip);
+    }
 }

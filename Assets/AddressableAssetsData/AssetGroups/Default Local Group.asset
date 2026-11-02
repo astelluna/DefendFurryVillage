@@ -127,11 +127,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 58a77103edd617c49b60f5c32198d299
-    m_Address: Character/Character_ShootGun.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5c10d71bed5783044b7eddc2fd585fdf
     m_Address: Weapon/Augment/Data/New Augment Data SO_Burn.asset
     m_ReadOnly: 0
@@ -178,11 +173,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6ad676ecdcf1268418d433d85432f65c
-    m_Address: Character/Character_Missile.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6e20d878aec1ae4469de2e976677196e
     m_Address: Assets/Prefab/Enemy/Enemy_Boss.prefab
@@ -237,11 +227,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9e23dce93975c064bbe2547d0a657fc7
-    m_Address: Character/Character_Laser.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a0532b36c0da3ad45ae37fc07a4cacba
     m_Address: Assets/GameData/Characher/Character DataSO_Dog.asset
@@ -309,11 +294,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bbf98ca8fafc5a1429be7654bee10e2b
-    m_Address: Character/Character_Shriken.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c1a97758e9c5a9f43b5676f3df960814
     m_Address: Weapon/DataSO/FallingData.asset
     m_ReadOnly: 0
@@ -377,11 +357,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: dd3cbd05845c1ff4d9029809354530e7
-    m_Address: Character/Character_Falling.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: df576e89de0ec2e41b65797c231e200e
     m_Address: Weapon/DataSO/LaserData.asset

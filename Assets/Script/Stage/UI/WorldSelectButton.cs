@@ -32,5 +32,9 @@ public class WorldSelectButton : MonoBehaviour
         worldText.text = worldName;
         WorldIndex = idx;
     }
+    public void ActiveButton(bool isActive)
+    {
+        worldSelectButton.interactable = isActive;
+    }
 
 }

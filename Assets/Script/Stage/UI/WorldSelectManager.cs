@@ -73,7 +73,22 @@ public class WorldSelectManager : MonoBehaviour, IMainMenuPanel
             WorldUIPanel stagePanelMainUI = stageSelectManagerArray[i];
             stagePanelMainUI.SetData(worldData, worldIdx);
         }
-
+        //진행 데이터에 따른 월드 버튼 활성/ 비활성화
+        //기록을 확인해서, 만약에 정보보다 적다면? 버튼을 비활성화
+        StageProgressData bestRecord = StageManager.Instance.BestStageProgressData;
+        //현재 스테이지 월드가 최고기록 월드보다 작다면? 스테이지 버튼 다 비활성화
+        for(int i=0; i< worldSelectButtonArray.Length; i++)
+        {
+            int index = i + 1;
+            if (index <= bestRecord.worldId)
+            {
+                worldSelectButtonArray[i].ActiveButton(true);
+            }
+            else
+            {
+                worldSelectButtonArray[i].ActiveButton(false);
+            }
+        }
     }
     private void OnDestroy()
     {

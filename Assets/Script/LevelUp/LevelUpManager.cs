@@ -6,9 +6,9 @@ public class LevelUpManager : MonoBehaviour
     public static LevelUpManager Instance { get; private set; }
 
     [SerializeField] LevelUpUI levelUpUI;
-
+    [SerializeField] int maxExperience = 10;
     int level = 1;
-    int maxExperience = 2;
+    
     int curExperience = 0;
     float experienceRatio = 0;
 

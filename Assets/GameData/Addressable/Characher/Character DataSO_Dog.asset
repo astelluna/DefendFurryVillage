@@ -26,10 +26,10 @@ MonoBehaviour:
   <SpecialWeaponDataSO>k__BackingField: {fileID: 11400000, guid: c1a97758e9c5a9f43b5676f3df960814, type: 2}
   <PurchasePrice>k__BackingField:
     <CurrencyType>k__BackingField: 0
-    <Amount>k__BackingField: 222
+    <Amount>k__BackingField: 500
   <CharacterBaseStat>k__BackingField:
-    <attack>k__BackingField: 10
+    <attack>k__BackingField: 15
     <criticalPercent>k__BackingField: 0
     <criticalDamageRate>k__BackingField: 2
     <armorPenetration>k__BackingField: 0
-  <AttackSound>k__BackingField: {fileID: 8300000, guid: 80d7f261371b421499212eddb083bfec, type: 3}
+  <AttackSound>k__BackingField: {fileID: 8300000, guid: bdfa571e72454084ebf87568120d108b, type: 3}

@@ -3,6 +3,8 @@ using UnityEngine;
 public class LoadingPanelMainScene : MonoBehaviour
 {
     //메인씬에서 로딩을 관리.
+    [SerializeField] AudioClip audioClip;
+
     public static LoadingPanelMainScene Instance { get; private set; }
 
     private void Awake()
@@ -28,10 +30,15 @@ public class LoadingPanelMainScene : MonoBehaviour
         await AddressableManager.Instance.WaitPreloadAsync();
         this.gameObject.SetActive(false);
         AdsManager.Instance.ShowInterstitial(null);
+        PlayBGM();
     }
 
     public void ShowPanel(bool isActive)
     {
         this.gameObject.SetActive(isActive);
+    }
+    public void PlayBGM()
+    {
+        SoundManager.Instance.PlayBGM(audioClip);
     }
 }

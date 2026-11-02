@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDataSO
   <attack>k__BackingField: 5
   <defense>k__BackingField: 10
-  <maxHp>k__BackingField: 500
+  <maxHp>k__BackingField: 200
   <attackRate>k__BackingField: 1
   <moveSpeed>k__BackingField: 5
   <penetration>k__BackingField: 0
@@ -28,4 +28,4 @@ MonoBehaviour:
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
   <DeadSound>k__BackingField: {fileID: 8300000, guid: 546bd009a1df82f4f9720aa35fe1be94, type: 3}
-  <AttackSound>k__BackingField: {fileID: 8300000, guid: 00cf1445456c84b4aafb2861c9bd0335, type: 3}
+  <AttackSound>k__BackingField: {fileID: 8300000, guid: d81d5523c314c5248b52018b3b36b542, type: 3}
