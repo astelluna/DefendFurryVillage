@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public class StageProgressData
 {
@@ -52,7 +55,7 @@ public class StageManager : Singleton<StageManager>
 {
     //어떤 스테이지를 선택하면 해당 스테이지의 정보대로 적을 소환한다. -> 일단 직렬화로 테스트 
     [Header("월드 갯수만큼 데이터 지정")]
-    [SerializeField] List<WorldDataSO> allWorldDataSOList;
+    [SerializeField] List<AssetReferenceT<WorldDataSO>> allWorldDataRefs;
     public IReadOnlyList<WorldDataSO> AllWorldDataSoList => allWorldDataSOList;
     StageDataSO selectedStageData;
     WorldStageInfo worldStageInfo = new WorldStageInfo(); //현재 선택한 월드,스테이지 정보
@@ -77,16 +80,55 @@ public class StageManager : Singleton<StageManager>
     StageEnemySpawnPosition stageEnemySpawnPosition; //소환 위치 담아둔 게임오브젝트
     #endregion
 
+    // 월드 
+    //외부에서 초기화 작업 끝났는지 확인하는 Task
+    private readonly TaskCompletionSource<bool> initTcs = new TaskCompletionSource<bool>();
+    Dictionary<string, WorldDataSO> allWorldSODict = new Dictionary<string, WorldDataSO>(); //검색용 딕셔너리
+    List<WorldDataSO> allWorldDataSOList = new List<WorldDataSO>();
+
+    private async Task Init()
+    {
+        try
+        {
+            await LoadWorldDataSO_Init();
+            initTcs.TrySetResult(true);
+            MyLog.Log($"월드 정보 설정 완료");
+        }
+        catch (Exception e)
+        {
+            MyLog.LogError($"월드 초기화 실패:{e}");
+            initTcs.TrySetException(e);
+        }
+    }
+    private async Task LoadWorldDataSO_Init()
+    {
+        //어드레서블로 되어있는 캐릭터 데이터들을 계속 불러와본다 
+        foreach (var item in allWorldDataRefs)
+        {
+            WorldDataSO worldDataSO = await AddressableManager.Instance.GetAssetAsync_Asset<WorldDataSO>(item);
+            if (allWorldSODict.ContainsKey(worldDataSO.worldName))
+            {
+                MyLog.LogError("SO에 월드ID가 중복입니다");
+                continue;
+            }
+            //초기화
+            allWorldSODict.Add(worldDataSO.worldName, worldDataSO);
+            allWorldDataSOList.Add(worldDataSO);
+        }
+    }
+
+
     
 
     protected override void OnAwake()
     {
     }
-    private void Start()
+    private async void Start()
     {
+        
         delay = new WaitForSeconds(spawnTime);
         curWaveIndex = 0;
-        
+        await Init();
     }
     private void OnDestroy()
     {
@@ -191,7 +233,7 @@ public class StageManager : Singleton<StageManager>
 
             Enemy enemyObj = EnemySpawner.Instance.GetPrefabByPool(stageEnemySpawnPosition.transform, enemyData);
             //Enemy enemyObj =  Instantiate(enemyData, transform);
-            float value = Random.Range(-3f, 3f);
+            float value = UnityEngine.Random.Range(-3f, 3f);
             Vector3 pos = enemyObj.transform.position;
             pos.x = value;
             enemyObj.transform.position = pos;

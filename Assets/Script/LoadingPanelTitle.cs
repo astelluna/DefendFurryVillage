@@ -43,9 +43,10 @@ public class LoadingPanelTitle : MonoBehaviour
             // TODO: 재시도 / 안내 UI
             return;
         }
-        bool isPreloadSuccess = await AddressablePreloadManager.Instance.StartPreLoad();
+        //bool isPreloadSuccess = await AddressablePreloadManager.Instance.StartPreLoad();
+        bool isPreloadSuccess = await AddressableManager.Instance.StartPreload();
 
-        if(!isPreloadSuccess)
+        if (!isPreloadSuccess)
         {
             MyLog.LogError("프리로드 실패");
             return;

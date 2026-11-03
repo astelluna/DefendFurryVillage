@@ -198,7 +198,7 @@ public class AddressableUpdateManager : MonoBehaviour
         {
             Debug.Log("[Addressables] 다운로드할 콘텐츠가 없습니다.");
 
-            onComplete?.Invoke(true);
+            CompleteSuccessMethod(onComplete);
             yield break;
         }
 
@@ -251,9 +251,13 @@ public class AddressableUpdateManager : MonoBehaviour
         // =========================================================
         // 7. 전체 업데이트 완료
         // =========================================================
-
+        CompleteSuccessMethod(onComplete);
         Debug.Log("[Addressables] 업데이트 작업 완료");
-
-        onComplete?.Invoke(true);
+        
+    }
+    private void CompleteSuccessMethod(Action<bool> action)
+    {
+        AddressableManager.Instance.NotifyContentReady();
+        action?.Invoke(true);
     }
 }

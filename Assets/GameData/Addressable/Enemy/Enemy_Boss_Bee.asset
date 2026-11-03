@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Enemy_Boss_Bee
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDataSO
   <attack>k__BackingField: 5
-  <defense>k__BackingField: 10
+  <defense>k__BackingField: 5
   <maxHp>k__BackingField: 300
   <attackRate>k__BackingField: 1
   <moveSpeed>k__BackingField: 5

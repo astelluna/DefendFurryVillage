@@ -32,12 +32,18 @@ public class AddressableManager : Singleton<AddressableManager>
     // RuntimeKey(GUID)|Type -> Location (동기 조회 결과 캐시)
     private readonly Dictionary<string, IResourceLocation> locationCache = new();
 
-    private Task preloadTask = Task.CompletedTask;
+    private Task<bool> preloadTask;
+    private readonly TaskCompletionSource<bool> contentReady = new();
+    // UpdateRoutine에서 다운로드가 성공적으로 끝났을 때 호출
+    public void NotifyContentReady() => contentReady.TrySetResult(true);
+    protected override void OnAwake() { }   // 자동 Preload 제거
 
-    protected override async void OnAwake()
+    public Task<bool> StartPreload()
     {
-        preloadTask = PreloadAsync("Preload");
-        await preloadTask;
+        Debug.Log($"StartPreload 호출, preloadTask null? {preloadTask == null}");
+        //preloadTask가 null이면 불러오고, 아니면 preloadTask를 호출시켜준다
+        preloadTask ??= StartPreloadInternal();
+        return preloadTask;
     }
 
     private void OnDestroy() => ReleaseAll();
@@ -45,30 +51,30 @@ public class AddressableManager : Singleton<AddressableManager>
     // ───────────────────────── Preload ─────────────────────────
 
     /// 로딩 화면 등에서 Preload 완료를 기다릴 때 사용
-    public Task WaitPreloadAsync() => preloadTask;
-
-    public bool IsPreloadDone => preloadTask.IsCompleted;
-
-    public async Task PreloadAsync(string label)
+    public Task WaitPreloadAsync() => preloadTask ?? Task.CompletedTask;
+    public bool IsPreloadDone => preloadTask != null && preloadTask.IsCompleted;
+    private async Task<bool> StartPreloadInternal()
     {
-        //태그가 붙어있는것들은 게임시작시 미리 다 불러와둔다.
+        await contentReady.Task;              // 다운로드/카탈로그 업데이트가 끝날 때까지 대기
+        return await PreloadAsync("Preload");
+    }
+    public async Task<bool> PreloadAsync(string label)
+    {
         try
         {
-            //IResourceLocation으로 불러온다. (목록과 타입을 자동으로 분리해서 가져옴)
             var locHandle = Addressables.LoadResourceLocationsAsync(label, typeof(object));
             IList<IResourceLocation> locations = await locHandle.Task;
-
-            List<Task> tasks = new List<Task>(locations.Count); //미리 갯수만큼 Capacity를 잡아둔다(메모리 공간 미리 할당). 요소 갯수는 0임
-            //어드레서블 리소스 불러와서 저장.
-            foreach (IResourceLocation loc in locations)
+            var tasks = new List<Task<Entry>>(locations.Count);
+            foreach (var loc in locations)
                 tasks.Add(AcquireAsync(loc, persistent: true, addRef: false));
-
             Addressables.Release(locHandle);
-            await Task.WhenAll(tasks);
+            var results = await Task.WhenAll(tasks);
+            return Array.TrueForAll(results, r => r != null);
         }
         catch (Exception e)
         {
-            MyLog.LogError($"Preload 실패 (label: {label}): {e}");
+            MyLog.LogError($"Preload 실패: {e}");
+            return false;
         }
     }
 
@@ -98,7 +104,7 @@ public class AddressableManager : Singleton<AddressableManager>
     /// 일반 에셋(Sprite, AudioClip, SO, GameObject 등). 사용이 끝나면 Release 호출 필요
     private async Task<T> GetAssetAsync_Object<T>(AssetReference assetRef) where T : Object
     {
-        await preloadTask;
+        await StartPreload();
         //찾으려는 에셋이 어드레서블에 등록되어있는지 확인하고 loc를 가져옴
         if (!TryFindLocate(assetRef, typeof(T), out var loc))
         {

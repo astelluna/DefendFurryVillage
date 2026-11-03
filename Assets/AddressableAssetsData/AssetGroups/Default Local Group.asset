@@ -27,12 +27,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0bc06de172187234c809b450642c351a
-    m_Address: Assets/GameData/Addressable/Enemy/Enemy_Boss_Cat.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0be125480aa0fc64c94a12097c9e4f6c
     m_Address: Weapon/Augment/Special/New Augment Special Spread Projectile SO.asset
     m_ReadOnly: 0
@@ -76,12 +70,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 31fa5887523dadb48868a43069f18a4d
-    m_Address: Assets/GameData/Addressable/Enemy/Enemy_Boss_Snake.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 33630871dec1a1740b31c74420d5cd1d
     m_Address: Assets/Prefab/Projectile/Falling.prefab
     m_ReadOnly: 0
@@ -121,20 +109,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4fb6eeb715a4d4c42a4426c02b3cf69e
-    m_Address: Assets/GameData/Addressable/Enemy/Enemy_Boss_Fairy.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5c10d71bed5783044b7eddc2fd585fdf
     m_Address: Weapon/Augment/Data/New Augment Data SO_Burn.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5f7c1b18f22cb6a4fa76c3796e220792
-    m_Address: Assets/GameData/Addressable/Enemy/BasicEnemy.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
@@ -143,24 +119,6 @@ MonoBehaviour:
     m_Address: Character/Character_Rabbit.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 636f71782d852a94a9e10cef198b95fc
-    m_Address: Assets/GameData/Addressable/Enemy/Enemy_Armor.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 648ce157bd6cfff44865528c67d929c5
-    m_Address: Assets/GameData/Addressable/Enemy/Enemy_Boss_Tiger.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6590bca789d848e46a757a552239d652
-    m_Address: Assets/GameData/Addressable/Enemy/Enemy_MoveSpeed.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 663115480594cea48a7c636f52959fac
     m_Address: Weapon/Augment/Special/New Augment Special Knock Back SO.asset
@@ -228,12 +186,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a0532b36c0da3ad45ae37fc07a4cacba
-    m_Address: Assets/GameData/Characher/Character DataSO_Dog.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a2661cdd9f3cd7747973e6a79c4f66e2
     m_Address: Character/Character_Rat.prefab
     m_ReadOnly: 0
@@ -260,26 +212,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: acf85f9107c41434790854a45b2a37f4
-    m_Address: Characher/CaracterDataSO_Sheep.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b03f93eba77166248a9af0e85d41b585
     m_Address: Weapon/DataSO/BasicGunData.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b0ef4b0a24c8ff249a4bade56cfb7cb8
-    m_Address: Characher/CaracterDataSO_Rat.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b26a365c8cfd10a4f93ecba3318c544c
-    m_Address: Assets/GameData/Addressable/Enemy/Enemy_Boss_SheepLady.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
@@ -306,43 +240,13 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c97431a8138b46d45880f54160514a94
-    m_Address: Assets/GameData/Addressable/Enemy/Enemy_Boss_Axolotl.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cb20d6b0d9ef221429a7572cfdb49eef
     m_Address: Character/Character_Fox.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cb72acc601d298f45ab3e6b6d6353aad
-    m_Address: Assets/GameData/Addressable/Enemy/Enemy_Boss_Bee.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ccab86491324ec045a89677e0f79cff4
-    m_Address: Characher/CaracterDataSO_Rabbit.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d156de8f394aa3143abeb00f8a6b3d83
-    m_Address: Assets/GameData/Addressable/Enemy/Enemy_Boss.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d24d07f40bac9b4408d68e690d7ee31d
     m_Address: Weapon/ExecuteSO/BasicGunExecuteSO.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d57a82b4f7f61c84592e565a5c2a5f75
-    m_Address: Assets/GameData/Addressable/Enemy/Enemy_Boss_Spider.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
@@ -370,12 +274,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: eb6c65b87d4523240a75fb221e35c5ea
-    m_Address: Assets/GameData/Addressable/Enemy/Enemy_HP.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f003a98c35903f3409438966b5dffd55
     m_Address: Assets/Prefab/Projectile/Bullet_Red.prefab
     m_ReadOnly: 0
@@ -394,12 +292,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa5fbf8b0b14f0e43aa913e0298e1f32
     m_Address: Weapon/Augment/Special/New Augment State Effect Stun SO.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Preload
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ff336df504980a546adea7b50af359c5
-    m_Address: Characher/CharacherDataSO_Fox.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload

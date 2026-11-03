@@ -44,7 +44,7 @@ public class FirestoreManager : Singleton<FirestoreManager>
 
     #region 캐릭터및 계정 생성할때 초기 값들
     //계정 생성할때 쓰는 값
-    const long initAccountGold = 10000; //초기 골드
+    const long initAccountGold = 0; //초기 골드
     //캐릭터 생성할때 쓰는 값
     const int initCharacterLevel = 1;
     const int initCharacterExp = 0;

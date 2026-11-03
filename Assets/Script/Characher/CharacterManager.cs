@@ -4,7 +4,11 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-
+public class CharacterAddressableHandle
+{
+    public AsyncOperationHandle handle;
+    public int RefCount;
+}
 public class CharacterManager : Singleton<CharacterManager>
 {
     //모든 플레이어 데이터를 어드레서블로 가지고있고 첫 로드해서 allCharacterSOList에 넣어서 사용
@@ -85,9 +89,9 @@ public class CharacterManager : Singleton<CharacterManager>
     protected override void OnAwake()
     {
     }
-    private void Start()
+    private async void Start()
     {
-        TestDelayTaskStart();
+        await Init();
         //Invoke(nameof(TestDelayTaskStart), 3f);
 
         //인게임 테스트용.(인게임씬에서 실행하면 테스트용으로 실행한다) -> 추후 진행
@@ -112,7 +116,7 @@ public class CharacterManager : Singleton<CharacterManager>
 #endif
     }
 
-    private async Task TestDelayTaskStart()
+    private async Task Init()
     {
         try
         {
@@ -132,7 +136,7 @@ public class CharacterManager : Singleton<CharacterManager>
         //어드레서블로 되어있는 캐릭터 데이터들을 계속 불러와본다 
         foreach (var item in characterAddressableSOList)
         {
-            CharacterDataSO characterDataSO = await AddressablePreloadManager.Instance.GetAsync<CharacterDataSO>(item);
+            CharacterDataSO characterDataSO = await AddressableManager.Instance.GetAssetAsync_Asset<CharacterDataSO>(item);
             if(allCharacterSODict.ContainsKey(characterDataSO.CharacterId))
             {
                 MyLog.LogError("SO에 캐릭터ID가 중복입니다");

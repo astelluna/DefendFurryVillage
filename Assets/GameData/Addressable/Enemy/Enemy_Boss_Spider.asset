@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Enemy_Boss_Spider
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDataSO
   <attack>k__BackingField: 5
-  <defense>k__BackingField: 10
-  <maxHp>k__BackingField: 500
+  <defense>k__BackingField: 6
+  <maxHp>k__BackingField: 400
   <attackRate>k__BackingField: 1
   <moveSpeed>k__BackingField: 5
   <penetration>k__BackingField: 0

@@ -14,7 +14,9 @@ public class GameResultPanel : MonoBehaviour
     [SerializeField] Transform makePosition;
 
     const string victoryText = "승리!!";
-    const string defectText = "패배!!";
+    const string defectText = 
+        "패배!! \n" +
+        "장비를 장착, 강화하거나 상점에서 캐릭터를 구매해보세요";
     string uiText;
 
     List<RewardItemUI> rewardItemUiList = new List<RewardItemUI>();
