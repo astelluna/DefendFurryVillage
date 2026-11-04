@@ -77,7 +77,8 @@ crashlytics-build.properties
 # Firebase
 /[Aa]ssets/Firebase/*
 /[Aa]ssets/GeneratedLocalRepo/Firebase/*
-/[Aa]ssets/Resources
+/[Aa]ssets/Resources/*
+/[Aa]ssets/Resource_Addressable/*
 
 # ServerData - For Cdn
 /ServerData/*

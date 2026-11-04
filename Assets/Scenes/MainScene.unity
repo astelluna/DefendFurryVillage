@@ -790,6 +790,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button_Cash
       objectReference: {fileID: 0}
+    - target: {fileID: 4972891450798224630, guid: 6b18f4b6f2e60374b9e381f49fc274cb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7611562682469114508, guid: 6b18f4b6f2e60374b9e381f49fc274cb, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

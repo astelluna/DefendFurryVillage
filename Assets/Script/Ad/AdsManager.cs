@@ -6,7 +6,7 @@ public class AdsManager : Singleton<AdsManager>
 {
     private InterstitialAd interstitialAd;
 
-    private string adUnitId = "ca-app-pub-1407745203471016/9025885840"; //실제 id
+    private string adUnitId = "ca-app-pub-1407745203471016/2861209770"; //실제 id
     //private string adUnitId = "ca-app-pub-3940256099942544/1033173712"; //테스트용 id
     private float lastShownTime = -999f;
     private const float MinInterval = 600f;

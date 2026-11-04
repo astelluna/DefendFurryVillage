@@ -21,11 +21,26 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02ee65abe5e40a644b4be7dbf17bfd54
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Dog/Material_001_Pbr_Normal.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02faf0b661b07754d9188fa0a282b46f
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Progress/Axolotl/textures/Axolotl/Axolotl/Mesh_0/Material_001_Pbr/Material_001_Pbr_MetallicAlpha.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 04ca601f25511cb4f9a4f7791a786beb
     m_Address: Weapon/Augment/Data/New Augment Data SO_Damage.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 067ce26d3a3825641be8425dd8192b01
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/bear/bear.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0be125480aa0fc64c94a12097c9e4f6c
     m_Address: Weapon/Augment/Special/New Augment Special Spread Projectile SO.asset
@@ -33,8 +48,24 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0d820723776b5e543839c8b66a9a6de3
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Sheep/Material_001_Pbr.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0f50582e868d2a4478e567dfbab4ae33
     m_Address: Assets/Prefab/Enemy/Enemy_Boss_Fairy.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 12062d3e094b4d94583353d5ba4ecc4a
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Castle Guard/Castle Guard
+      02.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 14593bea2204d1e41be0399cd95feb30
+    m_Address: Assets/Resource_Addressable/Enemy/ModelFbx/Progress/fairy
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -54,8 +85,33 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1f768140d30b27948b223e3da55c4938
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Sheep/Material_001_Pbr_Diffuse.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2259395f993165c4baaa9d6e0f81f854
     m_Address: Assets/Prefab/Enemy/Enemy_Spider_Boss.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 24442f1892eb1834bab950b888786237
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Nightshade/Nightshade_diffuse.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 260d8d4f3d1dabc4d9ac9a7f053d196d
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Progress/bee/Material_001_Pbr_Normal.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 28e5dd11c15b94849b7abcd2aa91679c
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Jones/Ch04_body.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2d04be977deb1a340a74c234fc135fe2
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Rat/Material_001_Pbr_Diffuse.jpg
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -75,14 +131,29 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 341b25339d945204aa5c4acd0e629be7
+    m_Address: Assets/Resource_Addressable/Enemy/ModelFbx/Progress/cat/Material_001_Pbr_Normal.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3738ee7248c21104c8c232637a338d4a
     m_Address: Weapon/Augment/Special/New Augment Special Delay Damage SO.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 394f5bd2af9737443ba7c831affb031c
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/bear/warrok_MAT.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3b2826e615640d3408071623896c2eb9
     m_Address: Assets/Prefab/Enemy/Enemy_MoveSpeed.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3c2ecfb1c6432a04093b7b5924bdf4cd
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Nightshade/Nightshade_specular.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -98,14 +169,54 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 455e5431373f6fa48ac81001ff670f36
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/bear/bear_normal.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 46f09c2ded11ed34783afa69be63d9d6
     m_Address: Weapon/Augment/Special/New Augment Special Magnet SO.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 49f0f55befeb75d4986a7ad74c901cad
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/pumpkinHulk
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4b268fccc74cc034d9774eaf0021233d
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Dog/Material_001_Pbr.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e1c446cdcf5636459277e5d3ea3841e
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Nightshade/Nightshade_MAT.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4ed091f2c66d84448ae1edf9a0ba6290
     m_Address: Assets/Prefab/Enemy/Enemy_Armor.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4fd950324087b864eb2f7cdcaf968f17
+    m_Address: Assets/Resource_Addressable/Enemy/ModelFbx/Progress/tiger
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 56a48058b67a28a4c91df3f4dec1e6ad
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Castle Guard/Guard_03__normal.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 596b5fd8689f4864d8e2561b7ac9693b
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Castle Guard/Guard_03.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5bfb5037a9e39864c95184bb19ec4ba0
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Sheep/Material_001_Pbr_Normal.jpg
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -115,8 +226,23 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5ffb62a114a586249ae2ca56f01a840f
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Dog/dog.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 61e5fb6d5efdaf84dbaafc38aa421ab2
     m_Address: Character/Character_Rabbit.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6491e330f73bb7841b1355df9a129a74
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Nightshade/Nightshade_glow.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64d5273ffc8247441a21566a4a5bf37c
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Progress/bee/bee.fbx
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -125,6 +251,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68af2bfe0c8f79f4a89944b6f221bcb7
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Progress/bee/textures/bee/bee/Mesh_0/Material_001_Pbr/Material_001_Pbr_MetallicAlpha.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6a37eddf7e8e02844aa5ddcfa1e2d9df
     m_Address: Weapon/Augment/Data/New Augment Data SO_KnockBack.asset
@@ -143,6 +274,21 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 73b77e8046ce15341923799a85557d50
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Progress/bee/Material_001_Pbr.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 757cb30c141571b4ebf796d1c768ceb0
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/bear/bear_specular.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7d006baf321554545a9c0a16e8f01b04
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Progress/Axolotl/Material_001_Pbr_Normal.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7d4d26dd4243506449ec7af6eefaf482
     m_Address: Weapon/DataSO/MissileData.asset
     m_ReadOnly: 0
@@ -154,6 +300,27 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e856e037f1dad846964389b308e41d7
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Progress/Axolotl/Axolotl.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7f9ba7b952475194992befaf488127f0
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Nightshade/Nightshade
+      J Friedrich.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7fbcbdce67010d446a0fa25498293f09
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Fox/Material_001_Pbr_Diffuse.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8341ada19538e1249bd03fca2403ca81
+    m_Address: Assets/Resource_Addressable/Enemy/ModelFbx/Progress/cat/textures/cat/cat/Mesh_0/Material_001_Pbr/Material_001_Pbr_MetallicAlpha.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8438ef4f56702c046906b110d2b6a1b3
     m_Address: Assets/Prefab/Enemy/Enemy_Boss_SheepLady.prefab
     m_ReadOnly: 0
@@ -161,6 +328,26 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8608943dad0f4f04e925efc5bd206d00
     m_Address: Assets/Prefab/Enemy/Enemy_Boss_Tiger.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 876622982bd200549ac5be02879b7b78
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/spider_boss
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87fe604c40471e846890b63304a7466f
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/bear/bear_diffuse.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8b64239f7c6fbcc4eb29dd86bea8fb63
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Jones/Ch04_1001_Normal.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e2c1e723856fda40aa1c780a586cc34
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Castle Guard/Guard_03__diffuse.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -186,8 +373,28 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 93c0d1428f04481419a094780819fcf0
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Sheep/sheep.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9e0184db40aa9f94ca05e40d6a7d57f4
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Rabbit/Material_001_Pbr_Diffuse.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a0a917291e6beb74fa96c7fabbf551ee
+    m_Address: Assets/Resource_Addressable/Enemy/ModelFbx/Progress/snake
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a2661cdd9f3cd7747973e6a79c4f66e2
     m_Address: Character/Character_Rat.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a35c010e6393f434b8fe76394fbc84f9
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Jones/Jones.fbx
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -202,6 +409,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a749e32045daa7a4a8800f03cbfa99bd
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Progress/Axolotl/Material_001_Pbr_Diffuse.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: abdfcabf0ef5f014ca2e814d56ce4ba0
     m_Address: Assets/Prefab/Projectile/Laser_test.prefab
     m_ReadOnly: 0
@@ -212,19 +424,79 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ad6132accea33f847b49811b0ccccd4c
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Fox/Material_001_Pbr_Normal.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af757b2896a20d042804f778911bf8f1
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Jones/Ch04_1001_Emissive.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: afb26b66f06164447a1efff26d9f020f
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Fox/fox.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b03f93eba77166248a9af0e85d41b585
     m_Address: Weapon/DataSO/BasicGunData.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b07edde458342dc4db40c3b82d5dda92
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Progress/Axolotl/Material_001_Pbr.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b1d9e878331011541ac9eb456474b1c1
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Rat/Material_001_Pbr_Normal.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b247000c645ff884585f8ac9a3d63243
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Nightshade/Nightshade_normal.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b3859af650b29c3428a48fe8c6a0315e
     m_Address: Assets/Prefab/Projectile/Missile.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b55e22c8fada6ab45ad3c3f39364984e
+    m_Address: Assets/Resource_Addressable/Enemy/ModelFbx/Progress/cat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b62132b5383ca2940b609ced168f5011
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Rabbit/Material_001_Pbr.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b6d8abb9f64bd4f4abf13c941aa2f9c1
+    m_Address: Assets/Resource_Addressable/Enemy/ModelFbx/Progress/cat/Material_001_Pbr_Diffuse.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b804a3dcad4af7442a040e8ce089b33b
     m_Address: Assets/Prefab/Enemy/Enemy_Basic.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bbb46e7ce69d1454d812341b3b58a3e6
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Rabbit/rabbit.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: be65988d08750f44586b9b84613ea0fa
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Jones/Ch04_1001_Diffuse.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c16c6c7707471704f91f5bc19754a76d
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Dog/Material_001_Pbr_Diffuse.jpg
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -234,6 +506,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c36c0a41091f3484aa920df7ab4e7491
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Rat/Material_001_Pbr.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c678d708c9f668045b82850ed7ee812f
     m_Address: Weapon/ExecuteSO/FallingExecuteSO.asset
     m_ReadOnly: 0
@@ -242,6 +519,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cb20d6b0d9ef221429a7572cfdb49eef
     m_Address: Character/Character_Fox.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d1b03b52d3d3dd6478670230531ae322
+    m_Address: Assets/Resource_Addressable/Enemy/ModelFbx/Progress/sheep_lady
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -262,11 +544,26 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd7a335b5db67e54c8c109d9d6378e2a
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Fox/Material_001_Pbr.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de049fb6b50b48e4eb2687cff7100d39
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Castle Guard/Guard_03__specular.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: df576e89de0ec2e41b65797c231e200e
     m_Address: Weapon/DataSO/LaserData.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e10457ba39034044993a4ef17819567c
+    m_Address: Assets/Resource_Addressable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e18c68d152f365a4d80a440279995931
     m_Address: Weapon/Augment/Data/New Augment Data SO_Magnet.asset
@@ -274,13 +571,28 @@ MonoBehaviour:
     m_SerializedLabels:
     - Preload
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ecebd6e16035bf146a8bdbf749b4c8d6
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Jones/Ch04_1001_Glossiness.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f003a98c35903f3409438966b5dffd55
     m_Address: Assets/Prefab/Projectile/Bullet_Red.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f04b76dc601e0b942826212f76843fec
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Progress/bee/Material_001_Pbr_Diffuse.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f4302a321a1a3b0459bcc4256759fb4b
     m_Address: Character/Character_Dog.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f5735b9a1973dc940aa6095e5e978d4b
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Rat/rat.fbx
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -295,6 +607,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Preload
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fdb2c3e9741eb024bb3120ee36fe7c91
+    m_Address: Assets/Rssources_Addressable/Enemy/ModelFbx/Jones/Ch04_1001_Specular.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ff80c55451e542f41b4bb1e8d25eb4ff
+    m_Address: Assets/Rssources_Addressable/Character/ModelFbx/Rabbit/Material_001_Pbr_Normal.jpg
+    m_ReadOnly: 0
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 1790af479a7d04e44a48b99ebc4c8d54, type: 2}
