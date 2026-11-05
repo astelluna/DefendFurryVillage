@@ -3,6 +3,8 @@
 
 https://youtu.be/4JmiUijDvHQ
 
+패키지 링크: https://drive.google.com/file/d/1e8aHY_Pu2uiQzUR_XB_yr-2OEGuww9G_/view?usp=sharing
+
 # 사용 기술
 - Unity 6.3 / C# — 게임과 Android 빌드 개발
 - URP — 렌더링 파이프라인
